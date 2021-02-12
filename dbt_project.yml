@@ -1,0 +1,48 @@
+name: 'greenhouse'
+version: '0.1.0'
+config-version: 2
+require-dbt-version: [">=0.18.0", "<0.20.0"]
+
+
+vars:
+  greenhouse:
+    activity: "{{ ref('stg_greenhouse__activity') }}" 
+    application: "{{ ref('stg_greenhouse__application') }}" 
+    application_qna: "{{ ref('stg_greenhouse__application_qna') }}" 
+    application_history: "{{ ref('stg_greenhouse__application_history') }}" 
+    attachment: "{{ ref('stg_greenhouse__attachment') }}" 
+    candidate: "{{ ref('stg_greenhouse__candidate') }}" 
+    candidate_tag: "{{ ref('stg_greenhouse__candidate_tag') }}" 
+    close_reason: "{{ ref('stg_greenhouse__close_reason') }}" 
+    eeoc: "{{ ref('stg_greenhouse__eeoc') }}" 
+    email_address: "{{ ref('stg_greenhouse__email_address') }}" 
+    hiring_team: "{{ ref('stg_greenhouse__hiring_team') }}" 
+    interview: "{{ ref('stg_greenhouse__interview') }}" 
+    job: "{{ ref('stg_greenhouse__job') }}" 
+    job_department: "{{ ref('stg_greenhouse__job_department') }}" 
+    job_office: "{{ ref('stg_greenhouse__job_office') }}" 
+    job_opening: "{{ ref('stg_greenhouse__job_opening') }}" 
+    job_post: "{{ ref('stg_greenhouse__job_post') }}" 
+    job_stage: "{{ ref('stg_greenhouse__job_stage') }}" 
+    job_application: "{{ ref('stg_greenhouse__job_application') }}" 
+    office: "{{ ref('stg_greenhouse__office') }}" 
+    phone_number: "{{ ref('stg_greenhouse__phone_number') }}" 
+    prospect_pool: "{{ ref('stg_greenhouse__prospect_pool') }}" 
+    prospect_stage: "{{ ref('stg_greenhouse__prospect_stage') }}" 
+    scheduled_interview: "{{ ref('stg_greenhouse__scheduled_interview') }}" 
+    scheduled_interviewer: "{{ ref('stg_greenhouse__scheduled_interviewer') }}" 
+    scorecard: "{{ ref('stg_greenhouse__scorecard') }}" 
+    scorecard_attribute: "{{ ref('stg_greenhouse__scorecard_attribute') }}" 
+    social_media_address: "{{ ref('stg_greenhouse__social_media_address') }}" 
+    source: "{{ ref('stg_greenhouse__source') }}" 
+    tag: "{{ ref('stg_greenhouse__tag') }}" 
+    user: "{{ ref('stg_greenhouse__user') }}" 
+    user_email: "{{ ref('stg_greenhouse__user_email') }}" 
+    website_address: "{{ ref('stg_greenhouse__website_address') }}" 
+  
+  greenhouse_using_eeoc: true
+  greenhouse_using_app_history: true
+  greenhouse_using_prospects: true
+
+models: 
+  materialized: table # for now
