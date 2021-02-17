@@ -1,0 +1,55 @@
+with scorecard as (
+
+    select *
+    from {{ var('scorecard') }}
+),
+
+scheduled_interviewer as (
+
+    select *
+    from {{ var('scheduled_interviewer') }}
+),
+
+scheduled_interview as (
+
+    select *
+    from {{ var('scheduled_interview') }}
+),
+
+interview as (
+    
+    select *
+    from {{ var('interview') }}
+),
+
+final as (
+
+    select
+        scheduled_interview.*,
+
+        interview.job_stage_id,
+        coalesce(interview.name, scorecard.interview_name) as interview_name,
+        {{ dbt_utils.datediff('scheduled_interview.start_at', 'scheduled_interview.end_at', 'minute') }} as duration_interview_minutes,
+        scorecard.scorecard_id,
+        scorecard.candidate_id,
+        scorecard.overall_recommendation,
+        scorecard.submitted_at as scorecard_submitted_at,
+        scorecard.submitted_by_user_id as scorecard_submitted_by_user_id,
+        scorecard.last_updated_at as scorecard_last_updated_at,
+
+        scheduled_interviewer.interviewer_user_id,
+
+        {{ dbt_utils.surrogate_key(['scheduled_interview_id', 'interviewer_user_id', 'scorecard_id']) }} as surrogate_key
+        
+
+    from scheduled_interview
+    left join scheduled_interviewer 
+        on scheduled_interview.scheduled_interview_id = scheduled_interviewer.scheduled_interview_id
+    left join scorecard
+        on scheduled_interviewer.scorecard_id = scorecard.scorecard_id
+    left join interview 
+        on scheduled_interview.interview_id = interview.interview_id
+)
+
+select *
+from final
