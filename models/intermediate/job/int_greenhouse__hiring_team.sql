@@ -1,10 +1,4 @@
-with job as (
-
-    select *
-    from {{ var('job') }}
-),
-
-hiring_team as (
+with hiring_team as (
 
     select *
     from {{ var('hiring_team') }}
