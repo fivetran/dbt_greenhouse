@@ -22,7 +22,7 @@ interview as (
     from {{ var('interview') }}
 ),
 
-final as (
+interview_w_scorecard as (
 
     select
         scheduled_interview.*,
@@ -37,9 +37,7 @@ final as (
         scorecard.submitted_by_user_id as scorecard_submitted_by_user_id,
         scorecard.last_updated_at as scorecard_last_updated_at,
 
-        scheduled_interviewer.interviewer_user_id,
-
-        {{ dbt_utils.surrogate_key(['scheduled_interview_id', 'interviewer_user_id', 'scorecard_id']) }} as surrogate_key
+        scheduled_interviewer.interviewer_user_id
         
 
     from scheduled_interview
@@ -49,6 +47,15 @@ final as (
         on scheduled_interviewer.scorecard_id = scorecard.scorecard_id
     left join interview 
         on scheduled_interview.interview_id = interview.interview_id
+),
+
+final as (
+
+    select
+        *,
+        {{ dbt_utils.surrogate_key(['scheduled_interview_id', 'interviewer_user_id', 'scorecard_id']) }} as interview_scorecard_key
+    
+    from interview_w_scorecard
 )
 
 select *

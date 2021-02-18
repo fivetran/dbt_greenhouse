@@ -53,3 +53,4 @@ select null
 
 select *
 from final 
+-- hold off on this until deciding whether or not to focus on jobs vs job openings 
