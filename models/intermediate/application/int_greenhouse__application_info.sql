@@ -38,6 +38,19 @@ activity as (
     group by 1
 ),
 
+-- note: prospect applications can have multiple jobs, while canddiate ones are 1:1
+job as (
+
+    select *
+    from {{ ref('int_greenhouse__job_info') }}
+),
+
+job_application as (
+
+    select *
+    from {{ var('job_application') }}
+),
+
 {% if var('greenhouse_using_eeoc', true) %}
 eeoc as (
 
@@ -60,7 +73,7 @@ prospect_stage as (
 ),
 {% endif %}
 
-final as (
+join_info as (
 
     select 
         application.*,
@@ -73,7 +86,17 @@ final as (
         job_stage.stage_name as current_job_stage,
         source.source_name as sourced_from,
         source.source_type_name as sourced_from_type,
-        activity.count_activites
+        activity.count_activites,
+
+        job.job_title,
+        job.office as job_office,
+        job.department as job_department,
+        job.parent_department as job_parent_department,
+        job.status as job_status,
+        job.hiring_managers,
+        job.job_id,
+        job.requisition_id as job_requisition_id,
+        job.sourcers as job_sourcers
 
         {% if var('greenhouse_using_prospects', true) %}
         ,
@@ -101,6 +124,10 @@ final as (
         on application.source_id = source.source_id
     left join activity
         on activity.candidate_id = candidate.candidate_id
+    left join job_application
+        on application.application_id = job_application.application_id
+    left join job
+        on job_application.job_id = job.job_id
 
     {% if var('greenhouse_using_eeoc', true) %}
     left join eeoc 
@@ -114,6 +141,15 @@ final as (
     left join prospect_stage
         on prospect_stage.prospect_stage_id = application.prospect_stage_id
     {% endif %}
+),
+
+final as (
+
+    select 
+        *,
+        {{ dbt_utils.surrogate_key(['application_id', 'job_id']) }} as application_job_key
+    
+    from join_info
 )
 
 select *

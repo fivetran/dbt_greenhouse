@@ -17,8 +17,8 @@ grab_user_names as (
         candidate.*,
         coordinator.first_name as coordinator_first_name,
         coordinator.last_name as coordinator_last_name,
-        recruiter.first_name as referrer_first_name,
-        recruiter.last_name as referrer_last_name,
+        recruiter.first_name as recruiter_first_name,
+        recruiter.last_name as recruiter_last_name,
         coordinator.emails as coordinator_emails,
         recruiter.emails as recruiter_emails
 
