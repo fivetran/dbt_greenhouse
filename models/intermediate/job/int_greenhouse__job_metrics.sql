@@ -1,17 +1,4 @@
-with job as (
-
-    select *
-    from {{ ref('int_greenhouse__job_info') }}
-),
-
--- want to get # open, closed
-job_application as (
-
-    select *
-    from {{ var('job_application') }}
-),
-
-application as (
+with application as (
 
     select *
     from {{ ref('int_greenhouse__application_info') }}
@@ -48,7 +35,7 @@ job_opening as (
 
 -- also wanna get interviews
 final as (
-select null
+select null as n
 )
 
 select *

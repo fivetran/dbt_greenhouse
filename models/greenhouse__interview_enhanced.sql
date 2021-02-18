@@ -10,7 +10,7 @@ job_stage as (
     from {{ var('job_stage') }}
 ),
 
--- this has job stuff in it
+-- this has job info!
 application as (
 
     select *
@@ -32,7 +32,7 @@ final as (
         job_stage.stage_name = application.current_job_stage as has_advanced_since_interview,
 
         application.recruiter_first_name,
-        application.recruiter_last_name,
+        application.recruiter_last_name
 
         {% if var('greenhouse_using_eeoc', true) %}
         ,
