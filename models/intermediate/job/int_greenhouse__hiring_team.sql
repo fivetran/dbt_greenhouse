@@ -14,10 +14,10 @@ user_info as (
 
     select
         hiring_team.job_id,
-        case when role = 'recruiters' then greenhouse_user.first_name || ' ' || greenhouse_user.last_name end as recruiter_name,
-        case when role = 'hiring_managers' then greenhouse_user.first_name || ' ' || greenhouse_user.last_name end as hiring_manager_name,
-        case when role = 'coordinators' then greenhouse_user.first_name || ' ' || greenhouse_user.last_name end as coordinator_name,
-        case when role = 'sourcers' then greenhouse_user.first_name || ' ' || greenhouse_user.last_name end as sourcer_name
+        case when role = 'recruiters' then greenhouse_user.full_name end as recruiter_name,
+        case when role = 'hiring_managers' then greenhouse_user.full_name end as hiring_manager_name,
+        case when role = 'coordinators' then greenhouse_user.full_name end as coordinator_name,
+        case when role = 'sourcers' then greenhouse_user.full_name end as sourcer_name
 
     from hiring_team join greenhouse_user using(user_id)
 ),

@@ -22,8 +22,7 @@ final as (
     select
         interview.*,
         job_stage.stage_name as job_stage,
-        application.first_name as candidate_first_name,
-        application.last_name as candidate_last_name,
+        application.full_name as candidate_name,
         application.status as current_application_status,
         application.job_title,
         application.job_office,
@@ -31,11 +30,10 @@ final as (
         application.job_parent_department,
         application.job_id,
 
-        application.hiring_managers like ('%' || (interview.interviewer_first_name || ' ' || interview.interviewer_last_name) || '%')  as interviewer_is_hiring_manager,
+        application.hiring_managers like ('%' || interview.interviewer_name || '%')  as interviewer_is_hiring_manager,
         job_stage.stage_name = application.current_job_stage as has_advanced_since_interview,
-
-        application.recruiter_first_name,
-        application.recruiter_last_name
+        application.hiring_managers,
+        application.recruiter_name
 
         {% if var('greenhouse_using_eeoc', true) %}
         ,

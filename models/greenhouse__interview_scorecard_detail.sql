@@ -16,19 +16,17 @@ join_w_attributes as (
         scorecard_attribute.*,
         interview.overall_recommendation,
     
-        interview.candidate_first_name,
-        interview.candidate_last_name,
-        interview.interviewer_first_name,
-        interview.interviewer_last_name,
+        interview.candidate_name,
+        interview.interviewer_name,
         interview.interview_name,
         
         interview.start_at as interview_start_at,
         interview.scorecard_submitted_at,
 
-        -- should we bring in any other fields? not sure if this is too many/few...
         interview.application_id,
         interview.job_title,
-        interview.job_id
+        interview.job_id ,
+        interview.hiring_managers
         
     from interview join scorecard_attribute using(scorecard_id)
 ),

@@ -15,17 +15,15 @@ grab_user_names as (
 
     select
         application.*,
-        credited_to_user.first_name as credited_to_user_first_name,
-        credited_to_user.last_name as credited_to_user_last_name,
-        prospect_owner.first_name as prospect_owner_first_name,
-        prospect_owner.last_name as prospect_owner_last_name,
+        referrer.full_name as referrer_name,
+        prospect_owner.full_name as prospect_owner_name,
 
-        prospect_owner.emails as prospect_owner_emails
+        prospect_owner.emails as prospect_owner_email
 
     from application
 
-    left join greenhouse_user as credited_to_user
-        on application.credited_to_user_id = credited_to_user.user_id
+    left join greenhouse_user as referrer
+        on application.credited_to_user_id = referrer.user_id
     left join greenhouse_user as prospect_owner
         on application.prospect_owner_user_id = prospect_owner.user_id
 

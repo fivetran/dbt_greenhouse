@@ -24,8 +24,8 @@ final as (
     select 
         application.*,
         -- convert back to bool
-        coalesce(interview_metrics.has_interviewed_w_hiring_manager, 0) = 0 as has_interviewed_w_hiring_manager,
-        
+        coalesce(interview_metrics.has_interviewed_w_hiring_manager, 0) = 1 as has_interviewed_w_hiring_manager,
+
         coalesce(interview_metrics.count_interviews, 0) as count_interviews,
         coalesce(interview_metrics.count_interview_scorecards, 0) as count_interview_scorecards,
         coalesce(interview_metrics.count_distinct_interviewers, 0) as count_distinct_interviewers,

@@ -15,12 +15,9 @@ grab_user_names as (
 
     select
         interview.*,
-        interviewer.first_name as interviewer_first_name,
-        interviewer.last_name as interviewer_last_name,
-        scorecard_submitter.first_name as scorecard_submitter_first_name,
-        scorecard_submitter.last_name as scorecard_submitter_last_name,
-        organizer.first_name as organizer_first_name,
-        organizer.last_name as organizer_last_name,
+        interviewer.full_name as interviewer_name,
+        scorecard_submitter.full_name as scorecard_submitter_name,
+        organizer.full_name as organizer_name,
         interviewer.emails as interviewer_email
 
     from interview

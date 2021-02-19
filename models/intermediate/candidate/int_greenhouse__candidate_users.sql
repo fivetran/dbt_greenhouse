@@ -15,12 +15,11 @@ grab_user_names as (
 
     select
         candidate.*,
-        coordinator.first_name as coordinator_first_name,
-        coordinator.last_name as coordinator_last_name,
-        recruiter.first_name as recruiter_first_name,
-        recruiter.last_name as recruiter_last_name,
-        coordinator.emails as coordinator_emails,
-        recruiter.emails as recruiter_emails
+        coordinator.full_name as coordinator_name,
+        recruiter.full_name as recruiter_name,
+
+        coordinator.emails as coordinator_email,
+        recruiter.emails as recruiter_email
 
     from candidate
 
