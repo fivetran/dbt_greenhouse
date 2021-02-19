@@ -18,7 +18,7 @@ grab_user_names as (
         interviewer.full_name as interviewer_name,
         scorecard_submitter.full_name as scorecard_submitter_name,
         organizer.full_name as organizer_name,
-        interviewer.emails as interviewer_email
+        interviewer.email as interviewer_email
 
     from interview
 

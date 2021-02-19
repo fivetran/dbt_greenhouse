@@ -8,7 +8,7 @@ phones as (
 
     select 
         candidate_id,
-        {{ fivetran_utils.string_agg("phone_type || ': ' || phone_number" , "', '") }} as phones
+        {{ fivetran_utils.string_agg("phone_type || ': ' || phone_number" , "', '") }} as phone
 
     from {{ var('phone_number') }}
 
@@ -19,7 +19,7 @@ emails as (
 
     select 
         candidate_id,
-        {{ fivetran_utils.string_agg("'<' || email || '>'" , "', '") }} as emails
+        {{ fivetran_utils.string_agg("'<' || email || '>'" , "', '") }} as email
 
     from {{ var('email_address') }}
 
@@ -76,8 +76,8 @@ join_candidate_info as (
 
     select 
         candidate.*,
-        phones.phones as phones,
-        emails.emails as emails,
+        phones.phone as phone,
+        emails.email as email,
         latest_resume.url as resume_url,
         latest_links.linkedin_url,
         latest_links.github_url

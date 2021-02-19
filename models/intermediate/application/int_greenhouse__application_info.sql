@@ -32,7 +32,7 @@ activity as (
 
     select 
         candidate_id,
-        count(*) as count_activites
+        count(*) as count_activities
 
     from {{ var('activity') }}
     group by 1
@@ -86,7 +86,7 @@ join_info as (
         job_stage.stage_name as current_job_stage,
         source.source_name as sourced_from,
         source.source_type_name as sourced_from_type,
-        activity.count_activites,
+        activity.count_activities,
 
         job.job_title,
         job.office as job_office,

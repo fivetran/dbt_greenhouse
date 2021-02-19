@@ -18,8 +18,8 @@ grab_user_names as (
         coordinator.full_name as coordinator_name,
         recruiter.full_name as recruiter_name,
 
-        coordinator.emails as coordinator_email,
-        recruiter.emails as recruiter_email
+        coordinator.email as coordinator_email,
+        recruiter.email as recruiter_email
 
     from candidate
 

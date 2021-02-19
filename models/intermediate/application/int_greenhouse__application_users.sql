@@ -18,7 +18,7 @@ grab_user_names as (
         referrer.full_name as referrer_name,
         prospect_owner.full_name as prospect_owner_name,
 
-        prospect_owner.emails as prospect_owner_email
+        prospect_owner.email as prospect_owner_email
 
     from application
 
