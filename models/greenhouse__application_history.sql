@@ -7,7 +7,7 @@ with application_history as (
         new_stage_id,
         new_status,
         updated_at as valid_from,
-        lead(updated_at) over (partition by application_id order by updated_at asc) as valid_until
+        coalesce(lead(updated_at) over (partition by application_id order by updated_at asc), {{ dbt_utils.current_timestamp() }})  as valid_until
 
     from {{ var('application_history') }}
 ),
