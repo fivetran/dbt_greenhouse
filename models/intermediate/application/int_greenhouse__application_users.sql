@@ -10,7 +10,7 @@ application as (
     from {{ var('application') }}
 ),
 
--- necessary users = credited_to_user_id, prospect_owner_user_id
+-- necessary users = credited_to_user (ie referrer), prospect_owner
 grab_user_names as (
 
     select

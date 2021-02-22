@@ -49,6 +49,7 @@ interview_w_scorecard as (
         on scheduled_interview.interview_id = interview.interview_id
 ),
 
+-- add surrogate key for tests
 final as (
 
     select

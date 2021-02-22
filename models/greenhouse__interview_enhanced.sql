@@ -31,7 +31,8 @@ final as (
         application.job_id,
 
         application.hiring_managers like ('%' || interview.interviewer_name || '%')  as interviewer_is_hiring_manager,
-        job_stage.stage_name = application.current_job_stage as has_advanced_since_interview,
+        -- this logic is incorrect i think...
+        {# job_stage.stage_name = application.current_job_stage as has_advanced_since_interview, #}
         application.hiring_managers,
         application.recruiter_name
 

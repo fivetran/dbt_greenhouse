@@ -30,6 +30,8 @@ final as (
         hiring_team.sourcers,
         hiring_team.recruiters,
         hiring_team.coordinators,
+
+        -- note: these can be plural (should we add 's' to these columns?) or remove the s's from hiring_team
         job_office.office,
         job_office.location as office_location,
         job_department.department,

@@ -76,7 +76,7 @@ activities_in_stages as (
 
     select 
         time_in_stages.*,
-        sum(case when activity.occurred_at >= valid_from and activity.occurred_at <= valid_until then 1 else 0 end) as count_activities_in_stage
+        sum(case when activity.occurred_at >= valid_from and activity.occurred_at < valid_until then 1 else 0 end) as count_activities_in_stage
 
     from time_in_stages
     left join activity on activity.candidate_id = time_in_stages.candidate_id

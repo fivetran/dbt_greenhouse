@@ -4,6 +4,7 @@ with candidate as (
     from {{ var('candidate') }}
 ),
 
+-- candidates can have multiple phones + emails
 phones as (
 
     select 
@@ -26,6 +27,7 @@ emails as (
     group by 1
 ),
 
+-- getting the last resume uploaded
 order_resumes as (
 
     select 

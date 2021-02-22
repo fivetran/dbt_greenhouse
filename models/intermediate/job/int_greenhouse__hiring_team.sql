@@ -26,7 +26,7 @@ agg_role_types as (
 
     select
         job_id,
-        {{ fivetran_utils.string_agg('hiring_manager_name', "', '") }} as hiring_managers,
+        {{ fivetran_utils.string_agg('hiring_manager_name', "', '") }} as hiring_managers, -- there can be multiple hiring managers
         {{ fivetran_utils.string_agg('sourcer_name', "', '") }} as sourcers,
         {{ fivetran_utils.string_agg('recruiter_name', "', '") }} as recruiters,
         {{ fivetran_utils.string_agg('coordinator_name', "', '") }} as coordinators
