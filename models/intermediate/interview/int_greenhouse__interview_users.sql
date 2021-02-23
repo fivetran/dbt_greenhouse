@@ -11,7 +11,7 @@ greenhouse_user as (
 ),
 
 -- necessary users = interviewer_user_id, scorecard_submitted_by_user_id, organizer_user_id
-grab_user_names as (
+join_user_names as (
 
     select
         interview.*,
@@ -31,4 +31,4 @@ grab_user_names as (
 
 )
 
-select * from grab_user_names
+select * from join_user_names

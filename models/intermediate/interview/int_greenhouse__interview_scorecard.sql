@@ -54,7 +54,7 @@ final as (
 
     select
         *,
-        {{ dbt_utils.surrogate_key(['scheduled_interview_id', 'interviewer_user_id', 'scorecard_id']) }} as interview_scorecard_key
+        {{ dbt_utils.surrogate_key(['scheduled_interview_id', 'interviewer_user_id']) }} as interview_scorecard_key
     
     from interview_w_scorecard
 )

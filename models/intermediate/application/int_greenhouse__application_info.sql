@@ -90,9 +90,9 @@ join_info as (
         activity.count_activities,
 
         job.job_title,
-        job.office as job_office,
-        job.department as job_department,
-        job.parent_department as job_parent_department,
+        job.offices as job_offices,
+        job.departments as job_departments,
+        job.parent_departments as job_parent_departments,
         job.status as job_status,
         job.hiring_managers,
         job.job_id,
@@ -155,7 +155,3 @@ final as (
 
 select *
 from final
-
--- job stuff - bring in here or in the final model?
--- interview metrics! bring in the final model maybe..
--- pronouns -- do this in another intermediate model

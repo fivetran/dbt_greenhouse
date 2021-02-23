@@ -28,7 +28,7 @@ join_w_attributes as (
         interview.job_id ,
         interview.hiring_managers
         
-    from interview join scorecard_attribute using(scorecard_id)
+    from interview left join scorecard_attribute using(scorecard_id)
 ),
 
 final as (

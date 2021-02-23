@@ -14,8 +14,8 @@ agg_offices as (
 
     select
         job_id,
-        {{ fivetran_utils.string_agg("office.office_name", "', '") }} as office,
-        {{ fivetran_utils.string_agg("office.location_name", "', '") }} as location
+        {{ fivetran_utils.string_agg("office.office_name", "'; '") }} as offices,
+        {{ fivetran_utils.string_agg("office.location_name", "'; '") }} as locations
 
     from job_office
     join office using(office_id)

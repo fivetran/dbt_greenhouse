@@ -42,9 +42,9 @@ join_application_history as (
         application.sourced_from, 
         application.sourced_from_type,
         application.job_title,
-        application.job_department,
-        application.job_parent_department,
-        application.job_office,
+        application.job_departments,
+        application.job_parent_departments,
+        application.job_offices,
         application.job_id,
         application.candidate_id
 

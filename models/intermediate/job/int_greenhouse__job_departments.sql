@@ -10,7 +10,7 @@ department as (
     from {{ var('department') }}
 ),
 
-grab_parent_department as (
+join_parent_department as (
 
     select 
         sub.*,
@@ -24,11 +24,11 @@ agg_departments as (
 
     select
         job_id,
-        {{ fivetran_utils.string_agg("grab_parent_department.name", "', '") }} as department,
-        {{ fivetran_utils.string_agg("grab_parent_department.parent_department_name", "', '") }} as parent_department
+        {{ fivetran_utils.string_agg("join_parent_department.name", "'; '") }} as departments,
+        {{ fivetran_utils.string_agg("join_parent_department.parent_department_name", "'; '") }} as parent_departments
 
     from job_department
-    join grab_parent_department using(department_id)
+    join join_parent_department using(department_id)
 
     group by job_id
 )

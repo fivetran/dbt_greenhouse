@@ -21,18 +21,17 @@ final as (
 
     select
         interview.*,
-        job_stage.stage_name as job_stage,
         application.full_name as candidate_name,
+        job_stage.stage_name as job_stage,
+        application.current_job_stage as application_current_job_stage,
         application.status as current_application_status,
         application.job_title,
-        application.job_office,
-        application.job_department,
-        application.job_parent_department,
+        application.job_offices,
+        application.job_departments,
+        application.job_parent_departments,
         application.job_id,
 
         application.hiring_managers like ('%' || interview.interviewer_name || '%')  as interviewer_is_hiring_manager,
-        -- this logic is incorrect i think...
-        {# job_stage.stage_name = application.current_job_stage as has_advanced_since_interview, #}
         application.hiring_managers,
         application.recruiter_name
 

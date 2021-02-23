@@ -11,14 +11,12 @@ application as (
 ),
 
 -- necessary users = credited_to_user (ie referrer), prospect_owner
-grab_user_names as (
+join_user_names as (
 
     select
         application.*,
         referrer.full_name as referrer_name,
-        prospect_owner.full_name as prospect_owner_name,
-
-        prospect_owner.email as prospect_owner_email
+        prospect_owner.full_name as prospect_owner_name
 
     from application
 
@@ -30,4 +28,4 @@ grab_user_names as (
 )
 
 select *
-from grab_user_names
+from join_user_names

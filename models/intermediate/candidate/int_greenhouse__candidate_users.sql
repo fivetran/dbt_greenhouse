@@ -11,7 +11,7 @@ candidate as (
 ),
 
 -- necessary users = coordinator_user, recruiter_user
-grab_user_names as (
+join_user_names as (
 
     select
         candidate.*,
@@ -31,4 +31,4 @@ grab_user_names as (
 )
 
 select *
-from grab_user_names
+from join_user_names
