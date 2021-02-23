@@ -8,6 +8,7 @@ interview_metrics as (
 
     select 
         application_id,
+        -- bigquery doesn't like taking the max of booleans...
         max(case when interviewer_is_hiring_manager then 1 else 0 end) as has_interviewed_w_hiring_manager,
         count(distinct scheduled_interview_id) as count_interviews,
         count(distinct scorecard_id) as count_interview_scorecards,
