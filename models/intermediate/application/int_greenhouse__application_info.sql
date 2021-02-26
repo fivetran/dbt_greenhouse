@@ -18,7 +18,7 @@ candidate_tag as (
 
 job_stage as (
 
-    select *,
+    select *
     from {{ var('job_stage') }}
 ),
 
