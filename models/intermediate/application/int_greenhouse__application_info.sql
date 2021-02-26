@@ -78,9 +78,17 @@ join_info as (
     select 
         application.*,
         -- remove/rename overlapping columns + get custom columns
+        {% if target.type == 'snowflake'%}
+        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_users'), 
+            except=["CANDIDATE_ID", "NEW_CANDIDATE_ID", "CREATED_AT", "_FIVETRAN_SYNCED", "LAST_ACTIVITY_AT"], 
+            relation_alias="candidate") }}
+
+        {% else %}
         {{ dbt_utils.star(from=ref('int_greenhouse__candidate_users'), 
             except=["candidate_id", "new_candidate_id", "created_at", "_fivetran_synced", "last_activity_at"], 
             relation_alias="candidate") }}
+        
+        {% endif %}
         ,
         candidate.created_at as candidate_created_at,
         candidate_tag.tags as candidate_tags,
