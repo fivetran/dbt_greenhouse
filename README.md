@@ -2,24 +2,23 @@
 
 This package models Greenhouse recruiting data from [Fivetran's connector](https://fivetran.com/docs/applications/greenhouse). It uses data in the format described by [this ERD](https://fivetran.com/docs/applications/greenhouse#schemainformation).
 
-This package enables you to understand trends in sourcing,recruiting, interviewing, and hiring at your company. It
-
-[High level objective of package]. It achieves this by:
-- [major thing the package does #1]
-- [ #2 ] 
-- [ #3]
-...
+This package enables you to understand trends in sourcing,recruiting, interviewing, and hiring at your company. It also provides recruiting stakeholders with information about individual applications, interviews, scorecards, and jobs.
+It achieves all of this by:
+- Enriching the core application, interview, and job tables with relevant pipeline data and metrics
+- Integrating the interview table with interviewer information and feedback, at both the overall scorecard and individual standard levels
+- Calculating the velocity and activity of applications through each pipeline stage, along with major job- and candidate-related attributes for segmented funnel analysis
 
 ## Models 
 This package contains transformation models, designed to work simultaneously with our [Greenhouse source package](https://github.com/fivetran/dbt_greenhouse_source). A dependency on the source package is declared in this package's `packages.yml` file, so it will automatically download when you run `dbt deps`. The primary outputs of this package are described below. Intermediate models are used to create these output models.
 
 | **model**                | **description**                                                                                                                                |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [greenhouse__application_enhanced](models/greenhouse__application_enhanced.sql)             | Each record represents a unique application. |
-| [greenhouse__application_history](models/greenhouse__application_history.sql)             | beep beep |
-| [greenhouse__interview_enhanced](models/greenhouse__interview_enhanced.sql)             | beep beep |
-| [greenhouse__interview_scorecard_detail](models/greenhouse__interview_scorecard_detail.sql)             | beep beep |
-| [greenhouse__job_enhanced](models/greenhouse__job_enhanced.sql)             | beep beep |
+| [greenhouse__application_enhanced](models/greenhouse__application_enhanced.sql)             | Each record represents a unique [application](https://developers.greenhouse.io/harvest.html#applications), enriched with data regarding the applicant's current stage, source, contact information and resume, associated tags, demographic information, recruiter, coordinator, referrer, hiring managers, and the job they are applying for. Also includes metrics surrounding the candidate's interviews and their volume of activity in Greenhouse.  |
+| [greenhouse__job_enhanced](models/greenhouse__job_enhanced.sql)             | Each record represents a unique [job](https://developers.greenhouse.io/harvest.html#jobs), enriched with its associated offices, teams, departments, and hiring team members. Also includes metrics regarding the volume of open, rejected, and hired applications, its active and filled job openings, any job posts, and its active, archived, and converted prospects. |
+| [greenhouse__interview_enhanced](models/greenhouse__interview_enhanced.sql)             | Each record represents a unique scheduled interview between an individual interviewer and a candidate (so a panel of 3 interviewers would have 3 records). Includes overall interview feedback, information about the users involved with this interview and application, the application's current status, and data regarding the candidate and the job being interviewed for. |
+| [greenhouse__interview_scorecard_detail](models/greenhouse__interview_scorecard_detail.sql)             | Each record represents a unique scorecard attribute, or an individual standard to be rated along for an interview. Includeds information about the candidate, job, and interview at large. *Note: this does not include free-form text responses to scorecard questions.*|
+| [greenhouse__application_history](models/greenhouse__application_history.sql)             | Each record represents an application advancing to a new stage. Includes data about the time spent in each stage, the volume of activity per stage, the application source, candidate demographics, recruiters, and hiring managers, as well as the job's team, office, and department. |
+
 
 ## Installation Instructions
 Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions, or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.

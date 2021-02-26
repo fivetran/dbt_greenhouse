@@ -77,7 +77,7 @@ join_info as (
 
     select 
         application.*,
-        -- remove/rename overlapping columns 
+        -- remove/rename overlapping columns + get custom columns
         {{ dbt_utils.star(from=ref('int_greenhouse__candidate_users'), 
             except=["candidate_id", "new_candidate_id", "created_at", "_fivetran_synced", "last_activity_at"], 
             relation_alias="candidate") }}
