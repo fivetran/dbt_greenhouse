@@ -79,7 +79,7 @@ vars:
   greenhouse_using_prospects: true
 
 seeds:
-  greenhouse_source_integration_tests:
+  greenhous_integration_tests:
     +column_types:
       _fivetran_synced: timestamp
     activity:
