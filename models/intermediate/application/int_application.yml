@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: int_greenhouse__application_users
+    description: Table capturing lists of activities on a candidate’s profile, including interviews, notes, and emails.
