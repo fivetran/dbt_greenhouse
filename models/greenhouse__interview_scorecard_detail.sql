@@ -26,7 +26,8 @@ join_w_attributes as (
         interview.application_id,
         interview.job_title,
         interview.job_id,
-        interview.hiring_managers
+        interview.hiring_managers,
+        interview.interview_scorecard_key
         
     from interview left join scorecard_attribute using(scorecard_id)
 ),
@@ -35,10 +36,10 @@ final as (
 
     select 
         *,
-        {{ dbt_utils.surrogate_key(['scorecard_id', 'index']) }} as scorecard_attribute_key
+        {{ dbt_utils.surrogate_key(['interview_scorecard_key', 'index']) }} as scorecard_attribute_key
 
     from join_w_attributes
 )
 
 select *
-from join_w_attributes
+from final
