@@ -1,4 +1,4 @@
-# Greenhouse
+# Greenhouse ([docs](https://fivetran-dbt-greenhouse.netlify.app/#!/overview))
 
 This package models Greenhouse recruiting data from [Fivetran's connector](https://fivetran.com/docs/applications/greenhouse). It uses data in the format described by [this ERD](https://fivetran.com/docs/applications/greenhouse#schemainformation).
 
@@ -69,7 +69,7 @@ vars:
     greenhouse_using_app_history: false # Disable if you do not have APPLICATION_HISTORY synced and/or do not want to run the application_history transform model
 ```
 
-*Note: This package only integrates the above variables. If you'd like to disable other models, please create an issue specifying which ones.*
+*Note: This package only integrates the above variables. If you'd like to disable other models, please create an [issue](https://github.com/fivetran/dbt_greenhouse/issues) specifying which ones.*
 
 ## Contributions
 Don't see a model or specific metric you would have liked to be included? Notice any bugs when installing 
