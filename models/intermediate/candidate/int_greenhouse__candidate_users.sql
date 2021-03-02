@@ -1,3 +1,8 @@
+{{
+  config(
+    materialized = 'table'
+    )
+}}
 with greenhouse_user as (
 
     select *
