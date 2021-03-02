@@ -2,10 +2,10 @@
 
 This package models Greenhouse recruiting data from [Fivetran's connector](https://fivetran.com/docs/applications/greenhouse). It uses data in the format described by [this ERD](https://fivetran.com/docs/applications/greenhouse#schemainformation).
 
-This package enables you to understand trends in sourcing,recruiting, interviewing, and hiring at your company. It also provides recruiting stakeholders with information about individual applications, interviews, scorecards, and jobs.
+This package enables you to understand trends in sourcing, recruiting, interviewing, and hiring at your company. It also provides recruiting stakeholders with information about individual applications, interviews, scorecards, and jobs.
 It achieves all of this by:
-- Enriching the core application, interview, and job tables with relevant pipeline data and metrics
-- Integrating the interview table with interviewer information and feedback, at both the overall scorecard and individual standard levels
+- Enriching the core `APPLICATION`, `INTERVIEW`, and `JOB` tables with relevant pipeline data and metrics
+- Integrating the `INTERVIEW` table with interviewer information and feedback at both the overall scorecard and individual standard levels
 - Calculating the velocity and activity of applications through each pipeline stage, along with major job- and candidate-related attributes for segmented funnel analysis
 
 ## Models 
@@ -13,10 +13,10 @@ This package contains transformation models, designed to work simultaneously wit
 
 | **model**                | **description**                                                                                                                                |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [greenhouse__application_enhanced](models/greenhouse__application_enhanced.sql)             | Each record represents a unique [application](https://developers.greenhouse.io/harvest.html#applications), enriched with data regarding the applicant's current stage, source, contact information and resume, associated tags, demographic information, recruiter, coordinator, referrer, hiring managers, and the job they are applying for. Also includes metrics surrounding the candidate's interviews and their volume of activity in Greenhouse.  |
-| [greenhouse__job_enhanced](models/greenhouse__job_enhanced.sql)             | Each record represents a unique [job](https://developers.greenhouse.io/harvest.html#jobs), enriched with its associated offices, teams, departments, and hiring team members. Also includes metrics regarding the volume of open, rejected, and hired applications, its active and filled job openings, any job posts, and its active, archived, and converted prospects. |
-| [greenhouse__interview_enhanced](models/greenhouse__interview_enhanced.sql)             | Each record represents a unique [scheduled interview](https://developers.greenhouse.io/harvest.html#scheduled-interviews) between an individual interviewer and a candidate (so a panel of 3 interviewers would have 3 records). Includes overall interview feedback, information about the users involved with this interview and application, the application's current status, and data regarding the candidate and the job being interviewed for. |
-| [greenhouse__interview_scorecard_detail](models/greenhouse__interview_scorecard_detail.sql)             | Each record represents a unique scorecard attribute, or an individual standard to be rated along for an interview. Includeds information about the candidate, job, and interview at large. *Note: this does not include free-form text responses to scorecard questions.*|
+| [greenhouse__application_enhanced](models/greenhouse__application_enhanced.sql)             | Each record represents a unique [application](https://developers.greenhouse.io/harvest.html#applications), enriched with data regarding the applicant's current stage, source, contact information and resume, associated tags, demographic information, recruiter, coordinator, referrer, hiring managers, and the job they are applying for. Includes metrics surrounding the candidate's interviews and their volume of activity in Greenhouse.  |
+| [greenhouse__job_enhanced](models/greenhouse__job_enhanced.sql)             | Each record represents a unique [job](https://developers.greenhouse.io/harvest.html#jobs), enriched with its associated offices, teams, departments, and hiring team members. Includes metrics regarding the volume of open, rejected, and hired applications, its active and filled job openings, any job posts, and its active, archived, and converted prospects. |
+| [greenhouse__interview_enhanced](models/greenhouse__interview_enhanced.sql)             | Each record represents a unique [scheduled interview](https://developers.greenhouse.io/harvest.html#scheduled-interviews) between an individual interviewer and a candidate (so a panel of three interviewers would have three records). Includes overall interview feedback, information about the users involved with this interview and application, the application's current status, and data regarding the candidate and the job being interviewed for. |
+| [greenhouse__interview_scorecard_detail](models/greenhouse__interview_scorecard_detail.sql)             | Each record represents a unique scorecard attribute, or an individual standard to be rated along for an interview. Includes information about the candidate, job, and interview at large. *Note: Does not include free-form text responses to scorecard questions.*|
 | [greenhouse__application_history](models/greenhouse__application_history.sql)             | Each record represents an application advancing to a new stage. Includes data about the time spent in each stage, the volume of activity per stage, the application source, candidate demographics, recruiters, and hiring managers, as well as the job's team, office, and department. |
 
 
@@ -37,8 +37,8 @@ vars:
     greenhouse_schema: your_schema_name 
 ```
 
-### Passing Through Custom Columns
-The Greenhouse `APPLICATION`, `JOB`, AND `CANDIDATE` tables may all have custom columns, all prefixed with `custom_field_`. To pass these columns along to the staging and final transformation models, add the following variables to your `dbt_project.yml` file:
+### Passthrough Custom Columns
+The Greenhouse `APPLICATION`, `JOB`, and `CANDIDATE` tables may have custom columns, all prefixed with `custom_field_`. To pass these columns along to the staging and final transformation models, add the following variables to your `dbt_project.yml` file:
 
 ```yml
 # dbt_project.yml
@@ -55,7 +55,7 @@ vars:
 ### Disabiling Models
 Your Greenhouse connector might not sync every table that this package expects. If your syncs exclude certain tables, it is because you either don't use that functionality in Greenhouse or have actively excluded some tables from your syncs.
 
-To disable the corresponding functionality in the package, you must add the relevant variables. By default, all variables are assumed to be true. Add variables for only the tables you would like to disable:
+To disable the corresponding functionality in the package, you must add the relevant variables. By default, all variables are assumed to be `true`. Add variables for only the tables you would like to disable:
 
 ```yml
 # dbt_project.yml
@@ -69,7 +69,7 @@ vars:
     greenhouse_using_app_history: false # Disable if you do not have APPLICATION_HISTORY synced and/or do not want to run the application_history transform model
 ```
 
-*Note: this package only integrates the above variables. If you'd like to disable other models, please create an issue specifying which ones.*
+*Note: This package only integrates the above variables. If you'd like to disable other models, please create an issue specifying which ones.*
 
 ## Contributions
 Don't see a model or specific metric you would have liked to be included? Notice any bugs when installing 
