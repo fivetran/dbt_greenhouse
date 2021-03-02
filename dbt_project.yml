@@ -42,6 +42,8 @@ vars:
   greenhouse_using_app_history: true
   greenhouse_using_prospects: true
 
-models: 
+models:
   greenhouse:
-    +materialized: table # for now
+    +materialized: table
+    intermediate: 
+      +materialized: ephemeral
