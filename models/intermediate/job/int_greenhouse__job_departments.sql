@@ -1,3 +1,5 @@
+{{ config(enabled=var('greenhouse_using_job_department', True)) }}
+
 with job_department as (
 
     select *
