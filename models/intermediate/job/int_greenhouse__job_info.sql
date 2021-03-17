@@ -33,14 +33,16 @@ final as (
         hiring_team.hiring_managers,
         hiring_team.sourcers,
         hiring_team.recruiters,
-        hiring_team.coordinators,
+        hiring_team.coordinators
 
         {% if var('greenhouse_using_job_office', True) %}
+        ,
         job_office.offices,
-        job_office.locations as office_locations,
+        job_office.locations as office_locations
         {% endif %}
 
         {% if var('greenhouse_using_job_department', True) %}
+        ,
         job_department.departments,
         job_department.parent_departments
         {% endif %}

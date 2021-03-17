@@ -42,15 +42,18 @@ join_application_history as (
         application.sourced_from, 
         application.sourced_from_type,
         application.job_title,
-        {% if var('greenhouse_using_job_department', True) %}
-        application.job_departments,
-        application.job_parent_departments,
-        {% endif %}
-        {% if var('greenhouse_using_job_office', True) %}
-        application.job_offices,
-        {% endif %}
         application.job_id,
         application.candidate_id
+        {% if var('greenhouse_using_job_department', True) %}
+        ,
+        application.job_departments,
+        application.job_parent_departments
+        {% endif %}
+        
+        {% if var('greenhouse_using_job_office', True) %}
+        ,
+        application.job_offices
+        {% endif %}
 
         {% if var('greenhouse_using_eeoc', True) %}
         ,

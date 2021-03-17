@@ -1,3 +1,7 @@
 packages:
-  - package: fivetran/greenhouse_source
-    version: [">=0.2.0","<0.3.0"]
+  # - package: fivetran/greenhouse_source
+  #   version: [">=0.2.0","<0.3.0"]
+    # - local: ../dbt_greenhouse_source
+  - git: https://github.com/fivetran/dbt_greenhouse_source.git
+    warn-unpinned: false  
+    revision: jr_working
