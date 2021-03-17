@@ -83,8 +83,8 @@ By default this package will build the Greenhouse Source staging models within a
 models:
     greenhouse:
         +schema: my_new_final_models_schema # leave blank for just the target_schema
-        greenhouse_source:
-            +schema: my_new_staging_models_schema # leave blank for just the target_schema
+    greenhouse_source:
+        +schema: my_new_staging_models_schema # leave blank for just the target_schema
 
 ```
 
