@@ -98,9 +98,15 @@ join_info as (
         activity.count_activities,
 
         job.job_title,
+        {% if var('greenhouse_using_job_office', True) %}
         job.offices as job_offices,
+        {% endif %}
+
+        {% if var('greenhouse_using_job_department', True) %}
         job.departments as job_departments,
         job.parent_departments as job_parent_departments,
+        {% endif %}
+        
         job.status as job_status,
         job.hiring_managers,
         job.job_id,

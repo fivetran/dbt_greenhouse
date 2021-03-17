@@ -42,9 +42,13 @@ join_application_history as (
         application.sourced_from, 
         application.sourced_from_type,
         application.job_title,
+        {% if var('greenhouse_using_job_department', True) %}
         application.job_departments,
         application.job_parent_departments,
+        {% endif %}
+        {% if var('greenhouse_using_job_office', True) %}
         application.job_offices,
+        {% endif %}
         application.job_id,
         application.candidate_id
 
@@ -81,8 +85,12 @@ activities_in_stages as (
     from time_in_stages
     left join activity on activity.candidate_id = time_in_stages.candidate_id
 
-    -- 18 columns in join_application_history CTE + 4 more if using the eeoc table + 1 days_in_stage column 
-    {{ dbt_utils.group_by(23 if var('greenhouse_using_eeoc', True) else 19) }}
+    -- 15 standard columns in join_application_history CTE + 4 more if using the eeoc table + 1 days_in_stage column + 1 job_office + 1 job_department
+    {% set count_eeoc_columns = 4 if var('greenhouse_using_eeoc', True) else 0 %}
+    {% set count_office_columns = 1 if var('greenhouse_using_job_office', True) else 0 %}
+    {% set count_department_columns = 2 if var('greenhouse_using_job_department', True) else 0 %}
+    
+    {{ dbt_utils.group_by(count_eeoc_columns + count_office_columns + count_department_columns + 15 + 1) }}
 )
 
 select *
