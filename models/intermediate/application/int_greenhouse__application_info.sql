@@ -98,14 +98,22 @@ join_info as (
         activity.count_activities,
 
         job.job_title,
-        job.offices as job_offices,
-        job.departments as job_departments,
-        job.parent_departments as job_parent_departments,
         job.status as job_status,
         job.hiring_managers,
         job.job_id,
         job.requisition_id as job_requisition_id,
         job.sourcers as job_sourcers
+
+        {% if var('greenhouse_using_job_office', True) %}
+        ,
+        job.offices as job_offices
+        {% endif %}
+
+        {% if var('greenhouse_using_job_department', True) %}
+        ,
+        job.departments as job_departments,
+        job.parent_departments as job_parent_departments
+        {% endif %}
 
         {% if var('greenhouse_using_prospects', true) %}
         ,
