@@ -7,7 +7,7 @@ with application_history as (
         new_stage_id,
         new_status,
         updated_at as valid_from,
-        coalesce(lead(updated_at) over (partition by application_id order by updated_at asc), {{ dbt_utils.current_timestamp() }})  as valid_until
+        coalesce(lead(updated_at) over (partition by application_id order by updated_at asc), {{ dbt.current_timestamp_backcompat() }})  as valid_until
 
     from {{ var('application_history') }}
 ),
@@ -74,7 +74,7 @@ time_in_stages as (
 
     select 
         *,
-        {{ dbt_utils.datediff('valid_from', 'valid_until', 'day') }} as days_in_stage
+        {{ dbt.datediff('valid_from', 'valid_until', 'day') }} as days_in_stage
 
     from join_application_history
 ),

@@ -36,7 +36,7 @@ final as (
 
     select 
         *,
-        {{ dbt_utils.surrogate_key(['interview_scorecard_key', 'index']) }} as scorecard_attribute_key
+        {{ dbt_utils.generate_surrogate_key(['interview_scorecard_key', 'index']) }} as scorecard_attribute_key
 
     from join_w_attributes
 )
