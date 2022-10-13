@@ -1,83 +1,77 @@
 name: 'greenhouse_integration_tests'
-version: '0.3.0'
+version: '0.4.0'
 config-version: 2
 profile: 'integration_tests'
-
-
 vars:
   greenhouse_source:
-    activity: "{{ ref('activity') }}" 
-    application: "{{ ref('application') }}" 
-    application_history: "{{ ref('application_history') }}" 
-    attachment: "{{ ref('attachment') }}" 
-    candidate: "{{ ref('candidate') }}" 
-    candidate_tag: "{{ ref('candidate_tag') }}" 
-    department: "{{ ref('department') }}" 
-    eeoc: "{{ ref('eeoc') }}" 
-    email_address: "{{ ref('email_address') }}" 
-    hiring_team: "{{ ref('hiring_team') }}" 
-    interview: "{{ ref('interview') }}" 
-    job: "{{ ref('job') }}" 
-    job_department: "{{ ref('job_department') }}" 
-    job_office: "{{ ref('job_office') }}" 
-    job_opening: "{{ ref('job_opening') }}" 
-    job_post: "{{ ref('job_post') }}" 
-    job_stage: "{{ ref('job_stage') }}" 
-    job_application: "{{ ref('job_application') }}" 
-    office: "{{ ref('office') }}" 
-    phone_number: "{{ ref('phone_number') }}" 
-    prospect_pool: "{{ ref('prospect_pool') }}" 
-    prospect_stage: "{{ ref('prospect_stage') }}" 
-    scheduled_interview: "{{ fivetran_utils.snowflake_seed_data('scheduled_interview') }}" 
-    scheduled_interviewer: "{{ ref('scheduled_interviewer') }}" 
-    scorecard: "{{ ref('scorecard') }}" 
-    scorecard_attribute: "{{ ref('scorecard_attribute') }}" 
-    social_media_address: "{{ ref('social_media_address') }}" 
-    source: "{{ ref('source') }}" 
-    tag: "{{ ref('tag') }}" 
-    user: "{{ ref('user') }}" 
-    user_email: "{{ ref('user_email') }}" 
-  
+    activity: "{{ ref('activity') }}"
+    application: "{{ ref('application') }}"
+    application_history: "{{ ref('application_history') }}"
+    attachment: "{{ ref('attachment') }}"
+    candidate: "{{ ref('candidate') }}"
+    candidate_tag: "{{ ref('candidate_tag') }}"
+    department: "{{ ref('department') }}"
+    eeoc: "{{ ref('eeoc') }}"
+    email_address: "{{ ref('email_address') }}"
+    hiring_team: "{{ ref('hiring_team') }}"
+    interview: "{{ ref('interview') }}"
+    job: "{{ ref('job') }}"
+    job_department: "{{ ref('job_department') }}"
+    job_office: "{{ ref('job_office') }}"
+    job_opening: "{{ ref('job_opening') }}"
+    job_post: "{{ ref('job_post') }}"
+    job_stage: "{{ ref('job_stage') }}"
+    job_application: "{{ ref('job_application') }}"
+    office: "{{ ref('office') }}"
+    phone_number: "{{ ref('phone_number') }}"
+    prospect_pool: "{{ ref('prospect_pool') }}"
+    prospect_stage: "{{ ref('prospect_stage') }}"
+    scheduled_interview: "{{ fivetran_utils.snowflake_seed_data('scheduled_interview') }}"
+    scheduled_interviewer: "{{ ref('scheduled_interviewer') }}"
+    scorecard: "{{ ref('scorecard') }}"
+    scorecard_attribute: "{{ ref('scorecard_attribute') }}"
+    social_media_address: "{{ ref('social_media_address') }}"
+    source: "{{ ref('source') }}"
+    tag: "{{ ref('tag') }}"
+    user: "{{ ref('user') }}"
+    user_email: "{{ ref('user_email') }}"
   greenhouse:
-    activity: "{{ ref('stg_greenhouse__activity') }}" 
-    application: "{{ ref('stg_greenhouse__application') }}" 
-    department: "{{ ref('stg_greenhouse__department') }}" 
-    attachment: "{{ ref('stg_greenhouse__attachment') }}" 
-    candidate: "{{ ref('stg_greenhouse__candidate') }}" 
-    candidate_tag: "{{ ref('stg_greenhouse__candidate_tag') }}" 
-    application_history: "{{ ref('stg_greenhouse__application_history') }}" 
-    eeoc: "{{ ref('stg_greenhouse__eeoc') }}" 
-    email_address: "{{ ref('stg_greenhouse__email_address') }}" 
-    hiring_team: "{{ ref('stg_greenhouse__hiring_team') }}" 
-    interview: "{{ ref('stg_greenhouse__interview') }}" 
-    job: "{{ ref('stg_greenhouse__job') }}" 
-    job_department: "{{ ref('stg_greenhouse__job_department') }}" 
-    job_office: "{{ ref('stg_greenhouse__job_office') }}" 
-    job_opening: "{{ ref('stg_greenhouse__job_opening') }}" 
-    job_post: "{{ ref('stg_greenhouse__job_post') }}" 
-    job_stage: "{{ ref('stg_greenhouse__job_stage') }}" 
-    job_application: "{{ ref('stg_greenhouse__job_application') }}" 
-    office: "{{ ref('stg_greenhouse__office') }}" 
-    phone_number: "{{ ref('stg_greenhouse__phone_number') }}" 
-    prospect_pool: "{{ ref('stg_greenhouse__prospect_pool') }}" 
-    prospect_stage: "{{ ref('stg_greenhouse__prospect_stage') }}" 
-    scheduled_interview: "{{ ref('stg_greenhouse__scheduled_interview') }}" 
-    scheduled_interviewer: "{{ ref('stg_greenhouse__scheduled_interviewer') }}" 
-    scorecard: "{{ ref('stg_greenhouse__scorecard') }}" 
-    scorecard_attribute: "{{ ref('stg_greenhouse__scorecard_attribute') }}" 
-    social_media_address: "{{ ref('stg_greenhouse__social_media_address') }}" 
-    source: "{{ ref('stg_greenhouse__source') }}" 
-    tag: "{{ ref('stg_greenhouse__tag') }}" 
-    user: "{{ ref('stg_greenhouse__user') }}" 
-    user_email: "{{ ref('stg_greenhouse__user_email') }}" 
-
+    activity: "{{ ref('stg_greenhouse__activity') }}"
+    application: "{{ ref('stg_greenhouse__application') }}"
+    department: "{{ ref('stg_greenhouse__department') }}"
+    attachment: "{{ ref('stg_greenhouse__attachment') }}"
+    candidate: "{{ ref('stg_greenhouse__candidate') }}"
+    candidate_tag: "{{ ref('stg_greenhouse__candidate_tag') }}"
+    application_history: "{{ ref('stg_greenhouse__application_history') }}"
+    eeoc: "{{ ref('stg_greenhouse__eeoc') }}"
+    email_address: "{{ ref('stg_greenhouse__email_address') }}"
+    hiring_team: "{{ ref('stg_greenhouse__hiring_team') }}"
+    interview: "{{ ref('stg_greenhouse__interview') }}"
+    job: "{{ ref('stg_greenhouse__job') }}"
+    job_department: "{{ ref('stg_greenhouse__job_department') }}"
+    job_office: "{{ ref('stg_greenhouse__job_office') }}"
+    job_opening: "{{ ref('stg_greenhouse__job_opening') }}"
+    job_post: "{{ ref('stg_greenhouse__job_post') }}"
+    job_stage: "{{ ref('stg_greenhouse__job_stage') }}"
+    job_application: "{{ ref('stg_greenhouse__job_application') }}"
+    office: "{{ ref('stg_greenhouse__office') }}"
+    phone_number: "{{ ref('stg_greenhouse__phone_number') }}"
+    prospect_pool: "{{ ref('stg_greenhouse__prospect_pool') }}"
+    prospect_stage: "{{ ref('stg_greenhouse__prospect_stage') }}"
+    scheduled_interview: "{{ ref('stg_greenhouse__scheduled_interview') }}"
+    scheduled_interviewer: "{{ ref('stg_greenhouse__scheduled_interviewer') }}"
+    scorecard: "{{ ref('stg_greenhouse__scorecard') }}"
+    scorecard_attribute: "{{ ref('stg_greenhouse__scorecard_attribute') }}"
+    social_media_address: "{{ ref('stg_greenhouse__social_media_address') }}"
+    source: "{{ ref('stg_greenhouse__source') }}"
+    tag: "{{ ref('stg_greenhouse__tag') }}"
+    user: "{{ ref('stg_greenhouse__user') }}"
+    user_email: "{{ ref('stg_greenhouse__user_email') }}"
   greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_']
   greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options']
-  
   greenhouse_using_eeoc: true
   greenhouse_using_app_history: true
   greenhouse_using_prospects: true
-
 seeds:
   greenhouse_integration_tests:
     +column_types:
@@ -137,15 +131,15 @@ seeds:
         race_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         veteran_status_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         submitted_at: timestamp
-    email_address: 
+    email_address:
       +column_types:
         candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         index: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-    hiring_team: 
+    hiring_team:
       +column_types:
         job_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-    interview: 
+    interview:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         job_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -196,8 +190,8 @@ seeds:
         location_name: "{{ 'string' if target.name == 'bigquery' else 'varchar' }}"
     phone_number:
       +column_types:
-        candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"   
-        index: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}" 
+        candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        index: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
     prospect_pool:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -225,7 +219,6 @@ seeds:
         organizer_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         created_at: timestamp
         end: timestamp
-        # start: timestamp
         updated_at: timestamp
       +enabled: "{{ true if target.type == 'snowflake' else false }}"
     scheduled_interviewer:
@@ -266,4 +259,3 @@ seeds:
     user_email:
       +column_types:
         user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-
