@@ -3,8 +3,8 @@ version: '0.5.0'
 config-version: 2
 profile: 'integration_tests'
 vars:
-    greenhouse_source:
-    greenhouse_schema: greenhouse_integration_tests
+  greenhouse_schema: greenhouse_integration_tests
+  greenhouse_source:
     activity: "{{ ref('activity') }}"
     application: "{{ ref('application') }}"
     application_history: "{{ ref('application_history') }}"
