@@ -38,7 +38,6 @@
 - Dependencies on `fivetran/fivetran_utils` have been upgraded, previously `[">=0.3.0", "<0.4.0"]` now `[">=0.4.0", "<0.5.0"]`.
 ## 🎉 Documentation and Feature Updates 🎉:
 - Updated README documentation for easier navigation and dbt package setup.
-- Included the `greenhouse_[source_table_name]_identifier` variables for easier flexibility of the package models to refer to differently named sources tables.
 
 # dbt_greenhouse v0.4.0
 🎉 dbt v1.0.0 Compatibility 🎉
