@@ -164,7 +164,7 @@ final as (
 
     select 
         *,
-        {{ dbt_utils.surrogate_key(['application_id', 'job_id']) }} as application_job_key
+        {{ dbt_utils.generate_surrogate_key(['application_id', 'job_id']) }} as application_job_key
     
     from join_info
 )

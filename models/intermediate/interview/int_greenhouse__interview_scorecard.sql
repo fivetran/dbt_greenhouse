@@ -29,7 +29,7 @@ interview_w_scorecard as (
 
         interview.job_stage_id,
         coalesce(interview.name, scorecard.interview_name) as interview_name,
-        {{ dbt_utils.datediff('scheduled_interview.start_at', 'scheduled_interview.end_at', 'minute') }} as duration_interview_minutes,
+        {{ dbt.datediff('scheduled_interview.start_at', 'scheduled_interview.end_at', 'minute') }} as duration_interview_minutes,
         scorecard.scorecard_id,
         scorecard.candidate_id,
         scorecard.overall_recommendation,
@@ -54,7 +54,7 @@ final as (
 
     select
         *,
-        {{ dbt_utils.surrogate_key(['scheduled_interview_id', 'interviewer_user_id']) }} as interview_scorecard_key
+        {{ dbt_utils.generate_surrogate_key(['scheduled_interview_id', 'interviewer_user_id']) }} as interview_scorecard_key
     
     from interview_w_scorecard
 )
