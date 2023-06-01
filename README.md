@@ -37,7 +37,7 @@ The following table provides a detailed list of all models materialized within t
 To use this dbt package, you must have the following:
 
 - At least one Fivetran Greenhouse connector syncing data into your destination.
-- A **BigQuery**, **Snowflake**, or **Redshift** destination.
+- A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
 ## Step 2: Install the package
 Include the following greenhouse package version in your `packages.yml` file:
@@ -45,8 +45,14 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=0.5.0", "<0.6.0"]
+    version: [">=0.6.0", "<0.7.0"]
 ```
+### Databricks dispatch configuration
+If you are using a Databricks destination with this package, you must add the following (or a variation of the following) dispatch configuration within your `dbt_project.yml`. This is required in order for the package to accurately search for macros within the `dbt-labs/spark_utils` then the `dbt-labs/dbt_utils` packages respectively.
+```yml
+dispatch:
+  - macro_namespace: dbt_utils
+    search_order: ['spark_utils', 'dbt_utils']
 
 ## Step 3: Define database and schema variables
 By default, this package runs using your destination and the `greenhouse` schema. If this is not where your Greenhouse data is (for example, if your Greenhouse schema is named `greenhouse_fivetran`), add the following configuration to your root `dbt_project.yml` file:
@@ -128,7 +134,7 @@ packages:
       version: [">=1.0.0", "<2.0.0"]
 
     - package: fivetran/greenhouse_source
-      version: [">=0.5.0", "<0.6.0"]
+      version: [">=0.6.0", "<0.7.0"]
 ```
 
 # 🙌 How is this package maintained and can I contribute?
