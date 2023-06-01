@@ -83,7 +83,7 @@ time_in_stages as (
 activities_in_stages as (
 
     select 
-        -- Call out each column for
+        -- Call out each column for Databricks compatibility
         time_in_stages.application_id,
         time_in_stages.new_stage_id,
         time_in_stages.new_status,
