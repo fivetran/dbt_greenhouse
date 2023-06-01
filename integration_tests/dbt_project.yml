@@ -3,7 +3,7 @@ version: 0.6.0
 config-version: 2
 profile: 'integration_tests'
 vars:
-  greenhouse_schema: greenhouse_integration_tests_2
+  greenhouse_schema: greenhouse_integration_tests_03
   greenhouse_source:
     greenhouse_activity_identifier: "activity"
     greenhouse_pplication_identifier: "application"
@@ -156,8 +156,8 @@ seeds:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         parent_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         primary_contact_user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        name: "{{ 'string' if target.name == 'bigquery' else 'varchar' }}"
-        location_name: "{{ 'string' if target.name == 'bigquery' else 'varchar' }}"
+        name: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
+        location_name: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
     phone_number:
       +column_types:
         candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
