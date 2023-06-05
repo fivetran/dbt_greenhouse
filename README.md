@@ -47,13 +47,7 @@ packages:
   - package: fivetran/greenhouse
     version: [">=0.6.0", "<0.7.0"]
 ```
-### Databricks dispatch configuration
-If you are using a Databricks destination with this package, you must add the following (or a variation of the following) dispatch configuration within your `dbt_project.yml`. This is required in order for the package to accurately search for macros within the `dbt-labs/spark_utils` then the `dbt-labs/dbt_utils` packages respectively.
-```yml
-dispatch:
-  - macro_namespace: dbt_utils
-    search_order: ['spark_utils', 'dbt_utils']
-```
+
 ## Step 3: Define database and schema variables
 By default, this package runs using your destination and the `greenhouse` schema. If this is not where your Greenhouse data is (for example, if your Greenhouse schema is named `greenhouse_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
@@ -135,9 +129,6 @@ packages:
 
     - package: fivetran/greenhouse_source
       version: [">=0.6.0", "<0.7.0"]
-
-    - package: dbt-labs/spark_utils
-      version: [">=0.3.0", "<0.4.0"]
 ```
 
 # 🙌 How is this package maintained and can I contribute?
