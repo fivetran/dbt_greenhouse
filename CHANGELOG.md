@@ -1,9 +1,11 @@
-# dbt_greenhouse v0.UPDATE.UPDATE
+# dbt_greenhouse v0.6.0
+## 🎉 Feature Update 🎉
+- Databricks and PostgreSQL compatibility! ([#19](https://github.com/fivetran/dbt_greenhouse/pull/19))
 
- ## Under the Hood:
+## 🚘 Under the Hood 🚘
+- Incorporated the new `fivetran_utils.drop_schemas_automation` macro into the end of each Buildkite integration test job. ([#17](https://github.com/fivetran/dbt_greenhouse/pull/17))
+- Updated the pull request [templates](/.github). ([#17](https://github.com/fivetran/dbt_greenhouse/pull/17))
 
-- Incorporated the new `fivetran_utils.drop_schemas_automation` macro into the end of each Buildkite integration test job.
-- Updated the pull request [templates](/.github).
 # dbt_greenhouse v0.5.0
 [PR #13](https://github.com/fivetran/dbt_greenhouse/pull/13) includes the following breaking changes:
 ## 🚨 Breaking Changes 🚨:

@@ -7,7 +7,8 @@ with application_history as (
         new_stage_id,
         new_status,
         updated_at as valid_from,
-        coalesce(lead(updated_at) over (partition by application_id order by updated_at asc), {{ dbt.current_timestamp_backcompat() }})  as valid_until
+        coalesce(lead(updated_at) over (partition by application_id order by updated_at asc), 
+            {{ dbt.current_timestamp_backcompat() }}) as valid_until
 
     from {{ var('application_history') }}
 ),
@@ -82,13 +83,47 @@ time_in_stages as (
 activities_in_stages as (
 
     select 
-        time_in_stages.*,
-        sum(case when activity.occurred_at >= valid_from and activity.occurred_at < valid_until then 1 else 0 end) as count_activities_in_stage
+        -- Call out each column for Databricks compatibility
+        time_in_stages.application_id,
+        time_in_stages.new_stage_id,
+        time_in_stages.new_status,
+        time_in_stages.valid_from,
+        time_in_stages.valid_until,
+        time_in_stages.new_stage,
+        time_in_stages.full_name,
+        time_in_stages.current_status,
+        time_in_stages.recruiter_name,
+        time_in_stages.hiring_managers,
+        time_in_stages.sourced_from, 
+        time_in_stages.sourced_from_type,
+        time_in_stages.job_title,
+        time_in_stages.job_id,
+        time_in_stages.candidate_id,
+        time_in_stages.days_in_stage,
+
+        {% if var('greenhouse_using_job_department', True) %}
+        time_in_stages.job_departments,
+        time_in_stages.job_parent_departments,
+        {% endif %}
+        
+        {% if var('greenhouse_using_job_office', True) %}
+        time_in_stages.job_offices,
+        {% endif %}
+
+        {% if var('greenhouse_using_eeoc', True) %}
+        time_in_stages.candidate_gender,
+        time_in_stages.candidate_disability_status,
+        time_in_stages.candidate_race,
+        time_in_stages.candidate_veteran_status,
+        {% endif %}
+
+        sum(case when activity.occurred_at >= valid_from and activity.occurred_at < valid_until 
+            then 1 else 0 end) as count_activities_in_stage
 
     from time_in_stages
     left join activity on activity.candidate_id = time_in_stages.candidate_id
 
-    -- 15 standard columns in join_application_history CTE + 4 more if using the eeoc table + 1 days_in_stage column + 1 job_office + 1 job_department
+    -- 15 standard columns in join_application_history CTE + 1 days_in_stage column + 4 more if using the eeoc table + 1 if job_office + 2 if job_department
     {% set count_eeoc_columns = 4 if var('greenhouse_using_eeoc', True) else 0 %}
     {% set count_office_columns = 1 if var('greenhouse_using_job_office', True) else 0 %}
     {% set count_department_columns = 2 if var('greenhouse_using_job_department', True) else 0 %}
