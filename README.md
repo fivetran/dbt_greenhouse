@@ -22,6 +22,8 @@
     - Enriching the core `APPLICATION`, `INTERVIEW`, and `JOB` tables with relevant pipeline data and metrics
     - Integrating the `INTERVIEW` table with interviewer information and feedback at both the overall scorecard and individual standard levels
     - Calculating the velocity and activity of applications through each pipeline stage, along with major job- and candidate-related attributes for segmented funnel analysis
+ 
+<!--section="greenhouse_transformation_model-->
 - Generates a comprehensive data dictionary of your source and modeled Greenhouse data through the [dbt docs site](https://fivetran.github.io/dbt_greenhouse/#!/overview).
 The following table provides a detailed list of all models materialized within this package by default. 
 > TIP: See more details about these models in the package's [dbt docs site](https://fivetran.github.io/dbt_greenhouse/#!/overview?g_v=1).
@@ -33,6 +35,8 @@ The following table provides a detailed list of all models materialized within t
 | [greenhouse__interview_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_enhanced)             | Each record represents a unique scheduled interview between an individual interviewer and a candidate (so a panel of three interviewers will have three records). Includes overall interview feedback, information about the users involved with this interview and application, the application's current status, and data regarding the candidate and the job being interviewed for. |
 | [greenhouse__interview_scorecard_detail](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_scorecard_detail)             | Each record represents a unique scorecard attribute or an individual standard to be rated along for an interview. Includes information about the candidate, job, and interview at large. *Note: Does not include free-form text responses to scorecard questions.*|
 | [greenhouse__application_history](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_history)             | Each record represents an application advancing to a new stage. Includes data about the time spent in each stage, the volume of activity per stage, the application source, candidate demographics, recruiters, and hiring managers, as well as the job's team, office, and department. |
+
+<!--section-end-->
 
 # 🎯 How do I use the dbt package?
 
