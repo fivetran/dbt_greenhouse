@@ -23,3 +23,11 @@ destination_configurations:
     dispatch:
       - macro_namespace: dbt_utils
         search_order: [ 'spark_utils', 'dbt_utils' ]
+
+public_models: [
+  "greenhouse__interview_scorecard_detail",
+  "greenhouse__application_enhanced",
+  "greenhouse__job_enhanced",
+  "greenhouse__application_history",
+  "greenhouse__interview_enhanced"
+]

@@ -15,17 +15,17 @@
 
 # Greenhouse Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_greenhouse/))
 
-# 📣 What does this dbt package do?
+## What does this dbt package do?
 - Produces modeled tables that leverage Greenhouse data from [Fivetran's connector](https://fivetran.com/docs/applications/greenhouse) in the format described by [this ERD](https://fivetran.com/docs/applications/greenhouse#schemainformation) and builds off the output of our [Greenhouse source package](https://github.com/fivetran/dbt_greenhouse_source).
 
 - Enables you to understand trends in sourcing, recruiting, interviewing, and hiring at your company. It also provides recruiting stakeholders with information about individual applications, interviews, scorecards, and jobs. It achieves this by:
     - Enriching the core `APPLICATION`, `INTERVIEW`, and `JOB` tables with relevant pipeline data and metrics
     - Integrating the `INTERVIEW` table with interviewer information and feedback at both the overall scorecard and individual standard levels
     - Calculating the velocity and activity of applications through each pipeline stage, along with major job- and candidate-related attributes for segmented funnel analysis
- 
+
 <!--section="greenhouse_transformation_model-->
 - Generates a comprehensive data dictionary of your source and modeled Greenhouse data through the [dbt docs site](https://fivetran.github.io/dbt_greenhouse/#!/overview).
-The following table provides a detailed list of all models materialized within this package by default. 
+The following table provides a detailed list of all models materialized within this package by default.
 > TIP: See more details about these models in the package's [dbt docs site](https://fivetran.github.io/dbt_greenhouse/#!/overview?g_v=1).
 
 | **Model**                | **Description**                                                                                                                                |
@@ -38,15 +38,15 @@ The following table provides a detailed list of all models materialized within t
 
 <!--section-end-->
 
-# 🎯 How do I use the dbt package?
+## How do I use the dbt package?
 
-## Step 1: Prerequisites
+### Step 1: Prerequisites
 To use this dbt package, you must have the following:
 
 - At least one Fivetran Greenhouse connector syncing data into your destination.
 - A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
-## Step 2: Install the package
+### Step 2: Install the package
 Include the following greenhouse package version in your `packages.yml` file:
 > TIP: Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
 ```yaml
@@ -55,7 +55,7 @@ packages:
     version: [">=0.6.0", "<0.7.0"]
 ```
 
-## Step 3: Define database and schema variables
+### Step 3: Define database and schema variables
 By default, this package runs using your destination and the `greenhouse` schema. If this is not where your Greenhouse data is (for example, if your Greenhouse schema is named `greenhouse_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
@@ -64,7 +64,7 @@ vars:
     greenhouse_schema: your_schema_name 
 ```
 
-## Step 4: Disable models for non-existent sources
+### Step 4: Disable models for non-existent sources
 Your Greenhouse connector might not sync every table that this package expects. If your syncs exclude certain tables, it is because you either do not use that functionality in Greenhouse or have actively excluded some tables from your syncs.
 
 To disable the corresponding functionality in the package, you must set the relevant config variables to `false`. By default, all variables are set to `true`. Alter variables only for the tables you want to disable:
@@ -79,11 +79,11 @@ vars:
 ```
 *Note: This package only integrates the above variables. If you'd like to disable other models, please create an [issue](https://github.com/fivetran/dbt_greenhouse/issues) specifying which ones.*
 
-## (Optional) Step 5: Additional configurations
+### (Optional) Step 5: Additional configurations
 
 <details><summary>Expand for configurations</summary>
 
-### Passing Through Custom Columns
+#### Passing Through Custom Columns
 The Greenhouse `APPLICATION`, `JOB`, and `CANDIDATE` tables may have custom columns, all prefixed with `custom_field_`. To pass these columns along to the staging and final transformation models, add the following variables to your `dbt_project.yml` file:
 
 ```yml
@@ -93,7 +93,7 @@ vars:
     greenhouse_job_custom_columns: ['the', 'list', 'of', 'columns'] # these columns will be in the final job_enhanced model
 ```
 
-### Changing the Build Schema
+#### Changing the Build Schema
 By default this package will build the Greenhouse Source staging models within a schema titled (<target_schema> + `_stg_greenhouse`) and the Greenhouse final transform models within a schema titled (<target_schema> + `_greenhouse`) in your target database. If this is not where you would like you Greenhouse staging and final models to be written to, add the following configuration to your `dbt_project.yml` file:
 
 ```yml
@@ -104,7 +104,7 @@ models:
         +schema: my_new_staging_models_schema # leave blank for just the target_schema
 
 ```
-### Change the source table references
+#### Change the source table references
 If an individual source table has a different name than the package expects, add the table name as it appears in your destination to the respective variable:
 
 > IMPORTANT: See this project's [`dbt_project.yml`](https://github.com/fivetran/dbt_greenhouse_source/blob/main/dbt_project.yml) variable declarations to see the expected names.
@@ -115,15 +115,15 @@ vars:
 ```
 </details>
 
-## (Optional) Step 6: Orchestrate your models with Fivetran Transformations for dbt Core™
+### (Optional) Step 6: Orchestrate your models with Fivetran Transformations for dbt Core™
 <details><summary>Expand for details</summary>
 <br>
     
 Fivetran offers the ability for you to orchestrate your dbt project through [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt). Learn how to set up your project for orchestration through Fivetran in our [Transformations for dbt Core setup guides](https://fivetran.com/docs/transformations/dbt#setupguide).
 </details>
 
-# 🔍 Does this package have dependencies?
-This dbt package is dependent on the following dbt packages. Please be aware that these dependencies are installed by default within this package. For more information on the following packages, refer to the [dbt hub](https://hub.getdbt.com/) site.
+## Does this package have dependencies?
+This dbt package is dependent on the following dbt packages. These dependencies are installed by default within this package. For more information on the following packages, refer to the [dbt hub](https://hub.getdbt.com/) site.
 > IMPORTANT: If you have any of these dependent packages in your own `packages.yml` file, we highly recommend that you remove them from your root `packages.yml` to avoid package version conflicts.
     
 ```yml
@@ -138,16 +138,15 @@ packages:
       version: [">=0.6.0", "<0.7.0"]
 ```
 
-# 🙌 How is this package maintained and can I contribute?
-## Package Maintenance
+## How is this package maintained and can I contribute?
+### Package Maintenance
 The Fivetran team maintaining this package _only_ maintains the latest version of the package. We highly recommend you stay consistent with the [latest version](https://hub.getdbt.com/fivetran/greenhouse/latest/) of the package and refer to the [CHANGELOG](https://github.com/fivetran/dbt_greenhouse/blob/main/CHANGELOG.md) and release notes for more information on changes across versions.
 
-## Contributions
-A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions! 
+### Contributions
+A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions.
 
-We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) on the best workflow for contributing to a package!
+We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) on the best workflow for contributing to a package.
 
-# 🏪 Are there any resources available?
-- If you have questions or want to reach out for help, please refer to the [GitHub Issue](https://github.com/fivetran/dbt_greenhouse/issues/new/choose) section to find the right avenue of support for you.
+## Are there any resources available?
+- If you have questions or want to reach out for help, see the [GitHub Issue](https://github.com/fivetran/dbt_greenhouse/issues/new/choose) section to find the right avenue of support for you.
 - If you would like to provide feedback to the dbt package team at Fivetran or would like to request a new dbt package, fill out our [Feedback Form](https://www.surveymonkey.com/r/DQ7K7WW).
-- Have questions or want to just say hi? Book a time during our office hours [on Calendly](https://calendly.com/fivetran-solutions-team/fivetran-solutions-team-office-hours) or email us at solutions@fivetran.com.
