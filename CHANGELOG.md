@@ -1,4 +1,12 @@
 # dbt_greenhouse v0.7.0
+[PR #25](https://github.com/fivetran/dbt_greenhouse/pull/25) is a breaking change due to [upstream updates](
+https://github.com/fivetran/dbt_greenhouse_source/blob/main/CHANGELOG.md#dbt_greenhouse_source-v070):
+
+- Updated the logic for `stg_greenhouse__tag` and `stg_greenhouse__user` to account for the presence of the singularly or plurally-named titular source tables, tag(s) and user(s).
+- This is a breaking change for customers with the plurally-named tables, as they have not been able to run the models previously.
+
+For more information, refer to the upstream [CHANGELOG.](
+https://github.com/fivetran/dbt_greenhouse_source/blob/main/CHANGELOG.md#dbt_greenhouse_source-v070)
 
 # dbt_greenhouse v0.6.0
 ## 🎉 Feature Update 🎉
