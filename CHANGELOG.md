@@ -1,3 +1,5 @@
+# dbt_greenhouse v0.7.0
+
 # dbt_greenhouse v0.6.0
 ## 🎉 Feature Update 🎉
 - Databricks and PostgreSQL compatibility! ([#19](https://github.com/fivetran/dbt_greenhouse/pull/19))
