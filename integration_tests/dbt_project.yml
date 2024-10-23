@@ -42,6 +42,11 @@ vars:
   greenhouse_using_eeoc: true
   greenhouse_using_app_history: true
   greenhouse_using_prospects: true
+
+
+models:
+  +schema: "greenhouse_{{ var('directed_schema','dev') }}"
+
 seeds:
   greenhouse_integration_tests:
     +column_types:
