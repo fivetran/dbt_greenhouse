@@ -2,12 +2,15 @@
 [PR #25](https://github.com/fivetran/dbt_greenhouse/pull/25) is a breaking change due to [upstream updates](
 https://github.com/fivetran/dbt_greenhouse_source/blob/main/CHANGELOG.md#dbt_greenhouse_source-v070):
 
+## Upstream Changes
 - Updated the logic for `stg_greenhouse__tag` and `stg_greenhouse__user` to account for the presence of the singularly or plurally-named titular source tables, tag(s) and user(s).
   - The source table `tag` was renamed to `tags` for [connectors created on or after July 18, 2024](https://fivetran.com/docs/connectors/applications/greenhouse/changelog#july2024) and the table `user` was renamed to `users` in [October 2024](https://fivetran.com/docs/connectors/applications/greenhouse/changelog#october2024).
 - This is a breaking change for customers with the plurally-named tables, as they have not been able to run the models previously.
 
-For more information, refer to the upstream [CHANGELOG.](
-https://github.com/fivetran/dbt_greenhouse_source/blob/main/CHANGELOG.md#dbt_greenhouse_source-v070)
+- For more information, refer to the upstream [CHANGELOG.](https://github.com/fivetran/dbt_greenhouse_source/blob/main/CHANGELOG.md#dbt_greenhouse_source-v070)
+
+## Under the Hood
+- Added validation tests under the `integration_tests/tests` folder.
 
 # dbt_greenhouse v0.6.0
 ## 🎉 Feature Update 🎉
