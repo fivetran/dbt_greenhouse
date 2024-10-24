@@ -2,8 +2,13 @@ name: 'greenhouse_integration_tests'
 version: 0.7.0
 config-version: 2
 profile: 'integration_tests'
+
+
+models:
+  +schema: "greenhouse_{{ var('directed_schema','dev') }}"
+
 vars:
-  greenhouse_schema: greenhouse_integration_tests_03
+  greenhouse_schema: greenhouse_integration_tests_05
   greenhouse_source:
     greenhouse_activity_identifier: "activity"
     greenhouse_pplication_identifier: "application"
@@ -43,9 +48,6 @@ vars:
   greenhouse_using_app_history: true
   greenhouse_using_prospects: true
 
-
-models:
-  +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 seeds:
   greenhouse_integration_tests:
