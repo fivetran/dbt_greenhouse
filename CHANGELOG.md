@@ -1,3 +1,10 @@
+# dbt_greenhouse v0.8.0
+[PR #28](https://github.com/fivetran/dbt_greenhouse/pull/28) is a breaking change due to [upstream updates](
+https://github.com/fivetran/dbt_greenhouse_source/releases/tag/v0.8.0):
+
+## Breaking Changes
+- Casted `*_id` fields as strings in upstream `stg_*` models to ensure compatibility in downstream joins.
+
 # dbt_greenhouse v0.7.0
 [PR #25](https://github.com/fivetran/dbt_greenhouse/pull/25) is a breaking change due to [upstream updates](
 https://github.com/fivetran/dbt_greenhouse_source/blob/main/CHANGELOG.md#dbt_greenhouse_source-v070):

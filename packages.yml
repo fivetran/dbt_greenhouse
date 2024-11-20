@@ -1,3 +1,6 @@
 packages:
-  - package: fivetran/greenhouse_source
-    version: [">=0.7.0", "<0.8.0"]
+  # - package: fivetran/greenhouse_source
+  #   version: [">=0.8.0", "<0.9.0"]
+  - git: https://github.com/fivetran/dbt_greenhouse_source.git
+    revision: bug/cast-ids-to-string
+    warn_unpinned: false
