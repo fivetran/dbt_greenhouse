@@ -1,4 +1,6 @@
-<p align="center">
+# Greenhouse Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_greenhouse/))
+
+<p align="left">
     <a alt="License"
         href="https://github.com/fivetran/dbt_greenhouse/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a>
@@ -12,8 +14,6 @@
         href="https://fivetran.com/docs/transformations/dbt/quickstart">
         <img src="https://img.shields.io/badge/Fivetran_Quickstart_Compatible%3F-yes-green.svg" /></a>
 </p>
-
-# Greenhouse Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_greenhouse/))
 
 ## What does this dbt package do?
 - Produces modeled tables that leverage Greenhouse data from [Fivetran's connector](https://fivetran.com/docs/applications/greenhouse) in the format described by [this ERD](https://fivetran.com/docs/applications/greenhouse#schemainformation) and builds off the output of our [Greenhouse source package](https://github.com/fivetran/dbt_greenhouse_source).
