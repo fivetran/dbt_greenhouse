@@ -3,7 +3,8 @@
 https://github.com/fivetran/dbt_greenhouse_source/releases/tag/v0.8.0):
 
 ## Breaking Changes
-- Casted `*_id` fields as strings in upstream `stg_*` models to ensure compatibility in downstream joins.
+- Updated `*_id` fields in upstream `stg_*` models to be cast as strings to ensure compatibility in downstream joins by avoiding potential type mismatches.
+  - Note: most IDs were previously stored as integers, so `*_id` fields in the end models will now also be strings.
 
 ## Documentation
 - Update dbt documentation definitions.
