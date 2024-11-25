@@ -7,7 +7,7 @@ https://github.com/fivetran/dbt_greenhouse_source/releases/tag/v0.8.0):
   - Note: most IDs were previously stored as integers, so `*_id` fields in the end models will now also be strings.
 
 ## Documentation
-- Update dbt documentation definitions.
+- Added dbt documentation definitions.
 - Update README formatting.
 
 ## Under the Hood
