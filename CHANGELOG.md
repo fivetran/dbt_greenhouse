@@ -1,3 +1,18 @@
+# dbt_greenhouse v0.8.0
+[PR #28](https://github.com/fivetran/dbt_greenhouse/pull/28) is a breaking change due to [upstream updates](
+https://github.com/fivetran/dbt_greenhouse_source/releases/tag/v0.8.0):
+
+## Breaking Changes
+- Updated `*_id` fields in upstream `stg_*` models to be cast as strings to ensure compatibility in downstream joins by avoiding potential type mismatches.
+  - Note: most IDs were previously stored as integers, so `*_id` fields in the end models will now also be strings.
+
+## Documentation
+- Added dbt documentation definitions.
+- Update README formatting.
+
+## Under the Hood
+- Added an additional integration test to verify functionality when `greenhouse_using_*` variables are disabled.
+
 # dbt_greenhouse v0.7.0
 [PR #25](https://github.com/fivetran/dbt_greenhouse/pull/25) is a breaking change due to [upstream updates](
 https://github.com/fivetran/dbt_greenhouse_source/blob/main/CHANGELOG.md#dbt_greenhouse_source-v070):

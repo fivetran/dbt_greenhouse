@@ -330,6 +330,8 @@ models:
         tests:
           - unique
           - not_null
+      - name: interview_scorecard_key
+        description: Key hashed on `scheduled_interview_id` and `interviewer_user_id`
 
   - name: greenhouse__job_enhanced 
     description: Table capturing information and metrics related to jobs. May contain custom columns.
@@ -365,7 +367,7 @@ models:
         description: Comma-separated list of the full names of the job's recruiting coordinators.
       - name: offices 
         description: Semicolon-separated list of the offices that the job is listed under. 
-      - name: locations
+      - name: office_locations
         description: Semicolon-separated list of the locations that the job is listed under. 
       - name: departments 
         description: Semicolon-separated list of the departments that the job is listed under. 
