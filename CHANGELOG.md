@@ -1,3 +1,9 @@
+# dbt_greenhouse version.version
+
+## Documentation
+- Added Quickstart model counts to README. ([#29](https://github.com/fivetran/dbt_greenhouse/pull/29))
+- Corrected references to connectors and connections in the README. ([#29](https://github.com/fivetran/dbt_greenhouse/pull/29))
+
 # dbt_greenhouse v0.8.0
 [PR #28](https://github.com/fivetran/dbt_greenhouse/pull/28) is a breaking change due to [upstream updates](
 https://github.com/fivetran/dbt_greenhouse_source/releases/tag/v0.8.0):

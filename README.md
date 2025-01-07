@@ -36,6 +36,8 @@ The following table provides a detailed list of all tables materialized within t
 | [greenhouse__interview_scorecard_detail](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_scorecard_detail)             | Each record represents a unique scorecard attribute or an individual standard to be rated along for an interview. Includes information about the candidate, job, and interview at large. *Note: Does not include free-form text responses to scorecard questions.*|
 | [greenhouse__application_history](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_history)             | Each record represents an application advancing to a new stage. Includes data about the time spent in each stage, the volume of activity per stage, the application source, candidate demographics, recruiters, and hiring managers, as well as the job's team, office, and department. |
 
+### Materialized Models
+Each Quickstart transformation job run materializes 68 models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
 <!--section-end-->
 
 ## How do I use the dbt package?
@@ -43,7 +45,7 @@ The following table provides a detailed list of all tables materialized within t
 ### Step 1: Prerequisites
 To use this dbt package, you must have the following:
 
-- At least one Fivetran Greenhouse connector syncing data into your destination.
+- At least one Fivetran Greenhouse connection syncing data into your destination.
 - A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
 ### Step 2: Install the package
