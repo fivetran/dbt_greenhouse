@@ -54,7 +54,7 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=0.8.0", "<0.9.0"]
+    version: [">=0.9.0", "<0.10.0"]
 ```
 
 ### Step 3: Define database and schema variables
@@ -137,7 +137,7 @@ packages:
       version: [">=1.0.0", "<2.0.0"]
 
     - package: fivetran/greenhouse_source
-      version: [">=0.8.0", "<0.9.0"]
+      version: [">=0.9.0", "<0.10.0"]
 ```
 
 ## How is this package maintained and can I contribute?
