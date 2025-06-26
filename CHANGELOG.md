@@ -1,6 +1,6 @@
 # dbt_greenhouse v0.9.0
 
-[PR #30](https://github.com/fivetran/dbt_greenhouse/pull/30) includes the following updates:
+[PR #31](https://github.com/fivetran/dbt_greenhouse/pull/31) includes the following updates:
 
 ## Breaking Change for dbt Core < 1.9.6
 
