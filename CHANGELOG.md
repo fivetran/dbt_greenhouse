@@ -19,7 +19,7 @@ into the `config` of `greenhouse`.
 
 If you are using dbt Core < 1.9.6 and want to continue running Greenhouse freshness tests, please elect **one** of the following options:
   1. (Recommended) Upgrade to dbt Core >= 1.9.6
-  2. Do not upgrade your installed version of the `greenhouse` package. Pin your dependency on v0.8.1 in your `packages.yml` file.
+  2. Do not upgrade your installed version of the `greenhouse` package. Pin your dependency on v0.8.0 in your `packages.yml` file.
   3. Utilize a dbt [override](https://docs.getdbt.com/reference/resource-properties/overrides) to overwrite the package's `greenhouse` source and apply freshness via the previous release top-level property route. This will require you to copy and paste the entirety of the previous release `src_greenhouse.yml` file and add an `overrides: greenhouse_source` property.
 
 ## Documentation
