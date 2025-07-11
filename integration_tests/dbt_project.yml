@@ -184,6 +184,7 @@ seeds:
         organizer_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         created_at: timestamp
         end: timestamp
+        ends: timestamp
         start: timestamp
         updated_at: timestamp
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
@@ -196,6 +197,7 @@ seeds:
         organizer_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         created_at: timestamp
         end: timestamp
+        ends: timestamp
         updated_at: timestamp
       +enabled: "{{ true if target.type == 'snowflake' else false }}"
     scheduled_interview_postgres:
@@ -206,6 +208,7 @@ seeds:
         organizer_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         created_at: timestamp
         end: timestamp
+        ends: timestamp
         updated_at: timestamp
       +enabled: "{{ true if target.type == 'postgres' else false }}"
     scheduled_interviewer:
