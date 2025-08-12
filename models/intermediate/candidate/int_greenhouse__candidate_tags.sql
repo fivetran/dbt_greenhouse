@@ -1,13 +1,13 @@
 with greeenhouse_tag as (
 
     select *
-    from {{ var('tag') }}
+    from {{ ref('stg_greenhouse__tag') }}
 ),
 
 candidate_tag as (
 
     select *
-    from {{ var('candidate_tag' )}}
+    from {{ ref('stg_greenhouse__candidate_tag') }}
 ),
 
 agg_tags as (

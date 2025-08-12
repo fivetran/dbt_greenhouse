@@ -7,7 +7,7 @@ with interview as (
 job_stage as (
 
     select *
-    from {{ var('job_stage') }}
+    from {{ ref('stg_greenhouse__job_stage') }}
 ),
 
 -- this has job info!
