@@ -16,7 +16,7 @@
 </p>
 
 ## What does this dbt package do?
-- Produces modeled tables that leverage Greenhouse data from [Fivetran's connector](https://fivetran.com/docs/applications/greenhouse) in the format described by [this ERD](https://fivetran.com/docs/applications/greenhouse#schemainformation) and builds off the output of our [Greenhouse source package](https://github.com/fivetran/dbt_greenhouse_source).
+- Produces modeled tables that leverage Greenhouse data from [Fivetran's connector](https://fivetran.com/docs/applications/greenhouse) in the format described by [this ERD](https://fivetran.com/docs/applications/greenhouse#schemainformation).
 
 - Enables you to understand trends in sourcing, recruiting, interviewing, and hiring at your company. It also provides recruiting stakeholders with information about individual applications, interviews, scorecards, and jobs. It achieves this by:
     - Enriching the core `APPLICATION`, `INTERVIEW`, and `JOB` tables with relevant pipeline data and metrics
@@ -54,7 +54,7 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=0.9.0", "<0.10.0"]
+    version: [">=1.0.0", "<1.1.0"]
 ```
 
 ### Step 3: Define database and schema variables
@@ -82,8 +82,7 @@ vars:
 *Note: This package only integrates the above variables. If you'd like to disable other models, please create an [issue](https://github.com/fivetran/dbt_greenhouse/issues) specifying which ones.*
 
 ### (Optional) Step 5: Additional configurations
-
-<details><summary>Expand for configurations</summary>
+<details open><summary>Expand/Collapse details</summary>
 
 #### Passing Through Custom Columns
 The Greenhouse `APPLICATION`, `JOB`, and `CANDIDATE` tables may have custom columns, all prefixed with `custom_field_`. To pass these columns along to the staging and final transformation models, add the following variables to your `dbt_project.yml` file:
@@ -101,11 +100,9 @@ By default this package will build the Greenhouse Source staging models within a
 ```yml
 models:
     greenhouse:
-        +schema: my_new_final_models_schema # leave blank for just the target_schema
-    greenhouse_source:
-        +schema: my_new_staging_models_schema # leave blank for just the target_schema
-
-```
+      +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
+      staging:
+        +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
 #### Change the source table references
 If an individual source table has a different name than the package expects, add the table name as it appears in your destination to the respective variable:
 
@@ -136,8 +133,6 @@ packages:
     - package: dbt-labs/dbt_utils
       version: [">=1.0.0", "<2.0.0"]
 
-    - package: fivetran/greenhouse_source
-      version: [">=0.9.0", "<0.10.0"]
 ```
 
 ## How is this package maintained and can I contribute?

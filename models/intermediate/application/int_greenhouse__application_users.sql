@@ -7,7 +7,7 @@ with greenhouse_user as (
 application as (
 
     select *
-    from {{ var('application') }}
+    from {{ ref('stg_greenhouse__application') }}
 ),
 
 -- necessary users = credited_to_user (ie referrer), prospect_owner

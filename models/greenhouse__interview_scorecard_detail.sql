@@ -7,7 +7,7 @@ with interview as (
 scorecard_attribute as (
 
     select *
-    from {{ var('scorecard_attribute') }}
+    from {{ ref('stg_greenhouse__scorecard_attribute') }}
 ),
 
 join_w_attributes as (

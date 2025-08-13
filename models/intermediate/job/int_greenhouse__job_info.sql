@@ -7,7 +7,7 @@ with hiring_team as (
 job as (
 
     select *
-    from {{ var('job') }}
+    from {{ ref('stg_greenhouse__job') }}
 ),
 
 {% if var('greenhouse_using_job_office', True) %}

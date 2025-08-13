@@ -3,13 +3,13 @@
 with job_office as (
 
     select *
-    from {{ var('job_office') }}
+    from {{ ref('stg_greenhouse__job_office') }}
 ),
 
 office as (
 
     select *
-    from {{ var('office') }}
+    from {{ ref('stg_greenhouse__office') }}
 ),
 
 agg_offices as (

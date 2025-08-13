@@ -10,7 +10,7 @@ with application_history as (
         coalesce(lead(updated_at) over (partition by application_id order by updated_at asc), 
             {{ dbt.current_timestamp_backcompat() }}) as valid_until
 
-    from {{ var('application_history') }}
+    from {{ ref('stg_greenhouse__application_history') }}
 ),
 
 application as (
@@ -22,13 +22,13 @@ application as (
 job_stage as (
 
     select *
-    from {{ var('job_stage') }}
+    from {{ ref('stg_greenhouse__job_stage') }}
 ),
 
 activity as (
 
     select *
-    from {{ var('activity') }}
+    from {{ ref('stg_greenhouse__activity') }}
 ),
 
 join_application_history as (
