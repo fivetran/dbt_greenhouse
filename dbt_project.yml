@@ -47,5 +47,7 @@ models:
     intermediate:
       +materialized: ephemeral
     staging:
-      +schema: greenhouse_source
-      +materialized: view
+      +materialized: table
+      +schema: stg_greenhouse
+      tmp:
+        +materialized: view
