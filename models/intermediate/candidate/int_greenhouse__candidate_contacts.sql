@@ -1,7 +1,7 @@
 with candidate as (
 
     select *
-    from {{ var('candidate') }}
+    from {{ ref('stg_greenhouse__candidate') }}
 ),
 
 -- candidates can have multiple phones + emails
@@ -11,7 +11,7 @@ phones as (
         candidate_id,
         {{ fivetran_utils.string_agg("phone_type || ': ' || phone_number" , "', '") }} as phone
 
-    from {{ var('phone_number') }}
+    from {{ ref('stg_greenhouse__phone_number') }}
 
     group by 1
 ),
@@ -22,7 +22,7 @@ emails as (
         candidate_id,
         {{ fivetran_utils.string_agg("'<' || email || '>'" , "', '") }} as email
 
-    from {{ var('email_address') }}
+    from {{ ref('stg_greenhouse__email_address') }}
 
     group by 1
 ),
@@ -33,7 +33,7 @@ order_resumes as (
     select 
         *,
         row_number() over(partition by candidate_id order by index desc) as resume_row_num
-    from {{ var('attachment') }}
+    from {{ ref('stg_greenhouse__attachment') }}
 
     where lower(type) = 'resume'
 ),
@@ -53,7 +53,7 @@ order_links as (
         row_number() over(partition by candidate_id, lower(url) like '%linkedin%' order by index desc) as linkedin_row_num,
         row_number() over(partition by candidate_id, lower(url) like '%github%' order by index desc) as github_row_num
 
-    from {{ var('social_media_address') }}
+    from {{ ref('stg_greenhouse__social_media_address') }}
 
     where lower(url) like '%linkedin%' or lower(url) like '%github%'
 

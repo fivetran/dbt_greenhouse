@@ -1,13 +1,13 @@
 with user_email as (
 
     select *
-    from {{ var('user_email' )}}
+    from {{ ref('stg_greenhouse__user_email') }}
 ),
 
 greenhouse_user as (
 
     select *
-    from {{ var('user') }}
+    from {{ ref('stg_greenhouse__user') }}
 ),
 
 agg_emails as (

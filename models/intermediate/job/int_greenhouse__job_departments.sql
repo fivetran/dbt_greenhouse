@@ -3,13 +3,13 @@
 with job_department as (
 
     select *
-    from {{ var('job_department') }}
+    from {{ ref('stg_greenhouse__job_department') }}
 ),
 
 department as (
 
     select *
-    from {{ var('department') }}
+    from {{ ref('stg_greenhouse__department') }}
 ),
 
 join_parent_department as (

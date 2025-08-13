@@ -137,12 +137,6 @@ models:
 
   - name: greenhouse__application_history 
     description: If enabled, table capturing the history of applications as they advance through job stages.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns: 
-            - application_id
-            - valid_from
-            - job_id
     columns:
       - name: application_id
         description: Foreign key referencing the APPLICATION that was updated.

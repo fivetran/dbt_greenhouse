@@ -1,7 +1,7 @@
 with hiring_team as (
 
     select *
-    from {{ var('hiring_team') }}
+    from {{ ref('stg_greenhouse__hiring_team') }}
 ),
 
 greenhouse_user as (

@@ -1,15 +1,14 @@
 name: 'greenhouse_integration_tests'
-version: 0.9.0
+version: '1.0.0'
 config-version: 2
 profile: 'integration_tests'
-
 
 models:
   +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 vars:
   greenhouse_schema: greenhouse_integration_tests_05
-  greenhouse_source:
+  greenhouse:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"
     greenhouse_application_history_identifier: "application_history"
@@ -32,24 +31,23 @@ vars:
     greenhouse_phone_number_identifier: "phone_number"
     greenhouse_prospect_pool_identifier: "prospect_pool"
     greenhouse_prospect_stage_identifier: "prospect_stage"
+    greenhouse_scheduled_interviewer_identifier: "scheduled_interviewer"
     greenhouse_scorecard_identifier: "scorecard"
     greenhouse_scorecard_attribute_identifier: "scorecard_attribute"
     greenhouse_social_media_address_identifier: "social_media_address"
     greenhouse_source_identifier: "source"
-    greenhouse_tag_identifier: "tag"
-    greenhouse_user_identifier: "user"
+    greenhouse_tags_identifier: "tags"
+    greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
-    greenhouse_scheduled_interviewer_identifier: "scheduled_interviewer"
     scheduled_interview: "{{ fivetran_utils.seed_data_helper('scheduled_interview', ('snowflake', 'postgres')) }}"
 
-  greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_']
-  greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options']
-  greenhouse_using_eeoc: true
-  greenhouse_using_app_history: true
-  greenhouse_using_prospects: true
-
+  # Comment out when generating docs
+  greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
+  greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options'] # @docs-ignore
 
 seeds:
+  +docs:
+    show: False
   greenhouse_integration_tests:
     +column_types:
       _fivetran_synced: timestamp
@@ -253,4 +251,4 @@ dispatch:
 
 flags:
   send_anonymous_usage_stats: False
-
+  use_colors: True

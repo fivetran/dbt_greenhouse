@@ -1,25 +1,25 @@
 with scorecard as (
 
     select *
-    from {{ var('scorecard') }}
+    from {{ ref('stg_greenhouse__scorecard') }}
 ),
 
 scheduled_interviewer as (
 
     select *
-    from {{ var('scheduled_interviewer') }}
+    from {{ ref('stg_greenhouse__scheduled_interviewer') }}
 ),
 
 scheduled_interview as (
 
     select *
-    from {{ var('scheduled_interview') }}
+    from {{ ref('stg_greenhouse__scheduled_interview') }}
 ),
 
 interview as (
     
     select *
-    from {{ var('interview') }}
+    from {{ ref('stg_greenhouse__interview') }}
 ),
 
 interview_w_scorecard as (

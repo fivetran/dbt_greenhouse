@@ -31,7 +31,7 @@ live_job_posts as (
         sum(case when is_external then 1 else 0 end) as count_live_external_posts,
         count(distinct lower(location_name)) as count_live_locations
 
-    from {{ var('job_post') }}
+    from {{ ref('stg_greenhouse__job_post') }}
 
     where is_live
 
@@ -46,7 +46,7 @@ job_openings as (
         sum(case when current_status = 'closed' then 1 else 0 end) as count_closed_openings,
         sum(case when current_status = 'closed' and application_id is not null then 1 else 0 end) as count_hired_closed_openings
         
-    from {{ var('job_opening') }}
+    from {{ ref('stg_greenhouse__job_opening') }}
 
     group by 1
 ),

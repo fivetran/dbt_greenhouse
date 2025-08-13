@@ -19,13 +19,13 @@ candidate_tag as (
 job_stage as (
 
     select *
-    from {{ var('job_stage') }}
+    from {{ ref('stg_greenhouse__job_stage') }}
 ),
 
 source as (
 
     select *
-    from {{ var('source') }}
+    from {{ ref('stg_greenhouse__source') }}
 ),
 
 activity as (
@@ -34,7 +34,7 @@ activity as (
         candidate_id,
         count(*) as count_activities
 
-    from {{ var('activity') }}
+    from {{ ref('stg_greenhouse__activity') }}
     group by 1
 ),
 
@@ -48,14 +48,14 @@ job as (
 job_application as (
 
     select *
-    from {{ var('job_application') }}
+    from {{ ref('stg_greenhouse__job_application') }}
 ),
 
 {% if var('greenhouse_using_eeoc', true) %}
 eeoc as (
 
     select *
-    from {{ var('eeoc') }}
+    from {{ ref('stg_greenhouse__eeoc') }}
 ),
 {% endif %}
 
@@ -63,13 +63,13 @@ eeoc as (
 prospect_pool as (
 
     select *
-    from {{ var('prospect_pool') }}
+    from {{ ref('stg_greenhouse__prospect_pool') }}
 ),
 
 prospect_stage as (
 
     select *
-    from {{ var('prospect_stage') }}
+    from {{ ref('stg_greenhouse__prospect_stage') }}
 ),
 {% endif %}
 
