@@ -1,5 +1,5 @@
 name: 'greenhouse_integration_tests'
-version: 0.9.0
+version: '1.0.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -8,7 +8,7 @@ models:
 
 vars:
   greenhouse_schema: greenhouse_integration_tests_05
-  greenhouse_source:
+  greenhouse:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"
     greenhouse_application_history_identifier: "application_history"
