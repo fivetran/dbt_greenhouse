@@ -1,5 +1,5 @@
 name: 'greenhouse'
-version: '1.0.0'
+version: '1.1.0'
 config-version: 2
 require-dbt-version: [">=1.3.0", "<2.0.0"]
 
@@ -34,7 +34,9 @@ vars:
     social_media_address: "{{ source('greenhouse', 'social_media_address') }}"
     source: "{{ source('greenhouse', 'source') }}"
     tag: "{{ source('greenhouse', 'tag') }}"
+    tags: "{{ source('greenhouse', 'tags') }}"
     user: "{{ source('greenhouse', 'user') }}"
+    users: "{{ source('greenhouse', 'users') }}"
     user_email: "{{ source('greenhouse', 'user_email') }}"
 
 models:
