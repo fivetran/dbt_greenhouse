@@ -7,7 +7,7 @@ models:
   +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 vars:
-  greenhouse_schema: greenhouse_integration_tests_05
+  greenhouse_schema: greenhouse_integration_tests_06
   greenhouse:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"
