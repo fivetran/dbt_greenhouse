@@ -1,8 +1,7 @@
-# dbt_greenhouse v1.1.0
+# dbt_greenhouse v1.0.1
 
 ## Bug Fixes
-- Updated `dbt_project.yml` variables with the new `tags` and `users` source tables, which are the new versions of the `tag` and `user` source tables. 
-- This is a breaking change for customers with the new plurally-named tables, as they have not been able to run the models previously.
+- Updated `dbt_project.yml` variables with the new `tags` and `users` source tables, which are the new versions of the `tag` and `user` source tables.
 
 ## Under the Hood
 - Added `tags` and `users` seed files.
