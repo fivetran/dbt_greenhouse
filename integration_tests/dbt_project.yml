@@ -1,5 +1,5 @@
 name: 'greenhouse_integration_tests'
-version: '1.0.0'
+version: '1.0.1'
 config-version: 2
 profile: 'integration_tests'
 
@@ -7,7 +7,7 @@ models:
   +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 vars:
-  greenhouse_schema: greenhouse_integration_tests_05
+  greenhouse_schema: greenhouse_integration_tests_06
   greenhouse:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"
@@ -236,7 +236,15 @@ seeds:
     tag:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+    tags:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
     user:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+    users:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         created_at: timestamp
