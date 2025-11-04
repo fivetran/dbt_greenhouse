@@ -95,7 +95,7 @@ vars:
 By default, this package defines one single-connection source, called `greenhouse`, which will be disabled if you are unioning multiple connections. This means that your DAG will not include your Greenhouse sources, though the package will run successfully.
 
 To properly incorporate all of your Greenhouse connections into your project's DAG:
-1. Define each of your sources in a `.yml` file in your project. Utilize the following template for the `source`-level configurations, and, **most importantly**, copy and paste the table and column-level definitions from the package's `src_greenhouse.yml` [file](https://github.com/fivetran/dbt_greenhouse/blob/main/models/staging/src_greenhouse.yml).
+1. Define each of your sources in a `.yml` file in your project. Utilize the following template for the `source`-level configurations, and, **most importantly**, copy and paste the table and column-level definitions from the package's `src_greenhouse.yml` [file](https://github.com/fivetran/dbt_greenhouse/blob/main/models/staging/src_greenhouse.yml). Remove `{{ var('greenhouse_sources', []) == [] }}` conditions from individual tables' `config.enabled` attributes.
 
 ```yml
 # a .yml file in your root project
