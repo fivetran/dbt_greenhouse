@@ -41,12 +41,15 @@ interview_w_scorecard as (
         
 
     from scheduled_interview
-    left join scheduled_interviewer 
+    left join scheduled_interviewer
         on scheduled_interview.scheduled_interview_id = scheduled_interviewer.scheduled_interview_id
+        and scheduled_interview.source_relation = scheduled_interviewer.source_relation
     left join scorecard
         on scheduled_interviewer.scorecard_id = scorecard.scorecard_id
-    left join interview 
+        and scheduled_interviewer.source_relation = scorecard.source_relation
+    left join interview
         on scheduled_interview.interview_id = interview.interview_id
+        and scheduled_interview.source_relation = interview.source_relation
 ),
 
 -- add surrogate key for tests
@@ -54,7 +57,7 @@ final as (
 
     select
         *,
-        {{ dbt_utils.generate_surrogate_key(['scheduled_interview_id', 'interviewer_user_id']) }} as interview_scorecard_key
+        {{ dbt_utils.generate_surrogate_key(['source_relation', 'scheduled_interview_id', 'interviewer_user_id']) }} as interview_scorecard_key
     
     from interview_w_scorecard
 )

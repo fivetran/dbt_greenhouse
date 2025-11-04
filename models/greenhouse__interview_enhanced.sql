@@ -54,8 +54,10 @@ final as (
     from interview
     left join job_stage 
         on interview.job_stage_id = job_stage.job_stage_id
-    left join 
-        application on interview.application_id = application.application_id
+        and interview.source_relation = job_stage.source_relation
+    left join application 
+        on interview.application_id = application.application_id
+        and interview.source_relation = application.source_relation
 )
 
 select * from final

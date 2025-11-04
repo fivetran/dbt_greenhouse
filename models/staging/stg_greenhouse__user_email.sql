@@ -15,13 +15,14 @@ fields as (
                 staging_columns=get_user_email_columns()
             )
         }}
-        
+        {{ greenhouse.apply_source_relation() }}
     from base
 ),
 
 final as (
     
-    select 
+    select
+        source_relation,
         _fivetran_synced,
         email,
         cast(user_id as {{ dbt.type_string() }}) as user_id

@@ -47,18 +47,21 @@ final as (
         job_department.parent_departments
         {% endif %}
 
-    from job 
-    left join hiring_team 
+    from job
+    left join hiring_team
         on job.job_id = hiring_team.job_id
+        and job.source_relation = hiring_team.source_relation
 
     {% if var('greenhouse_using_job_office', True) %}
-    left join job_office 
+    left join job_office
         on job.job_id = job_office.job_id
+        and job.source_relation = job_office.source_relation
     {% endif %}
-    
+
     {% if var('greenhouse_using_job_department', True) %}
     left join job_department
         on job.job_id = job_department.job_id
+        and job.source_relation = job_department.source_relation
     {% endif %}
 )
 

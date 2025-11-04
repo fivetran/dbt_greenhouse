@@ -15,7 +15,8 @@ fields as (
                 staging_columns=get_candidate_columns()
             )
         }}
-        
+        {{ greenhouse.apply_source_relation() }}
+
         {% if var('greenhouse_candidate_custom_columns', []) != [] %}
         ,
         {{ var('greenhouse_candidate_custom_columns', [] )  | join(', ') }}
@@ -25,8 +26,9 @@ fields as (
 ),
 
 final as (
-    
-    select 
+
+    select
+        source_relation,
         _fivetran_synced,
         company as current_company,
         cast(coordinator_id as {{ dbt.type_string() }}) as coordinator_user_id,

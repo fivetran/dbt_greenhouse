@@ -8,6 +8,8 @@ logs/
 profiles.yml
 target/
 *.log
+package-lock.json
+package.json
 
 # IDE files
 .idea/
@@ -61,6 +63,9 @@ service-account.json
 .cache/
 *.temp
 *.tmp
+
+# Claude instructions
+CLAUDE.md
 
 # Virtual environments
 .conda/

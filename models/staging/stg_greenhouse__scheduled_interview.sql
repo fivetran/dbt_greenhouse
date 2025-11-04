@@ -15,23 +15,25 @@ fields as (
                 staging_columns=get_scheduled_interview_columns()
             )
         }}
+        {{ greenhouse.apply_source_relation() }}
         
     from base
 ),
 
 final as (
-    
-    select 
+
+    select
+        source_relation,
         _fivetran_synced,
         cast(application_id as {{ dbt.type_string() }}) as application_id,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(coalesce(ends,
         {%- if target.type == 'bigquery' %}
-        `end` 
-        {% elif target.type in ('redshift','postgres') %} 
-        "end" 
+        `end`
+        {% elif target.type in ('redshift','postgres') %}
+        "end"
         {% else %}
-        end 
+        end
         {% endif %}
         ) as {{ dbt.type_timestamp() }}) as end_at,
         cast(id as {{ dbt.type_string() }}) as scheduled_interview_id,
@@ -41,15 +43,15 @@ final as (
 
         cast(
         {%- if target.type == 'snowflake' %}
-        "START" 
+        "START"
         {% else %}
-        start 
+        start
         {% endif %}
         as {{ dbt.type_timestamp() }}) as start_at,
-        
+
         status,
         cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at
-        
+
     from fields
 
     where not coalesce(_fivetran_deleted, false)

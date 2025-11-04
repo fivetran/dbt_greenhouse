@@ -15,13 +15,15 @@ fields as (
                 staging_columns=get_scorecard_columns()
             )
         }}
+        {{ greenhouse.apply_source_relation() }}
         
     from base
 ),
 
 final as (
-    
-    select 
+
+    select
+        source_relation,
         _fivetran_synced,
         cast(application_id as {{ dbt.type_string() }}) as application_id,
         cast(candidate_id as {{ dbt.type_string() }}) as candidate_id,

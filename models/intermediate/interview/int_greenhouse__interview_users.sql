@@ -24,10 +24,13 @@ join_user_names as (
 
     left join greenhouse_user as interviewer
         on interview.interviewer_user_id = interviewer.user_id
+        and interview.source_relation = interviewer.source_relation
     left join greenhouse_user as scorecard_submitter
-        on interview.scorecard_submitted_by_user_id = scorecard_submitter.user_id 
+        on interview.scorecard_submitted_by_user_id = scorecard_submitter.user_id
+        and interview.source_relation = scorecard_submitter.source_relation
     left join greenhouse_user as organizer
-        on interview.organizer_user_id = organizer.user_id 
+        on interview.organizer_user_id = organizer.user_id
+        and interview.source_relation = organizer.source_relation 
 
 )
 

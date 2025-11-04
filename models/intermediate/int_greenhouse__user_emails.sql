@@ -13,21 +13,24 @@ greenhouse_user as (
 agg_emails as (
 
     select
+        source_relation,
         user_id,
         {{ fivetran_utils.string_agg('email', "', '") }} as email
 
-    from user_email 
+    from user_email
 
-    group by 1
+    group by 1, 2
 ),
 
 final as (
 
-    select 
+    select
         greenhouse_user.*,
         agg_emails.email
-    from 
-    greenhouse_user left join agg_emails using(user_id)
+    from greenhouse_user
+    left join agg_emails
+        on greenhouse_user.user_id = agg_emails.user_id
+        and greenhouse_user.source_relation = agg_emails.source_relation
 )
 
 select * 

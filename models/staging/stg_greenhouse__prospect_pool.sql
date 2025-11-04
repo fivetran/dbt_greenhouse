@@ -16,13 +16,14 @@ fields as (
                 staging_columns=get_prospect_pool_columns()
             )
         }}
-        
+        {{ greenhouse.apply_source_relation() }}
     from base
 ),
 
 final as (
     
-    select 
+    select
+        source_relation,
         _fivetran_synced,
         active as is_active,
         cast(id as {{ dbt.type_string() }}) as prospect_pool_id,

@@ -15,13 +15,14 @@ fields as (
                 staging_columns=get_job_post_columns()
             )
         }}
-        
+        {{ greenhouse.apply_source_relation() }}
     from base
 ),
 
 final as (
     
-    select 
+    select
+        source_relation,
         _fivetran_synced,
         content,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,

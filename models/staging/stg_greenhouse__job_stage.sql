@@ -15,13 +15,15 @@ fields as (
                 staging_columns=get_job_stage_columns()
             )
         }}
+        {{ greenhouse.apply_source_relation() }}
         
     from base
 ),
 
 final as (
-    
-    select 
+
+    select
+        source_relation,
         _fivetran_synced,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(id as {{ dbt.type_string() }}) as job_stage_id,

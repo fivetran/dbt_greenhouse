@@ -2,8 +2,10 @@ version: 2
 
 models:
   - name: stg_greenhouse__activity
-    description: Table capturing lists of activities on a candidate’s profile, including interviews, notes, and emails.
+    description: Table capturing lists of activities on a candidate's profile, including interviews, notes, and emails.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: body
         description: Content of the activity taken. 
       - name: candidate_id
@@ -22,6 +24,8 @@ models:
   - name: stg_greenhouse__application
     description: Table capturing all applications (candidates + prospects).
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: applied_at
         description: Timestamp of when the application was submitted. 
       - name: candidate_id
@@ -33,7 +37,6 @@ models:
       - name: application_id
         description: Unique ID of the application.
         tests:
-          - unique
           - not_null
       - name: last_activity_at
         description: Timestamp of when the last activity was taken on this application. 
@@ -62,7 +65,9 @@ models:
 
   - name: stg_greenhouse__application_history
     description: Table capturing the history of applications as they advance through job stages.
-    columns: 
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that was updated.
       - name: new_stage_id
@@ -77,6 +82,8 @@ models:
   - name: stg_greenhouse__attachment
     description: Table capturing files attached to the candidate profile.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE who uploaded the attachment.
       - name: filename
@@ -93,6 +100,8 @@ models:
   - name: stg_greenhouse__candidate
     description: Table capturing an organization's candidates.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: current_company
         description: The company at which the candidate currently works.
       - name: coordinator_user_id
@@ -104,7 +113,6 @@ models:
       - name: candidate_id
         description: Unique ID of the candidate in Greenhouse.
         tests:
-          - unique
           - not_null
       - name: is_private
         description: Boolean that is true if the candidate is private. 
@@ -124,8 +132,10 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__candidate_tag
-    description: Table associating candidate's with their attached tags. 
+    description: Table associating candidate's with their attached tags.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE who is tagged. 
       - name: tag_id
@@ -136,12 +146,13 @@ models:
   - name: stg_greenhouse__department
     description: Table storing an organization's job departments.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: external_department_id
         description: An arbitrary ID provided by an external source; does not map to another entity in Greenhouse.
       - name: department_id
         description: Unique ID of the department.
         tests:
-          - unique
           - not_null
       - name: name
         description: The department’s name.
@@ -156,7 +167,6 @@ models:
       - name: application_id
         description: Foreign key referencing the ID of the application with this EEOC data. 
         tests:
-          - unique
           - not_null
       - name: disability_status_description
         description: Description of the applicant's disability status.
@@ -213,7 +223,6 @@ models:
       - name: interview_id
         description: Unique ID of the interview.
         tests:
-          - unique
           - not_null
       - name: interview_kit_content
         description: Details about the interview, including unique ID, interview prep content, and custom interview questions.
@@ -236,7 +245,6 @@ models:
       - name: job_id
         description: Unique ID of the job.
         tests:
-          - unique
           - not_null
       - name: job_title
         description: Title of the job role.
@@ -319,7 +327,6 @@ models:
       - name: job_post_id
         description: Unique ID of the job post.
         tests:
-          - unique
           - not_null
       - name: is_internal
         description: If true, this job post has been posted (or is to be posted) on an internal job board.
@@ -346,7 +353,6 @@ models:
       - name: job_stage_id
         description: Unique ID of the job stage.
         tests:
-          - unique
           - not_null
       - name: job_id
         description: Foreign key referencing the JOB for which the stage exists. 
@@ -365,7 +371,6 @@ models:
       - name: office_id
         description: Unique ID of the office.
         tests:
-          - unique
           - not_null
       - name: location_name
         description: The office's location.
@@ -404,7 +409,6 @@ models:
       - name: scheduled_interview_id
         description: Unique ID of the scheduled interview.
         tests:
-          - unique
           - not_null
       - name: interview_id
         description: Foreign key referencing the id of the generic INTERVIEW step that this scheduled interview maps to. 
@@ -445,7 +449,6 @@ models:
       - name: scorecard_id
         description: Unique ID of the scorecard.
         tests:
-          - unique
           - not_null
       - name: interview_name
         description: Title of the interview. 
@@ -498,7 +501,6 @@ models:
       - name: source_id
         description: Unique ID of the source. 
         tests:
-          - unique
           - not_null
       - name: source_name
         description: Name of the source.
@@ -517,7 +519,6 @@ models:
       - name: tag_id
         description: Unique ID of the tag. 
         tests:
-          - unique
           - not_null
       - name: tag_name 
         description: Title of the tag as it appears in the UI.
@@ -538,7 +539,6 @@ models:
       - name: user_id
         description: Unique ID of the user. 
         tests:
-          - unique
           - not_null
       - name: is_site_admin
         description: If true, this user is a site admin, which means the user has full permissions on all non-private jobs.
@@ -565,7 +565,6 @@ models:
       - name: prospect_pool_id
         description: Unique ID of the prospect pool.
         tests:
-          - unique
           - not_null
       - name: prospect_pool_name
         description: Name given to the prospect pool.

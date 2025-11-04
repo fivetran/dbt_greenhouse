@@ -15,13 +15,14 @@ fields as (
                 staging_columns=get_scheduled_interviewer_columns()
             )
         }}
-        
+        {{ greenhouse.apply_source_relation() }}
     from base
 ),
 
 final as (
     
-    select 
+    select
+        source_relation,
         _fivetran_synced,
         cast(interviewer_id as {{ dbt.type_string() }}) as interviewer_user_id,
         cast(scheduled_interview_id as {{ dbt.type_string() }}) as scheduled_interview_id,

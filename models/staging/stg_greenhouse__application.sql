@@ -15,7 +15,8 @@ fields as (
                 staging_columns=get_application_columns()
             )
         }}
-    
+        {{ greenhouse.apply_source_relation() }}
+
         {% if var('greenhouse_application_custom_columns', []) != [] %}
         ,
         {{ var('greenhouse_application_custom_columns', [] )  | join(', ') }}
@@ -25,8 +26,9 @@ fields as (
 ),
 
 final as (
-    
-    select 
+
+    select
+        source_relation,
         _fivetran_synced,
         cast(applied_at as {{ dbt.type_timestamp() }}) as applied_at,
         cast(candidate_id as {{ dbt.type_string() }}) as candidate_id,

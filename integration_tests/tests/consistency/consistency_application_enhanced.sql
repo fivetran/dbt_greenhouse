@@ -3,13 +3,15 @@
     enabled=var('fivetran_validation_tests_enabled', false)
 ) }}
 
+{% set columns_to_exclude = ['candidate_tags', 'email'] + var('consistency_test_exclude_columns', [])%}
+
 with prod as (
-    select *
+    select {{ dbt_utils.star(from=ref('greenhouse__application_enhanced'), except=columns_to_exclude) }}
     from {{ target.schema }}_greenhouse_prod.greenhouse__application_enhanced
 ),
 
 dev as (
-    select *
+    select {{ dbt_utils.star(from=ref('greenhouse__application_enhanced'), except=columns_to_exclude) }}
     from {{ target.schema }}_greenhouse_dev.greenhouse__application_enhanced
 ), 
 

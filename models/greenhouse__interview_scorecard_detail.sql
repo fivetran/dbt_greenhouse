@@ -29,14 +29,17 @@ join_w_attributes as (
         interview.hiring_managers,
         interview.interview_scorecard_key
         
-    from interview left join scorecard_attribute using(scorecard_id)
+    from interview 
+    left join scorecard_attribute
+        on interview.scorecard_id = scorecard_attribute.scorecard_id
+        and interview.source_relation = scorecard_attribute.source_relation
 ),
 
 final as (
 
     select 
         *,
-        {{ dbt_utils.generate_surrogate_key(['interview_scorecard_key', 'index']) }} as scorecard_attribute_key
+        {{ dbt_utils.generate_surrogate_key(['source_relation', 'interview_scorecard_key', 'index']) }} as scorecard_attribute_key
 
     from join_w_attributes
 )

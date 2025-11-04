@@ -4,6 +4,8 @@ models:
   - name: int_greenhouse__application_users
     description: Table capturing applications and the internal users involved in each one.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: applied_at
         description: Timestamp of when the application was submitted. 
       - name: candidate_id
@@ -15,7 +17,6 @@ models:
       - name: application_id
         description: Unique ID of the application.
         tests:
-          - unique
           - not_null
       - name: last_activity_at
         description: Timestamp of when the last activity was taken on this application. 
@@ -45,8 +46,10 @@ models:
         description: Full name of the prospect owner.
 
   - name: int_greenhouse__application_info
-    description: Table capturing information about applications 
+    description: Table capturing information about applications
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: applied_at
         description: Timestamp of when the application was submitted. 
       - name: candidate_id
@@ -159,7 +162,7 @@ models:
         description: Description of the applicant's veteran status.
       - name: application_job_key
         description: >
-          Unique key hashed on `application_id` and `job_id`. This has to be done as the table contains both 
+          Unique key hashed on `application_id` `job_id`, and `source_relation`. This has to be done as the table contains both 
           candidates and prospects.
         tests:
           - unique

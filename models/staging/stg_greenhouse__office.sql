@@ -16,13 +16,14 @@ fields as (
                 staging_columns=get_office_columns()
             )
         }}
-        
+        {{ greenhouse.apply_source_relation() }}
     from base
 ),
 
 final as (
     
-    select 
+    select
+        source_relation,
         _fivetran_synced,
         cast(external_id as {{ dbt.type_string() }}) as external_office_id,
         cast(id as {{ dbt.type_string() }}) as office_id,

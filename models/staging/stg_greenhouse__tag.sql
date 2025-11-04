@@ -15,13 +15,14 @@ fields as (
                 staging_columns=get_tag_columns()
             )
         }}
-        
+        {{ greenhouse.apply_source_relation() }}
     from base
 ),
 
 final as (
     
-    select 
+    select
+        source_relation,
         _fivetran_synced,
         cast(id as {{ dbt.type_string() }}) as tag_id,
         name as tag_name
