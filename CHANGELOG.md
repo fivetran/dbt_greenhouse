@@ -13,6 +13,8 @@
 ## Feature Update
 - **Union Data Functionality**: This release supports running the package on multiple Greenhouse source connections. See the [README](https://github.com/fivetran/dbt_greenhouse/tree/main?tab=readme-ov-file#step-3-define-database-and-schema-variables) for details on how to leverage this feature.
 
+> **Please note that rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization’s PII and data governance requirements.**
+
 ## Tests Update
 - Removes uniqueness tests on non-surrogate keys. The new unioning feature requires combination-of-column tests to consider the new `source_relation` column in addition to the existing primary key, but this is not supported across dbt versions.
 - These tests will be reintroduced once a version-agnostic solution is available.
