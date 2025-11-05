@@ -8,7 +8,6 @@ models:
 
 vars:
   greenhouse_schema: greenhouse_integration_tests_06
-  consistency_test_exclude_columns: ['source_relation', 'scorecard_attribute_key', 'interview_scorecard_key', 'application_job_key']
   greenhouse:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"

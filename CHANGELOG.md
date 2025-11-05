@@ -6,8 +6,8 @@
 | Data Model(s) | Change type | Old | New | Notes |
 | ------------- | ----------- | ----| --- | ----- |
 | All models | New column | | `source_relation` | Identifies the source connection when using multiple Greenhouse connections |
-| `greenhouse__application_enhanced`<br>`int_greenhouse__application_info` | Updated surrogate key | `application_job_key` = `application_id` + `job_id` | `application_job_key` = `source_relation` + `application_id` + `job_id` |  |
-| `greenhouse__interview_enhanced`<br>`greenhouse__interview_scorecard_detail`<br>`int_greenhouse__interview_scorecard`<br>`int_greenhouse__interview_users` | Updated surrogate key | `interview_scorecard_key` = `scheduled_interview_id` + `interviewer_user_id` | `interview_scorecard_key` = `source_relation` + `scheduled_interview_id` + `interviewer_user_id` |  |
+| `greenhouse__application_enhanced` | Updated surrogate key | `application_job_key` = `application_id` + `job_id` | `application_job_key` = `source_relation` + `application_id` + `job_id` |  |
+| `greenhouse__interview_enhanced`<br>`greenhouse__interview_scorecard_detail` | Updated surrogate key | `interview_scorecard_key` = `scheduled_interview_id` + `interviewer_user_id` | `interview_scorecard_key` = `source_relation` + `scheduled_interview_id` + `interviewer_user_id` |  |
 | `greenhouse__interview_scorecard_detail` | Updated surrogate key | `scorecard_attribute_key` = `interview_scorecard_key` + `index` | `scorecard_attribute_key` = `source_relation` + `interview_scorecard_key` + `index` |  |
 
 ## Feature Update
