@@ -72,7 +72,7 @@ vars:
 #### Option B: Union multiple connections
 If you have multiple Greenhouse connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. For each source table, the package will union all of the data together and pass the unioned table into the transformations. The `source_relation` column in each model indicates the origin of each record.
 
-> **Please note that rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization’s PII and data governance requirements.**
+**PLEASE NOTE:** Rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization’s PII and data governance requirements.
 
 To use this functionality, you will need to set the `greenhouse_sources` variable in your root `dbt_project.yml` file:
 
