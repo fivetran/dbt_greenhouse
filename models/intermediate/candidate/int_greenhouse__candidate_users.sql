@@ -30,8 +30,10 @@ join_user_names as (
 
     left join greenhouse_user as coordinator
         on candidate.coordinator_user_id = coordinator.user_id
+        and candidate.source_relation = coordinator.source_relation
     left join greenhouse_user as recruiter
-        on candidate.recruiter_user_id = recruiter.user_id 
+        on candidate.recruiter_user_id = recruiter.user_id
+        and candidate.source_relation = recruiter.source_relation 
 
 )
 

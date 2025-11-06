@@ -15,6 +15,7 @@ fields as (
                 staging_columns=get_job_columns()
             )
         }}
+        {{ greenhouse.apply_source_relation() }}
 
         {% if var('greenhouse_job_custom_columns', []) != [] %}
         ,
@@ -25,8 +26,9 @@ fields as (
 ),
 
 final as (
-    
-    select 
+
+    select
+        source_relation,
         _fivetran_synced,
         cast(closed_at as {{ dbt.type_timestamp() }}) as last_opening_closed_at,
         confidential as is_confidential,
@@ -37,7 +39,7 @@ final as (
         cast(requisition_id as {{ dbt.type_string() }}) as requisition_id,
         status,
         cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at
-        
+
         {% if var('greenhouse_job_custom_columns', []) != [] %}
         ,
         {{ var('greenhouse_job_custom_columns', [] )  | join(', ') }}

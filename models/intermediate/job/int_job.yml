@@ -2,12 +2,13 @@ version: 2
 
 models:
   - name: int_greenhouse__hiring_team
-    description: Table aggregating the users on each job's hiring team. 
+    description: Table aggregating the users on each job's hiring team.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: job_id
         description: Foreign key referencing the JOB that this team of users is hiring for. 
         tests:
-          - unique
           - not_null
       - name: hiring_managers
         description: Comma-separated list of the full names of the job's hiring managers.
@@ -20,11 +21,12 @@ models:
 
   - name: int_greenhouse__job_departments
     description: Table aggregating the departments associated with each job.
-    columns: 
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: job_id
         description: Foreign key referencing the JOB.
         tests:
-          - unique
           - not_null
       - name: departments 
         description: Semicolon-separated list of the departments that the job is listed under. 
@@ -33,11 +35,12 @@ models:
 
   - name: int_greenhouse__job_offices
     description: Table aggregating the offices and locations associated with each job.
-    columns: 
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: job_id
         description: Foreign key referencing the JOB.
         tests:
-          - unique
           - not_null
       - name: offices 
         description: Semicolon-separated list of the offices that the job is listed under. 
@@ -45,8 +48,10 @@ models:
         description: Semicolon-separated list of the locations that the job is listed under. 
         
   - name: int_greenhouse__job_info
-    description: Table capturing information related to each job. 
+    description: Table capturing information related to each job.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: last_opening_closed_at
         description: Timestamp of when the last opening for this job closed.
       - name: is_confidential
@@ -56,7 +61,6 @@ models:
       - name: job_id
         description: Unique ID of the job.
         tests:
-          - unique
           - not_null
       - name: job_title
         description: Title of the job role.

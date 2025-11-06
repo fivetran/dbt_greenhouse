@@ -5,6 +5,8 @@ models:
   - name: int_greenhouse__user_emails
     description: Table of all internal users, with aggregated user emails.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: created_at
         description: Timestamp of when the user was created.
       - name: is_disabled
@@ -16,7 +18,6 @@ models:
       - name: user_id
         description: Unique ID of the user. 
         tests:
-          - unique
           - not_null
       - name: is_site_admin
         description: If true, this user is a site admin, which means the user has full permissions on all non-private jobs.

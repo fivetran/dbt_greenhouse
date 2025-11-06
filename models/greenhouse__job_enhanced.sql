@@ -7,6 +7,7 @@ with job as (
 job_applications as (
 
     select 
+        source_relation,
         job_id,
         sum(case when not is_prospect and status = 'active' then 1 else 0 end) as count_active_applications,
         sum(case when not is_prospect and status = 'hired' then 1 else 0 end) as count_hired_applications,
@@ -20,12 +21,13 @@ job_applications as (
 
     from {{ ref('greenhouse__application_enhanced') }}
 
-    group by 1
+    group by 1, 2
 ),
 
 live_job_posts as (
 
     select 
+        source_relation,
         job_id,
         sum(case when is_internal then 1 else 0 end) as count_live_internal_posts,
         sum(case when is_external then 1 else 0 end) as count_live_external_posts,
@@ -35,12 +37,13 @@ live_job_posts as (
 
     where is_live
 
-    group by 1
+    group by 1, 2
 ),
 
 job_openings as (
 
     select 
+        source_relation,
         job_id,
         sum(case when current_status = 'open' then 1 else 0 end) as count_active_openings,
         sum(case when current_status = 'closed' then 1 else 0 end) as count_closed_openings,
@@ -48,7 +51,7 @@ job_openings as (
         
     from {{ ref('stg_greenhouse__job_opening') }}
 
-    group by 1
+    group by 1, 2
 ),
 
 final as (
@@ -76,10 +79,13 @@ final as (
     from job 
     left join job_applications 
         on job.job_id = job_applications.job_id
+        and job.source_relation = job_applications.source_relation
     left join live_job_posts
         on job.job_id = live_job_posts.job_id
+        and job.source_relation = live_job_posts.source_relation
     left join job_openings
         on job.job_id = job_openings.job_id
+        and job.source_relation = job_openings.source_relation
 )
 
 select *

@@ -15,13 +15,14 @@ fields as (
                 staging_columns=get_scorecard_attribute_columns()
             )
         }}
-        
+        {{ greenhouse.apply_source_relation() }}
     from base
 ),
 
 final as (
     
-    select 
+    select
+        source_relation,
         _fivetran_synced,
         index,
         name as attribute_name,

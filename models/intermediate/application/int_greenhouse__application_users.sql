@@ -22,8 +22,10 @@ join_user_names as (
 
     left join greenhouse_user as referrer
         on application.credited_to_user_id = referrer.user_id
+        and application.source_relation = referrer.source_relation
     left join greenhouse_user as prospect_owner
         on application.prospect_owner_user_id = prospect_owner.user_id
+        and application.source_relation = prospect_owner.source_relation
 
 )
 

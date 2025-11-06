@@ -4,6 +4,8 @@ models:
   - name: int_greenhouse__interview_scorecard
     description: Table joining **scheduled** interviews with interviewer scorecards. Each record is unique to the interview and interviewer.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that is being interviewed.
       - name: created_at
@@ -45,14 +47,16 @@ models:
       - name: interviewer_user_id
         description: Foreign key referencing the USER conducting the interview.
       - name: interview_scorecard_key
-        description: Key hashed on `scheduled_interview_id` and `interviewer_user_id`
+        description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
         tests:
           - unique
           - not_null
 
   - name: int_greenhouse__interview_users
-    description: Table of interviews with the full names of users involved in administering them. 
+    description: Table of interviews with the full names of users involved in administering them.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that is being interviewed.
       - name: created_at
@@ -94,7 +98,7 @@ models:
       - name: interviewer_user_id
         description: Foreign key referencing the USER conducting the interview.
       - name: interview_scorecard_key
-        description: Key hashed on `scheduled_interview_id` and `interviewer_user_id`
+        description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
         tests:
           - unique
           - not_null

@@ -2,8 +2,10 @@ version: 2
 
 models:
   - name: int_greenhouse__candidate_users
-    description: Table storing candidates and the internal users involved with coordinating them. 
+    description: Table storing candidates and the internal users involved with coordinating them.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: current_company
         description: The company at which the candidate currently works.
       - name: coordinator_user_id
@@ -15,7 +17,6 @@ models:
       - name: candidate_id
         description: Unique ID of the candidate in Greenhouse.
         tests:
-          - unique
           - not_null
       - name: is_private
         description: Boolean that is true if the candidate is private. 
@@ -53,6 +54,8 @@ models:
   - name: int_greenhouse__candidate_contacts
     description: Table storing candidates and their contact + social media information.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: current_company
         description: The company at which the candidate currently works.
       - name: coordinator_user_id
@@ -64,7 +67,6 @@ models:
       - name: candidate_id
         description: Unique ID of the candidate in Greenhouse.
         tests:
-          - unique
           - not_null
       - name: is_private
         description: Boolean that is true if the candidate is private. 
@@ -92,12 +94,13 @@ models:
         description: URL of the candidate's most recently added Github link. 
 
   - name: int_greenhouse__candidate_tags
-    description: Table aggregating tags associated with candidates. 
+    description: Table aggregating tags associated with candidates.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE who has these tags.
         tests:
-          - unique
           - not_null
       - name: tags
         description: Comma-separated list of tags attached to this candidate. 

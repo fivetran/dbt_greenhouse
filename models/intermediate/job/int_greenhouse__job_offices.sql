@@ -15,14 +15,17 @@ office as (
 agg_offices as (
 
     select
+        job_office.source_relation,
         job_id,
         {{ fivetran_utils.string_agg("office.office_name", "'; '") }} as offices,
         {{ fivetran_utils.string_agg("office.location_name", "'; '") }} as locations
 
     from job_office
-    join office using(office_id)
+    join office
+        on job_office.office_id = office.office_id
+        and job_office.source_relation = office.source_relation
 
-    group by job_id
+    group by 1, 2
 )
 
 select * from 

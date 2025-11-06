@@ -4,12 +4,12 @@
 ) }}
 
 with prod as (
-    select *
+    select {{ dbt_utils.star(from=ref('greenhouse__interview_enhanced'), except=var('consistency_test_exclude_columns', [])) }}
     from {{ target.schema }}_greenhouse_prod.greenhouse__interview_enhanced
 ),
 
 dev as (
-    select *
+    select {{ dbt_utils.star(from=ref('greenhouse__interview_enhanced'), except=var('consistency_test_exclude_columns', [])) }}
     from {{ target.schema }}_greenhouse_dev.greenhouse__interview_enhanced
 ), 
 

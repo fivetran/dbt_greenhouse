@@ -16,19 +16,21 @@ fields as (
                 staging_columns=get_application_history_columns()
             )
         }}
+        {{ greenhouse.apply_source_relation() }}
         
     from base
 ),
 
 final as (
-    
-    select 
+
+    select
+        source_relation,
         _fivetran_synced,
         cast(application_id as {{ dbt.type_string() }}) as application_id,
         cast(new_stage_id as {{ dbt.type_string() }}) as new_stage_id,
         new_status,
         cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
-        
+
     from fields
 )
 

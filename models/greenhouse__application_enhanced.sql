@@ -7,6 +7,7 @@ with application as (
 interview_metrics as (
 
     select 
+        source_relation,
         application_id,
         max(case when interviewer_is_hiring_manager then 1 else 0 end) as has_interviewed_w_hiring_manager,
         count(distinct scheduled_interview_id) as count_interviews,
@@ -16,7 +17,7 @@ interview_metrics as (
 
     from {{ ref('greenhouse__interview_enhanced') }}
 
-    group by 1
+    group by 1, 2
 ),
 
 final as (
@@ -31,7 +32,9 @@ final as (
         interview_metrics.latest_interview_scheduled_at
 
     from application 
-    left join interview_metrics using(application_id)
+    left join interview_metrics 
+        on application.application_id = interview_metrics.application_id
+        and application.source_relation = interview_metrics.source_relation
 )
 
 select * from final

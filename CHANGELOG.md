@@ -1,7 +1,28 @@
+# dbt_greenhouse v1.1.0
+
+## Schema/Data Change
+**4 total changes • 3 possible breaking changes**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ------------- | ----------- | ----| --- | ----- |
+| All models | New column | | `source_relation` | Identifies the source connection when using multiple Greenhouse connections |
+| `greenhouse__application_enhanced` | Updated surrogate key | `application_job_key` = `application_id` + `job_id` | `application_job_key` = `source_relation` + `application_id` + `job_id` |  |
+| `greenhouse__interview_enhanced`<br>`greenhouse__interview_scorecard_detail` | Updated surrogate key | `interview_scorecard_key` = `scheduled_interview_id` + `interviewer_user_id` | `interview_scorecard_key` = `source_relation` + `scheduled_interview_id` + `interviewer_user_id` |  |
+| `greenhouse__interview_scorecard_detail` | Updated surrogate key | `scorecard_attribute_key` = `interview_scorecard_key` + `index` | `scorecard_attribute_key` = `source_relation` + `interview_scorecard_key` + `index` |  |
+
+## Feature Update
+- **Union Data Functionality**: This release supports running the package on multiple Greenhouse source connections. See the [README](https://github.com/fivetran/dbt_greenhouse/tree/main?tab=readme-ov-file#step-3-define-database-and-schema-variables) for details on how to leverage this feature.
+
+**PLEASE NOTE:** Rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization’s PII and data governance requirements.
+
+## Tests Update
+- Removes uniqueness tests on non-surrogate keys. The new unioning feature requires combination-of-column tests to consider the new `source_relation` column in addition to the existing primary key, but this is not supported across dbt versions.
+- These tests will be reintroduced once a version-agnostic solution is available.
+
 # dbt_greenhouse v1.0.1
 
 ## Bug Fixes
-- Updated `dbt_project.yml` variables with the new `tags` and `users` source tables, which are the new versions of the `tag` and `user` source tables. These sources were previously included, but were accidentally dropped in the Source Package consolidation release. 
+- Updated `dbt_project.yml` variables with the new `tags` and `users` source tables, which are the new versions of the `tag` and `user` source tables. These sources were previously included, but were accidentally dropped in the Source Package consolidation release.
 
 ## Under the Hood
 - Added `tags` and `users` seed files.

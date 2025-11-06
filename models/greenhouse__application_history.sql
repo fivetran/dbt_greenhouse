@@ -3,11 +3,12 @@
 with application_history as (
 
     select 
+        source_relation,
         application_id,
         new_stage_id,
         new_status,
         updated_at as valid_from,
-        coalesce(lead(updated_at) over (partition by application_id order by updated_at asc), 
+        coalesce(lead(updated_at) over (partition by application_id {{ greenhouse.partition_by_source_relation() }} order by updated_at asc),
             {{ dbt.current_timestamp_backcompat() }}) as valid_until
 
     from {{ ref('stg_greenhouse__application_history') }}
@@ -67,8 +68,10 @@ join_application_history as (
     from application_history 
     join application
         on application_history.application_id = application.application_id
+        and application_history.source_relation = application.source_relation
     left join job_stage
         on application_history.new_stage_id = job_stage.job_stage_id
+        and application_history.source_relation = job_stage.source_relation
 ),
 
 time_in_stages as (
@@ -82,8 +85,9 @@ time_in_stages as (
 
 activities_in_stages as (
 
-    select 
+    select
         -- Call out each column for Databricks compatibility
+        time_in_stages.source_relation,
         time_in_stages.application_id,
         time_in_stages.new_stage_id,
         time_in_stages.new_status,
@@ -94,7 +98,7 @@ activities_in_stages as (
         time_in_stages.current_status,
         time_in_stages.recruiter_name,
         time_in_stages.hiring_managers,
-        time_in_stages.sourced_from, 
+        time_in_stages.sourced_from,
         time_in_stages.sourced_from_type,
         time_in_stages.job_title,
         time_in_stages.job_id,
@@ -122,13 +126,14 @@ activities_in_stages as (
 
     from time_in_stages
     left join activity on activity.candidate_id = time_in_stages.candidate_id
+        and activity.source_relation = time_in_stages.source_relation
 
-    -- 15 standard columns in join_application_history CTE + 1 days_in_stage column + 4 more if using the eeoc table + 1 if job_office + 2 if job_department
+    -- 16 standard columns in join_application_history CTE (including source_relation) + 1 days_in_stage column + 4 more if using the eeoc table + 1 if job_office + 2 if job_department
     {% set count_eeoc_columns = 4 if var('greenhouse_using_eeoc', True) else 0 %}
     {% set count_office_columns = 1 if var('greenhouse_using_job_office', True) else 0 %}
     {% set count_department_columns = 2 if var('greenhouse_using_job_department', True) else 0 %}
-    
-    {{ dbt_utils.group_by(count_eeoc_columns + count_office_columns + count_department_columns + 15 + 1) }}
+
+    {{ dbt_utils.group_by(count_eeoc_columns + count_office_columns + count_department_columns + 16 + 1) }}
 )
 
 select *

@@ -16,13 +16,15 @@ fields as (
                 staging_columns=get_eeoc_columns()
             )
         }}
+        {{ greenhouse.apply_source_relation() }}
         
     from base
 ),
 
 final as (
-    
-    select 
+
+    select
+        source_relation,
         _fivetran_synced,
         cast(application_id as {{ dbt.type_string() }}) as application_id,
         disability_status_description,
@@ -34,7 +36,7 @@ final as (
         cast(submitted_at as {{ dbt.type_timestamp() }}) as submitted_at,
         veteran_status_description,
         cast(veteran_status_id as {{ dbt.type_string() }}) as veteran_status_id
-        
+
     from fields
 )
 
