@@ -1,3 +1,10 @@
+# dbt_greenhouse v1.2.0
+
+[PR #39](https://github.com/fivetran/dbt_greenhouse/pull/39) includes the following updates:
+
+## Features
+  - Increases the required dbt version upper limit to v3.0.0
+
 # dbt_greenhouse v1.1.0
 
 ## Schema/Data Change
