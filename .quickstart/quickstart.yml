@@ -46,16 +46,16 @@ public_models: [
 supported_vars:
   greenhouse_application_custom_columns:
     type: list
-    description: "Addtional `APPLICATION` fields to include in `greenhouse__application_enhanced`"
+    description: "Additional `APPLICATION` fields to include in `greenhouse__application_enhanced`"
     display_name: "Additional Application Columns"
 
   greenhouse_candidate_custom_columns:
     type: list
-    description: "Addtional `CANDIDATE` fields to include in `greenhouse__application_enhanced`"
+    description: "Additional `CANDIDATE` fields to include in `greenhouse__application_enhanced`"
     display_name: "Additional Candidate Columns"
 
   greenhouse_job_custom_columns:
     type: list
-    description: "Addtional `JOB` fields to include in `greenhouse__job_enhanced`"
+    description: "Additional `JOB` fields to include in `greenhouse__job_enhanced`"
     display_name: "Additional Job Columns"
 
