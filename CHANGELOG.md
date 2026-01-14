@@ -1,3 +1,15 @@
+# dbt_greenhouse v1.3.0
+
+[PR #41](https://github.com/fivetran/dbt_greenhouse/pull/41) includes the following updates:
+
+## Documentation
+- Updates README with standardized Fivetran formatting
+
+## Under the Hood
+- In the `.quickstart.yml` file:
+  - Adds `table_variables` for non-essential sources to prevent missing sources from blocking downstream Quickstart models.
+  - Adds `supported_vars` for Quickstart UI customization
+
 # dbt_greenhouse v1.2.0
 
 [PR #39](https://github.com/fivetran/dbt_greenhouse/pull/39) includes the following updates:
