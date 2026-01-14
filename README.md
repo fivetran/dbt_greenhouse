@@ -23,22 +23,20 @@
     - Integrating the `INTERVIEW` table with interviewer information and feedback at both the overall scorecard and individual standard levels
     - Calculating the velocity and activity of applications through each pipeline stage, along with major job- and candidate-related attributes for segmented funnel analysis
 
-<!--section="greenhouse_transformation_model-->
 - Generates a comprehensive data dictionary of your source and modeled Greenhouse data through the [dbt docs site](https://fivetran.github.io/dbt_greenhouse/#!/overview).
 The following table provides a detailed list of all tables materialized within this package by default.
 > TIP: See more details about these tables in the package's [dbt docs site](https://fivetran.github.io/dbt_greenhouse/#!/overview?g_v=1).
 
 | **Table**                | **Description**                                                                                                                                |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [greenhouse__application_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_enhanced)             | Each record represents a unique application, enriched with data regarding the applicant's current stage, source, contact information and resume, associated tags, demographic information, recruiter, coordinator, referrer, hiring managers, and the job they are applying for. Includes metrics surrounding the candidate's interviews and their volume of activity in Greenhouse.  |
-| [greenhouse__job_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__job_enhanced)             | Each record represents a unique job, enriched with its associated offices, teams, departments, and hiring team members. Includes metrics regarding the volume of open, rejected, and hired applications, its active and filled job openings, any job posts, and its active, archived, and converted prospects. |
-| [greenhouse__interview_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_enhanced)             | Each record represents a unique scheduled interview between an individual interviewer and a candidate (so a panel of three interviewers will have three records). Includes overall interview feedback, information about the users involved with this interview and application, the application's current status, and data regarding the candidate and the job being interviewed for. |
-| [greenhouse__interview_scorecard_detail](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_scorecard_detail)             | Each record represents a unique scorecard attribute or an individual standard to be rated along for an interview. Includes information about the candidate, job, and interview at large. *Note: Does not include free-form text responses to scorecard questions.*|
-| [greenhouse__application_history](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_history)             | Each record represents an application advancing to a new stage. Includes data about the time spent in each stage, the volume of activity per stage, the application source, candidate demographics, recruiters, and hiring managers, as well as the job's team, office, and department. |
+| [greenhouse__application_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_enhanced)             | Tracks all candidate applications with complete applicant profiles including current pipeline stage, recruiter and coordinator assignments, contact information, resume links, and interview activity to manage the hiring funnel. <br></br>**Example Analytics Questions:**<ul><li>Which recruiters or sources generate the most applications and hires?</li><li>What is the average time from application to hire by job or candidate source?</li><li>How do application volumes and status distributions vary across different pipeline stages?</li></ul>|
+| [greenhouse__job_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__job_enhanced)             | Provides comprehensive job posting data with metrics on application volumes, hiring outcomes, and team assignments to understand job performance and hiring effectiveness. <br></br>**Example Analytics Questions:**<ul><li>Which jobs have the most open applications and highest conversion rates to hire?</li><li>How long do job postings stay open before being filled?</li><li>What is the ratio of rejected to hired applications by department or office?</li></ul>|
+| [greenhouse__interview_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_enhanced)             | Tracks individual interviews between interviewers and candidates with feedback scores, interviewer information, and application status to evaluate interview effectiveness and candidate progression. <br></br>**Example Analytics Questions:**<ul><li>Which interviewers provide the most feedback and have the highest candidate advancement rates?</li><li>What is the average interview score by job or candidate source?</li><li>How do interview outcomes correlate with eventual hiring decisions?</li></ul>|
+| [greenhouse__interview_scorecard_detail](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_scorecard_detail)             | Captures detailed interview scorecard ratings for each evaluation criterion to analyze interviewer feedback patterns and candidate assessment consistency. *Note: Does not include free-form text responses.* <br></br>**Example Analytics Questions:**<ul><li>Which scorecard attributes have the highest average ratings across all interviews?</li><li>How do scorecard ratings vary by interviewer or candidate source?</li><li>What rating patterns correlate with successful hires versus rejections?</li></ul>|
+| [greenhouse__application_history](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_history)             | Chronicles application progression through hiring stages with time-in-stage metrics, activity volumes, and recruiter assignments to analyze hiring velocity and pipeline bottlenecks. <br></br>**Example Analytics Questions:**<ul><li>What is the average time candidates spend in each hiring stage?</li><li>Which stages have the highest drop-off or rejection rates?</li><li>How does time-to-hire vary by job, department, or candidate source?</li></ul>|
 
 ### Materialized Models
 Each Quickstart transformation job run materializes 68 models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
-<!--section-end-->
 
 ## How do I use the dbt package?
 
@@ -54,7 +52,7 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=1.2.0", "<1.3.0"]
+    version: [">=1.3.0", "<1.4.0"]
 ```
 
 ### Step 3: Define database and schema variables
@@ -206,6 +204,8 @@ The Fivetran team maintaining this package _only_ maintains the latest version o
 A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions.
 
 We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) on the best workflow for contributing to a package.
+
+<!--section-end-->
 
 ## Are there any resources available?
 - If you have questions or want to reach out for help, see the [GitHub Issue](https://github.com/fivetran/dbt_greenhouse/issues/new/choose) section to find the right avenue of support for you.
