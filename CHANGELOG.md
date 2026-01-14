@@ -7,8 +7,8 @@
 
 ## Under the Hood
 - In the `.quickstart.yml` file:
-  - Adds `table_variables` for non-essential sources to prevent missing sources from blocking downstream Quickstart models.
-  - Adds `supported_vars` for Quickstart UI customization
+  - Adds `table_variables` for relevant sources to prevent missing sources from blocking downstream Quickstart models.
+  - Adds `supported_vars` for Quickstart UI customization.
 
 # dbt_greenhouse v1.2.0
 
