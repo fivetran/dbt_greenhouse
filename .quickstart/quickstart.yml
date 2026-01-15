@@ -18,6 +18,17 @@ table_variables:
     - department
     - job_department
 
+  _fivetran_quickstart_candidate_tag:
+    - candidate_tag
+  _fivetran_quickstart_phone_number:
+    - phone_number
+  _fivetran_quickstart_social_media_address:
+    - social_media_address
+  _fivetran_quickstart_tag:
+    - tag
+  _fivetran_quickstart_tags:
+    - tags
+
 destination_configurations:
   databricks:
     dispatch:
@@ -31,3 +42,20 @@ public_models: [
   "greenhouse__application_history",
   "greenhouse__interview_enhanced"
 ]
+
+supported_vars:
+  greenhouse_application_custom_columns:
+    type: list
+    description: "Additional `APPLICATION` fields to include in `greenhouse__application_enhanced`"
+    display_name: "Additional Application Columns"
+
+  greenhouse_candidate_custom_columns:
+    type: list
+    description: "Additional `CANDIDATE` fields to include in `greenhouse__application_enhanced`"
+    display_name: "Additional Candidate Columns"
+
+  greenhouse_job_custom_columns:
+    type: list
+    description: "Additional `JOB` fields to include in `greenhouse__job_enhanced`"
+    display_name: "Additional Job Columns"
+

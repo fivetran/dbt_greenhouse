@@ -1,4 +1,5 @@
-# Greenhouse dbt Package ([Docs](https://fivetran.github.io/dbt_greenhouse/))
+<!--section="greenhouse_transformation_model"-->
+# Greenhouse dbt Package
 
 <p align="left">
     <a alt="License"
@@ -11,53 +12,74 @@
     <a alt="PRs">
         <img src="https://img.shields.io/badge/Contributions-welcome-blueviolet" /></a>
     <a alt="Fivetran Quickstart Compatible"
-        href="https://fivetran.com/docs/transformations/dbt/quickstart">
+        href="https://fivetran.com/docs/transformations/data-models/quickstart-management#quickstartmanagement">
         <img src="https://img.shields.io/badge/Fivetran_Quickstart_Compatible%3F-yes-green.svg" /></a>
 </p>
 
+This dbt package transforms data from Fivetran's Greenhouse connector into analytics-ready tables.
+
+## Resources
+
+- Number of materialized models¹: 68
+- Connector documentation
+  - [Greenhouse connector documentation](https://fivetran.com/docs/connectors/applications/greenhouse)
+  - [Greenhouse ERD](https://fivetran.com/docs/connectors/applications/greenhouse#schemainformation)
+- dbt package documentation
+  - [GitHub repository](https://github.com/fivetran/dbt_greenhouse)
+  - [dbt Docs](https://fivetran.github.io/dbt_greenhouse/#!/overview)
+  - [DAG](https://fivetran.github.io/dbt_greenhouse/#!/overview?g_v=1)
+  - [Changelog](https://github.com/fivetran/dbt_greenhouse/blob/main/CHANGELOG.md)
+
 ## What does this dbt package do?
-- Produces modeled tables that leverage Greenhouse data from [Fivetran's connector](https://fivetran.com/docs/applications/greenhouse) in the format described by [this ERD](https://fivetran.com/docs/applications/greenhouse#schemainformation).
+This package enables you to understand trends in sourcing, recruiting, interviewing, and hiring at your company. It creates enriched models with metrics focused on applications, interviews, and jobs.
 
-- Enables you to understand trends in sourcing, recruiting, interviewing, and hiring at your company. It also provides recruiting stakeholders with information about individual applications, interviews, scorecards, and jobs. It achieves this by:
-    - Enriching the core `APPLICATION`, `INTERVIEW`, and `JOB` tables with relevant pipeline data and metrics
-    - Integrating the `INTERVIEW` table with interviewer information and feedback at both the overall scorecard and individual standard levels
-    - Calculating the velocity and activity of applications through each pipeline stage, along with major job- and candidate-related attributes for segmented funnel analysis
+### Output schema
+Final output tables are generated in the following target schema:
 
-<!--section="greenhouse_transformation_model-->
-- Generates a comprehensive data dictionary of your source and modeled Greenhouse data through the [dbt docs site](https://fivetran.github.io/dbt_greenhouse/#!/overview).
-The following table provides a detailed list of all tables materialized within this package by default.
-> TIP: See more details about these tables in the package's [dbt docs site](https://fivetran.github.io/dbt_greenhouse/#!/overview?g_v=1).
+```
+<your_database>.<connector/schema_name>_greenhouse
+```
 
-| **Table**                | **Description**                                                                                                                                |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [greenhouse__application_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_enhanced)             | Each record represents a unique application, enriched with data regarding the applicant's current stage, source, contact information and resume, associated tags, demographic information, recruiter, coordinator, referrer, hiring managers, and the job they are applying for. Includes metrics surrounding the candidate's interviews and their volume of activity in Greenhouse.  |
-| [greenhouse__job_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__job_enhanced)             | Each record represents a unique job, enriched with its associated offices, teams, departments, and hiring team members. Includes metrics regarding the volume of open, rejected, and hired applications, its active and filled job openings, any job posts, and its active, archived, and converted prospects. |
-| [greenhouse__interview_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_enhanced)             | Each record represents a unique scheduled interview between an individual interviewer and a candidate (so a panel of three interviewers will have three records). Includes overall interview feedback, information about the users involved with this interview and application, the application's current status, and data regarding the candidate and the job being interviewed for. |
-| [greenhouse__interview_scorecard_detail](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_scorecard_detail)             | Each record represents a unique scorecard attribute or an individual standard to be rated along for an interview. Includes information about the candidate, job, and interview at large. *Note: Does not include free-form text responses to scorecard questions.*|
-| [greenhouse__application_history](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_history)             | Each record represents an application advancing to a new stage. Includes data about the time spent in each stage, the volume of activity per stage, the application source, candidate demographics, recruiters, and hiring managers, as well as the job's team, office, and department. |
+### Final output tables
 
-### Materialized Models
-Each Quickstart transformation job run materializes 68 models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
-<!--section-end-->
+By default, this package materializes the following final tables:
 
-## How do I use the dbt package?
+| Table | Description |
+| :---- | :---- |
+| [greenhouse__application_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_enhanced) | Tracks all candidate applications with complete applicant profiles including current pipeline stage, recruiter and coordinator assignments, contact information, resume links, and interview activity to manage the hiring funnel. <br></br>**Example Analytics Questions:**<ul><li>Which recruiters or sources generate the most applications and hires?</li><li>What is the average time from application to hire by job or candidate source?</li><li>How do application volumes and status distributions vary across different pipeline stages?</li></ul>|
+| [greenhouse__job_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__job_enhanced) | Provides comprehensive job posting data with metrics on application volumes, hiring outcomes, and team assignments to understand job performance and hiring effectiveness. <br></br>**Example Analytics Questions:**<ul><li>Which jobs have the most open applications and highest conversion rates to hire?</li><li>How long do job postings stay open before being filled?</li><li>What is the ratio of rejected to hired applications by department or office?</li></ul>|
+| [greenhouse__interview_enhanced](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_enhanced) | Tracks individual interviews between interviewers and candidates with feedback scores, interviewer information, and application status to evaluate interview effectiveness and candidate progression. <br></br>**Example Analytics Questions:**<ul><li>Which interviewers provide the most feedback and have the highest candidate advancement rates?</li><li>What is the distribution of interview recommendations by job or candidate source?</li><li>How do interview outcomes correlate with eventual hiring decisions?</li></ul>|
+| [greenhouse__interview_scorecard_detail](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__interview_scorecard_detail) | Captures detailed interview scorecard ratings for each evaluation criterion to analyze interviewer feedback patterns and candidate assessment consistency. *Note: Does not include free-form text responses.* <br></br>**Example Analytics Questions:**<ul><li>Which scorecard attributes have the highest average ratings across all interviews?</li><li>How do scorecard ratings vary by interviewer or candidate source?</li><li>What rating patterns correlate with successful hires versus rejections?</li></ul>|
+| [greenhouse__application_history](https://fivetran.github.io/dbt_greenhouse/#!/model/model.greenhouse.greenhouse__application_history) | Chronicles application progression through hiring stages with time-in-stage metrics, activity volumes, and recruiter assignments to analyze hiring velocity and pipeline bottlenecks. <br></br>**Example Analytics Questions:**<ul><li>What is the average time candidates spend in each hiring stage?</li><li>Which stages have the highest drop-off or rejection rates?</li><li>How does time-to-hire vary by job, department, or candidate source?</li></ul>|
 
-### Step 1: Prerequisites
+¹ Each Quickstart transformation job run materializes these models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
+
+---
+
+## Prerequisites
 To use this dbt package, you must have the following:
 
 - At least one Fivetran Greenhouse connection syncing data into your destination.
 - A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
-### Step 2: Install the package
+## How do I use the dbt package?
+You can either add this dbt package in the Fivetran dashboard or import it into your dbt project:
+
+- To add the package in the Fivetran dashboard, follow our [Quickstart guide](https://fivetran.com/docs/transformations/data-models/quickstart-management).
+- To add the package to your dbt project, follow the setup instructions in the dbt package's [README file](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#how-do-i-use-the-dbt-package) to use this package.
+
+<!--section-end-->
+
+### Install the package
 Include the following greenhouse package version in your `packages.yml` file:
 > TIP: Check [dbt Hub](https://hub.getdbt.com/) for the latest installation instructions or [read the dbt docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=1.2.0", "<1.3.0"]
+    version: [">=1.3.0", "<1.4.0"]
 ```
 
-### Step 3: Define database and schema variables
+### Define database and schema variables
 
 #### Option A: Single connection
 By default, this package runs using your [destination](https://docs.getdbt.com/docs/running-a-dbt-project/using-the-command-line-interface/configure-your-profile) and the `greenhouse` schema. If this is not where your Greenhouse data is (for example, if your Greenhouse schema is named `greenhouse_fivetran`), add the following configuration to your root `dbt_project.yml` file:
@@ -72,7 +94,7 @@ vars:
 #### Option B: Union multiple connections
 If you have multiple Greenhouse connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. For each source table, the package will union all of the data together and pass the unioned table into the transformations. The `source_relation` column in each model indicates the origin of each record.
 
-**PLEASE NOTE:** Rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization’s PII and data governance requirements.
+**PLEASE NOTE:** Rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization's PII and data governance requirements.
 
 To use this functionality, you will need to set the `greenhouse_sources` variable in your root `dbt_project.yml` file:
 
@@ -118,7 +140,7 @@ sources:
     tables: # copy and paste from greenhouse/models/staging/src_greenhouse.yml - see https://support.atlassian.com/bitbucket-cloud/docs/yaml-anchors/ for how to use anchors to only do so once
 ```
 
-> **Note**: If there are source tables you do not have (see [Step 4](https://github.com/fivetran/dbt_greenhouse?tab=readme-ov-file#step-4-disable-models-for-non-existent-sources)), you may still include them, as long as you have set the right variables to `False`.
+> **Note**: If there are source tables you do not have (see [Disable models for non-existent sources](https://github.com/fivetran/dbt_greenhouse?tab=readme-ov-file#disable-models-for-non-existent-sources)), you may still include them, as long as you have set the right variables to `False`.
 
 2. Set the `has_defined_sources` variable (scoped to the `greenhouse` package) to `True`, like such:
 ```yml
@@ -128,7 +150,7 @@ vars:
     has_defined_sources: true
 ```
 
-### Step 4: Disable models for non-existent sources
+### Disable models for non-existent sources
 Your Greenhouse connection might not sync every table that this package expects. If your syncs exclude certain tables, it is because you either do not use that functionality in Greenhouse or have actively excluded some tables from your syncs.
 
 To disable the corresponding functionality in the package, you must set the relevant config variables to `false`. By default, all variables are set to `true`. Alter variables only for the tables you want to disable:
@@ -143,7 +165,7 @@ vars:
 ```
 *Note: This package only integrates the above variables. If you'd like to disable other models, please create an [issue](https://github.com/fivetran/dbt_greenhouse/issues) specifying which ones.*
 
-### (Optional) Step 5: Additional configurations
+### (Optional) Additional configurations
 <details open><summary>Expand/Collapse details</summary>
 
 #### Passing Through Custom Columns
@@ -178,11 +200,11 @@ vars:
 ```
 </details>
 
-### (Optional) Step 6: Orchestrate your models with Fivetran Transformations for dbt Core™
+### (Optional) Orchestrate your models with Fivetran Transformations for dbt Core™
 <details><summary>Expand for details</summary>
 <br>
 
-Fivetran offers the ability for you to orchestrate your dbt project through [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt). Learn how to set up your project for orchestration through Fivetran in our [Transformations for dbt Core setup guides](https://fivetran.com/docs/transformations/dbt#setupguide).
+Fivetran offers the ability for you to orchestrate your dbt project through [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt#transformationsfordbtcore). Learn how to set up your project for orchestration through Fivetran in our [Transformations for dbt Core setup guides](https://fivetran.com/docs/transformations/dbt/setup-guide#transformationsfordbtcoresetupguide).
 </details>
 
 ## Does this package have dependencies?
@@ -198,14 +220,18 @@ packages:
       version: [">=1.0.0", "<2.0.0"]
 ```
 
+<!--section="greenhouse_maintenance"-->
 ## How is this package maintained and can I contribute?
+
 ### Package Maintenance
-The Fivetran team maintaining this package _only_ maintains the latest version of the package. We highly recommend you stay consistent with the [latest version](https://hub.getdbt.com/fivetran/greenhouse/latest/) of the package and refer to the [CHANGELOG](https://github.com/fivetran/dbt_greenhouse/blob/main/CHANGELOG.md) and release notes for more information on changes across versions.
+The Fivetran team maintaining this package only maintains the [latest version](https://hub.getdbt.com/fivetran/greenhouse/latest/) of the package. We highly recommend you stay consistent with the latest version of the package and refer to the [CHANGELOG](https://github.com/fivetran/dbt_greenhouse/blob/main/CHANGELOG.md) and release notes for more information on changes across versions.
 
 ### Contributions
 A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions.
 
-We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) on the best workflow for contributing to a package.
+We highly encourage and welcome contributions to this package. Learn how to contribute to a package in dbt's [Contributing to an external dbt package article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657).
+
+<!--section-end-->
 
 ## Are there any resources available?
 - If you have questions or want to reach out for help, see the [GitHub Issue](https://github.com/fivetran/dbt_greenhouse/issues/new/choose) section to find the right avenue of support for you.
