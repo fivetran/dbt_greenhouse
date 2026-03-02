@@ -4,10 +4,13 @@ config-version: 2
 profile: 'integration_tests'
 
 models:
+  +persist_docs:
+    relation: true
+    columns: "{{ false if target.type in ('databricks') else true }}"
   +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 vars:
-  greenhouse_schema: greenhouse_integration_tests_06
+  greenhouse_schema: greenhouse_integration_tests
   greenhouse:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"
