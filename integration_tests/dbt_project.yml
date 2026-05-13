@@ -42,7 +42,7 @@ vars:
     greenhouse_tags_identifier: "tags"
     greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
-    greenhouse_scheduled_interview_identifier: "{{ scheduled_interview_snowflake if target.type == 'snowflake' else scheduled_interview_postgres if target.type == 'postgres' else scheduled_interview }}"
+    greenhouse_scheduled_interview_identifier: "scheduled_interview{{ '_snowflake' if target.type == 'snowflake' else '_postgres' if target.type == 'postgres' else '' }}"
 
   # Comment out when generating docs
   greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
