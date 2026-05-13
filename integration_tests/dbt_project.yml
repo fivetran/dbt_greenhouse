@@ -42,7 +42,7 @@ vars:
     greenhouse_tags_identifier: "tags"
     greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
-    scheduled_interview: "{{ fivetran_utils.seed_data_helper('scheduled_interview', ('snowflake', 'postgres')) }}"
+    greenhouse_scheduled_interview_identifier: "{{ scheduled_interview_snowflake if target.type == 'snowflake' else scheduled_interview_postgres if target.type == 'postgres' else scheduled_interview }}"
 
   # Comment out when generating docs
   greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
