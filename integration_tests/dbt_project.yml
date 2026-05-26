@@ -42,7 +42,7 @@ vars:
     greenhouse_tags_identifier: "tags"
     greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
-    scheduled_interview: "{{ fivetran_utils.seed_data_helper('scheduled_interview', ('snowflake', 'postgres')) }}"
+    greenhouse_scheduled_interview_identifier: "scheduled_interview"
 
   # Comment out when generating docs
   greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
@@ -190,6 +190,7 @@ seeds:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
       +enabled: "{{ true if target.type not in ('snowflake','postgres') else false }}"
     scheduled_interview_snowflake:
+      +alias: "scheduled_interview"
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -200,6 +201,7 @@ seeds:
         updated_at: timestamp
       +enabled: "{{ true if target.type == 'snowflake' else false }}"
     scheduled_interview_postgres:
+      +alias: "scheduled_interview"
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
