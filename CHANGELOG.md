@@ -1,3 +1,11 @@
+# dbt_greenhouse v1.4.0
+
+[PR #44](https://github.com/fivetran/dbt_greenhouse/pull/44) includes the following updates:
+
+## Under the Hood
+- Migrates the `union_connections`, `apply_source_relation`, and `partition_by_source_relation` macros to the `dbt_fivetran_utils` package.
+- Adds the `fivetran_using_source_casing` variable for case-sensitive destination support. When enabled, downstream transformations respect source casing to ensure consistent results. See the [Additional Configurations](https://github.com/fivetran/dbt_greenhouse/#source-casing-for-case-sensitive-destinations) section of the README for details.
+
 # dbt_greenhouse v1.3.0
 
 [PR #41](https://github.com/fivetran/dbt_greenhouse/pull/41) includes the following updates:
@@ -32,7 +40,7 @@
 ## Feature Update
 - **Union Data Functionality**: This release supports running the package on multiple Greenhouse source connections. See the [README](https://github.com/fivetran/dbt_greenhouse/tree/main?tab=readme-ov-file#step-3-define-database-and-schema-variables) for details on how to leverage this feature.
 
-**PLEASE NOTE:** Rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization’s PII and data governance requirements.
+**PLEASE NOTE:** Rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization's PII and data governance requirements.
 
 ## Tests Update
 - Removes uniqueness tests on non-surrogate keys. The new unioning feature requires combination-of-column tests to consider the new `source_relation` column in addition to the existing primary key, but this is not supported across dbt versions.

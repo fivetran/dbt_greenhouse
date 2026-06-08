@@ -8,7 +8,7 @@ with application_history as (
         new_stage_id,
         new_status,
         updated_at as valid_from,
-        coalesce(lead(updated_at) over (partition by application_id {{ greenhouse.partition_by_source_relation() }} order by updated_at asc),
+        coalesce(lead(updated_at) over (partition by application_id {{ fivetran_utils.partition_by_source_relation(package_name='greenhouse') }} order by updated_at asc),
             {{ dbt.current_timestamp_backcompat() }}) as valid_until
 
     from {{ ref('stg_greenhouse__application_history') }}

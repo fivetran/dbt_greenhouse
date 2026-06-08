@@ -63,25 +63,21 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=1.3.0", "<1.4.0"]
+    version: [">=1.4.0", "<1.5.0"]
 ```
 
 ### Define database and schema variables
-
 #### Option A: Single connection
-By default, this package runs using your [destination](https://docs.getdbt.com/docs/running-a-dbt-project/using-the-command-line-interface/configure-your-profile) and the `greenhouse` schema. If this is not where your Greenhouse data is (for example, if your Greenhouse schema is named `greenhouse_fivetran`), add the following configuration to your root `dbt_project.yml` file:
+By default, this package runs using your destination and the `greenhouse` schema. If this is not where your Greenhouse data is (for example, if your Greenhouse schema is named `greenhouse_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
 vars:
-  greenhouse:
-    greenhouse_database: your_database_name
+    greenhouse_database: your_destination_name
     greenhouse_schema: your_schema_name
 ```
 
 #### Option B: Union multiple connections
 If you have multiple Greenhouse connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. For each source table, the package will union all of the data together and pass the unioned table into the transformations. The `source_relation` column in each model indicates the origin of each record.
-
-**PLEASE NOTE:** Rows from your individual Greenhouse connections will be stored together in unified tables. Given the potentially sensitive nature of Greenhouse data, confirm that this configuration complies with your organization's PII and data governance requirements.
 
 To use this functionality, you will need to set the `greenhouse_sources` variable in your root `dbt_project.yml` file:
 
@@ -100,42 +96,9 @@ vars:
         name: connection_2_source_name
 ```
 
-##### Recommended: Incorporate unioned sources into DAG
-> *If you are running the package through [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt#transformationsfordbtcore), the below step is necessary in order to synchronize model runs with your Greenhouse connections. Alternatively, you may choose to run the package through Fivetran [Quickstart](https://fivetran.com/docs/transformations/quickstart), which would create separate sets of models for each Greenhouse source rather than one set of unioned models.*
+#### Optional: Incorporate unioned sources into DAG
 
-By default, this package defines one single-connection source, called `greenhouse`, which will be disabled if you are unioning multiple connections. This means that your DAG will not include your Greenhouse sources, though the package will run successfully.
-
-To properly incorporate all of your Greenhouse connections into your project's DAG:
-1. Define each of your sources in a `.yml` file in your project. Utilize the following template for the `source`-level configurations, and, **most importantly**, copy and paste the table and column-level definitions from the package's `src_greenhouse.yml` [file](https://github.com/fivetran/dbt_greenhouse/blob/main/models/staging/src_greenhouse.yml).
-
-```yml
-# a .yml file in your root project
-
-version: 2
-
-sources:
-  - name: <name> # ex: Should match name in greenhouse_sources
-    schema: <schema_name>
-    database: <database_name>
-    loader: fivetran
-    config:
-      loaded_at_field: _fivetran_synced
-      freshness: # feel free to adjust to your liking
-        warn_after: {count: 72, period: hour}
-        error_after: {count: 168, period: hour}
-
-    tables: # copy and paste from greenhouse/models/staging/src_greenhouse.yml - see https://support.atlassian.com/bitbucket-cloud/docs/yaml-anchors/ for how to use anchors to only do so once
-```
-
-> **Note**: If there are source tables you do not have (see [Disable models for non-existent sources](https://github.com/fivetran/dbt_greenhouse?tab=readme-ov-file#disable-models-for-non-existent-sources)), you may still include them, as long as you have set the right variables to `False`.
-
-2. Set the `has_defined_sources` variable (scoped to the `greenhouse` package) to `True`, like such:
-```yml
-# dbt_project.yml
-vars:
-  greenhouse:
-    has_defined_sources: true
-```
+If you use [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt#transformationsfordbtcore) and are unioning multiple Greenhouse connections, you can define your sources in a property `.yml` file, [using this as a template](https://github.com/fivetran/dbt_greenhouse/blob/main/models/staging/src_greenhouse.yml). Set the variable `has_defined_sources: true` under the Greenhouse namespace in your `dbt_project.yml`. Otherwise, your Greenhouse connections won't appear in your DAG. See the `union_connections` macro [documentation](https://github.com/fivetran/dbt_fivetran_utils/tree/releases/v0.4.latest#optional-union-connections-defined-sources-configuration) for full configuration details.
 
 ### Disable models for non-existent sources
 Your Greenhouse connection might not sync every table that this package expects. If your syncs exclude certain tables, it is because you either do not use that functionality in Greenhouse or have actively excluded some tables from your syncs.
@@ -184,6 +147,14 @@ If an individual source table has a different name than the package expects, add
 ```yml
 vars:
     greenhouse_<default_source_table_name>_identifier: your_table_name 
+```
+
+#### Source casing for case-sensitive destinations
+By default, the package applies case-insensitive comparisons when resolving `source_relation` values. If your destination is case-sensitive and you want downstream transformations to respect the exact casing of your source database and schema names, set the following variable:
+
+```yml
+vars:
+    fivetran_using_source_casing: true
 ```
 </details>
 

@@ -15,7 +15,7 @@ fields as (
                 staging_columns=get_job_columns()
             )
         }}
-        {{ greenhouse.apply_source_relation() }}
+        {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}
 
         {% if var('greenhouse_job_custom_columns', []) != [] %}
         ,

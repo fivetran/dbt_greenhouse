@@ -17,7 +17,7 @@ sources:
     tables:
       - name: activity
         identifier: "{{ var('greenhouse_activity_identifier', 'activity')}}"
-        description: Table capturing lists of activities on a candidate’s profile, including interviews, notes, and emails.
+        description: Table capturing lists of activities on a candidate's profile, including interviews, notes, and emails.
         columns:
           - name: body
             description: Content of the activity taken. 
@@ -99,7 +99,7 @@ sources:
           - name: index
             description: Index of the file upload amongst this candidate's attachments.
           - name: type
-            description: One of [“resume”, “cover_letter”, “admin_only”]
+            description: One of ["resume", "cover_letter", "admin_only"]
           - name: url
             description: Url of where the attachment is stored.
 
@@ -158,7 +158,7 @@ sources:
           - name: id
             description: Unique ID of the department.
           - name: name
-            description: The department’s name.
+            description: The department's name.
           - name: parent_id
             description: Self-referencing parent department ID.
 
@@ -305,11 +305,11 @@ sources:
           - name: opening_id
             description: Opening ID visible from the UI. 
           - name: status
-            description: Either “open” or “closed”.
+            description: Either "open" or "closed".
 
       - name: job_post 
         identifier: "{{ var('greenhouse_job_post_identifier', 'job_post')}}"
-        description: Table capturing the online job posts for an organization’s jobs (as seen on the Job Board).
+        description: Table capturing the online job posts for an organization's jobs (as seen on the Job Board).
         columns:
           - name: content
             description: The text of the job post as posted to the external job board.
@@ -362,7 +362,7 @@ sources:
           - name: location_name
             description: The office's location.
           - name: name
-            description: The office’s name.
+            description: The office's name.
           - name: parent_id
             description: Self-referencing id of the office's parent office. 
           - name: primary_contact_user_id
@@ -523,7 +523,7 @@ sources:
           - name: disabled
             description: Boolean that is true if the user account has been disabled.
           - name: employee_id 
-            description: The user’s external employee id.
+            description: The user's external employee id.
           - name: first_name
             description: User's first name. 
           - name: last_name
@@ -546,7 +546,7 @@ sources:
           - name: disabled
             description: Boolean that is true if the user account has been disabled.
           - name: employee_id 
-            description: The user’s external employee id.
+            description: The user's external employee id.
           - name: first_name
             description: User's first name. 
           - name: last_name
@@ -592,4 +592,3 @@ sources:
             description: Name of the prospect stage. 
           - name: prospect_pool_id
             description: Foreign key referencing the PROSPECT_POOL the stage belongs to.
-        

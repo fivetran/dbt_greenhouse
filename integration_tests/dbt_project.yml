@@ -1,5 +1,5 @@
 name: 'greenhouse_integration_tests'
-version: '1.3.0'
+version: '1.4.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -51,6 +51,7 @@ vars:
 seeds:
   +docs:
     show: False
+  +quote_columns: "{{ target.type == 'redshift' or var('fivetran_using_source_casing', false) }}"
   greenhouse_integration_tests:
     +column_types:
       _fivetran_synced: timestamp
@@ -187,8 +188,8 @@ seeds:
         end: timestamp
         start: timestamp
         updated_at: timestamp
-      +quote_columns: "{{ true if target.type == 'redshift' else false }}"
-      +enabled: "{{ true if target.type not in ('snowflake','postgres') else false }}"
+      +quote_columns: "{{ target.type == 'redshift' or var('fivetran_using_source_casing', false) }}"
+      +enabled: "{{ true if target.type not in ('snowflake','postgres') or var('fivetran_using_source_casing', false) else false }}"
     scheduled_interview_snowflake:
       +alias: "scheduled_interview"
       +column_types:
@@ -199,7 +200,7 @@ seeds:
         created_at: timestamp
         end: timestamp
         updated_at: timestamp
-      +enabled: "{{ true if target.type == 'snowflake' else false }}"
+      +enabled: "{{ true if target.type == 'snowflake' and not var('fivetran_using_source_casing', false) else false }}"
     scheduled_interview_postgres:
       +alias: "scheduled_interview"
       +column_types:
@@ -210,7 +211,7 @@ seeds:
         created_at: timestamp
         end: timestamp
         updated_at: timestamp
-      +enabled: "{{ true if target.type == 'postgres' else false }}"
+      +enabled: "{{ true if target.type == 'postgres' and not var('fivetran_using_source_casing', false) else false }}"
     scheduled_interviewer:
       +column_types:
         interviewer_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
