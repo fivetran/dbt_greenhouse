@@ -34,7 +34,7 @@ order_resumes as (
 
     select 
         *,
-        row_number() over(partition by candidate_id {{ greenhouse.partition_by_source_relation() }} order by index desc) as resume_row_num
+        row_number() over(partition by candidate_id {{ fivetran_utils.partition_by_source_relation(package_name='greenhouse') }} order by index desc) as resume_row_num
     from {{ ref('stg_greenhouse__attachment') }}
 
     where lower(type) = 'resume'
@@ -53,8 +53,8 @@ order_links as (
         source_relation,
         candidate_id,
         lower(url) as url,
-        row_number() over(partition by candidate_id, lower(url) like '%linkedin%' {{ greenhouse.partition_by_source_relation() }} order by index desc) as linkedin_row_num,
-        row_number() over(partition by candidate_id, lower(url) like '%github%' {{ greenhouse.partition_by_source_relation() }} order by index desc) as github_row_num
+        row_number() over(partition by candidate_id, lower(url) like '%linkedin%' {{ fivetran_utils.partition_by_source_relation(package_name='greenhouse') }} order by index desc) as linkedin_row_num,
+        row_number() over(partition by candidate_id, lower(url) like '%github%' {{ fivetran_utils.partition_by_source_relation(package_name='greenhouse') }} order by index desc) as github_row_num
 
     from {{ ref('stg_greenhouse__social_media_address') }}
 

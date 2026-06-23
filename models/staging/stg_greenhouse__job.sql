@@ -15,13 +15,13 @@ fields as (
                 staging_columns=get_job_columns()
             )
         }}
-        {{ greenhouse.apply_source_relation() }}
+        {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}
 
         {% if var('greenhouse_job_custom_columns', []) != [] %}
         ,
-        {{ var('greenhouse_job_custom_columns', [] )  | join(', ') }}
+        {% for col in var('greenhouse_job_custom_columns', []) %}{{ adapter.quote(col) if var('fivetran_using_source_casing', false) else col }}{{ ', ' if not loop.last }}{% endfor %}
         {% endif %}
-        
+
     from base
 ),
 
@@ -42,7 +42,7 @@ final as (
 
         {% if var('greenhouse_job_custom_columns', []) != [] %}
         ,
-        {{ var('greenhouse_job_custom_columns', [] )  | join(', ') }}
+        {% for col in var('greenhouse_job_custom_columns', []) %}{{ adapter.quote(col) if var('fivetran_using_source_casing', false) else col }}{{ ', ' if not loop.last }}{% endfor %}
         {% endif %}
 
     from fields
