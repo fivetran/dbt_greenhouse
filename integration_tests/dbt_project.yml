@@ -211,7 +211,7 @@ seeds:
         created_at: timestamp
         end: timestamp
         updated_at: timestamp
-      +enabled: "{{ true if target.type == 'postgres' and not var('fivetran_using_source_casing', false) else false }}"
+      +enabled: "{{ true if target.type in ('postgres','duckdb') and not var('fivetran_using_source_casing', false) else false }}"
     scheduled_interviewer:
       +column_types:
         interviewer_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
