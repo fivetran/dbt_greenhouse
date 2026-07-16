@@ -189,7 +189,7 @@ seeds:
         start: timestamp
         updated_at: timestamp
       +quote_columns: "{{ target.type == 'redshift' or var('fivetran_using_source_casing', false) }}"
-      +enabled: "{{ true if target.type not in ('snowflake','postgres') or var('fivetran_using_source_casing', false) else false }}"
+      +enabled: "{{ true if target.type not in ('snowflake','postgres','duckdb') or var('fivetran_using_source_casing', false) else false }}"
     scheduled_interview_snowflake:
       +alias: "scheduled_interview"
       +column_types:
