@@ -30,7 +30,7 @@ final as (
         cast(coalesce(ends,
         {%- if target.type == 'bigquery' %}
         `end`
-        {% elif target.type in ('redshift','postgres') %}
+        {% elif target.type in ('redshift','postgres','duckdb') %}
         "end"
         {% else %}
         end
