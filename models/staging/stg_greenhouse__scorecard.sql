@@ -26,19 +26,24 @@ final as (
         source_relation,
         _fivetran_synced,
         cast(application_id as {{ dbt.type_string() }}) as application_id,
-        cast(candidate_id as {{ dbt.type_string() }}) as candidate_id,
+        candidate_rating,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(id as {{ dbt.type_string() }}) as scorecard_id,
-        interview as interview_name,
+        cast(interview_kit_id as {{ dbt.type_string() }}) as interview_kit_id,
         cast(interviewed_at as {{ dbt.type_timestamp() }}) as interviewed_at,
-        overall_recommendation,
+        cast(interviewer_id as {{ dbt.type_string() }}) as interviewer_id,
+        notes,
+        notes_with_tags,
+        private_notes,
+        private_notes_with_tags,
+        public_notes,
+        public_notes_with_tags,
+        status,
         cast(submitted_at as {{ dbt.type_timestamp() }}) as submitted_at,
-        cast(submitted_by_user_id as {{ dbt.type_string() }}) as submitted_by_user_id,
+        cast(submitter_id as {{ dbt.type_string() }}) as submitted_by_user_id,
         cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at
 
     from fields
-
-    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

@@ -2,12 +2,13 @@
 
 {% set columns = [
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
-    {"name": "index", "datatype": dbt.type_int()},
-    {"name": "name", "datatype": dbt.type_string()},
+    {"name": "candidate_attribute_rating", "datatype": dbt.type_string()},
+    {"name": "created_at", "datatype": dbt.type_timestamp()},
+    {"name": "id", "datatype": dbt.type_int()},
+    {"name": "job_candidate_attribute_id", "datatype": dbt.type_int()},
     {"name": "note", "datatype": dbt.type_string()},
-    {"name": "rating", "datatype": dbt.type_string()},
     {"name": "scorecard_id", "datatype": dbt.type_int()},
-    {"name": "type", "datatype": dbt.type_string()}
+    {"name": "updated_at", "datatype": dbt.type_timestamp()}
 ] %}
 
 {{ return(columns) }}

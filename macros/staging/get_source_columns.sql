@@ -1,12 +1,13 @@
 {% macro get_source_columns() %}
 
 {% set columns = [
-    {"name": "_fivetran_deleted", "datatype": "boolean"},
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
+    {"name": "created_at", "datatype": dbt.type_timestamp()},
     {"name": "id", "datatype": dbt.type_int()},
     {"name": "name", "datatype": dbt.type_string()},
-    {"name": "source_type_id", "datatype": dbt.type_int()},
-    {"name": "source_type_name", "datatype": dbt.type_string()}
+    {"name": "type_id", "datatype": dbt.type_int()},
+    {"name": "type_name", "datatype": dbt.type_string()},
+    {"name": "updated_at", "datatype": dbt.type_timestamp()}
 ] %}
 
 {{ return(columns) }}

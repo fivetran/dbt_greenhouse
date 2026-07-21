@@ -23,7 +23,7 @@ application as (
 job_stage as (
 
     select *
-    from {{ ref('stg_greenhouse__job_stage') }}
+    from {{ ref('stg_greenhouse__job_interview_stage') }}
 ),
 
 activity as (

@@ -14,13 +14,13 @@ join_w_attributes as (
 
     select
         scorecard_attribute.*,
-        interview.overall_recommendation,
+        interview.candidate_rating,
     
         interview.candidate_name,
         interview.interviewer_name,
         interview.interview_name,
         
-        interview.start_at as interview_start_at,
+        interview.starts_at as interview_start_at,
         interview.scorecard_submitted_at,
 
         interview.application_id,
@@ -39,7 +39,7 @@ final as (
 
     select 
         *,
-        {{ dbt_utils.generate_surrogate_key(['source_relation', 'interview_scorecard_key', 'index']) }} as scorecard_attribute_key
+        {{ dbt_utils.generate_surrogate_key(['source_relation', 'interview_scorecard_key', 'id']) }} as scorecard_attribute_key
 
     from join_w_attributes
 )

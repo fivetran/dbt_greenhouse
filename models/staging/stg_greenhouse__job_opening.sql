@@ -27,11 +27,15 @@ final as (
         cast(application_id as {{ dbt.type_string() }}) as application_id,
         cast(close_reason_id as {{ dbt.type_string() }}) as close_reason_id,
         cast(closed_at as {{ dbt.type_timestamp() }}) as closed_at,
-        cast(id as {{ dbt.type_string() }})as job_openining_id,
+        cast(id as {{ dbt.type_string() }}) as job_opening_id,
         cast(job_id as {{ dbt.type_string() }}) as job_id,
         cast(opened_at as {{ dbt.type_timestamp() }}) as opened_at,
-        cast(opening_id as {{ dbt.type_string() }})as opening_text_id,
-        status as current_status
+        cast(opening_id as {{ dbt.type_string() }}) as opening_text_id,
+        is_open as current_status,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at,
+        sort_order,
+        cast(target_start_on as date) as target_start_on
 
     from fields
 )

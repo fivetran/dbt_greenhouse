@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__user_email_tmp') }}
 
 ),
@@ -20,13 +20,18 @@ fields as (
 ),
 
 final as (
-    
+
     select
         source_relation,
         _fivetran_synced,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         email,
-        cast(user_id as {{ dbt.type_string() }}) as user_id
-        
+        cast(id as {{ dbt.type_string() }}) as id,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at,
+        cast(user_id as {{ dbt.type_string() }}) as user_id,
+        cast(verification_token_sent_at as {{ dbt.type_timestamp() }}) as verification_token_sent_at,
+        verified
+
     from fields
 )
 

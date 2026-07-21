@@ -13,7 +13,7 @@ interview_metrics as (
         count(distinct scheduled_interview_id) as count_interviews,
         count(distinct scorecard_id) as count_interview_scorecards,
         count(distinct interviewer_user_id) as count_distinct_interviewers,
-        max(start_at) as latest_interview_scheduled_at
+        max(starts_at) as latest_interview_scheduled_at
 
     from {{ ref('greenhouse__interview_enhanced') }}
 

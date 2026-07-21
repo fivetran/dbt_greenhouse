@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__application_tmp') }}
 
 ),
@@ -30,21 +30,24 @@ final as (
     select
         source_relation,
         _fivetran_synced,
-        cast(applied_at as {{ dbt.type_timestamp() }}) as applied_at,
-        cast(candidate_id as {{ dbt.type_string() }}) as candidate_id,
-        cast(credited_to_user_id as {{ dbt.type_string() }}) as credited_to_user_id,
-        cast(current_stage_id as {{ dbt.type_string() }}) as current_stage_id,
         cast(id as {{ dbt.type_string() }}) as application_id,
+        cast(candidate_id as {{ dbt.type_string() }}) as candidate_id,
         cast(last_activity_at as {{ dbt.type_timestamp() }}) as last_activity_at,
         location_address,
         prospect as is_prospect,
-        cast(prospect_owner_id as {{ dbt.type_string() }}) as prospect_owner_user_id,
-        cast(prospect_pool_id as {{ dbt.type_string() }}) as prospect_pool_id,
-        cast(prospect_stage_id as {{ dbt.type_string() }}) as prospect_stage_id,
         cast(rejected_at as {{ dbt.type_timestamp() }}) as rejected_at,
-        cast(rejected_reason_id as {{ dbt.type_string() }}) as rejected_reason_id,
         cast(source_id as {{ dbt.type_string() }}) as source_id,
-        status
+        status,
+        cast(stage_id as {{ dbt.type_string() }}) as stage_id,
+        cast(coordinator_id as {{ dbt.type_string() }}) as coordinator_id,
+        cast(job_id as {{ dbt.type_string() }}) as job_id,
+        cast(job_post_id as {{ dbt.type_string() }}) as job_post_id,
+        cast(recruiter_id as {{ dbt.type_string() }}) as recruiter_id,
+        cast(referrer_id as {{ dbt.type_string() }}) as referrer_id,
+        cast(agency_note_id as {{ dbt.type_string() }}) as agency_note_id,
+        needs_decision,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 
         {% if var('greenhouse_application_custom_columns', []) != [] %}
         ,

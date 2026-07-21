@@ -1,14 +1,13 @@
-{% macro get_office_columns() %}
+{% macro get_job_interview_stage_columns() %}
 
 {% set columns = [
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
+    {"name": "active", "datatype": "boolean"},
     {"name": "created_at", "datatype": dbt.type_timestamp()},
-    {"name": "external_id", "datatype": dbt.type_string()},
     {"name": "id", "datatype": dbt.type_int()},
-    {"name": "location", "datatype": dbt.type_string()},
+    {"name": "job_id", "datatype": dbt.type_int()},
     {"name": "name", "datatype": dbt.type_string()},
-    {"name": "parent_id", "datatype": dbt.type_int()},
-    {"name": "primary_in_house_contact_user_id", "datatype": dbt.type_int()},
+    {"name": "sort_order", "datatype": dbt.type_int()},
     {"name": "updated_at", "datatype": dbt.type_timestamp()}
 ] %}
 

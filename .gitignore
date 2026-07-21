@@ -64,6 +64,9 @@ service-account.json
 *.temp
 *.tmp
 
+# dbt worktrees
+worktrees/
+
 # Claude instructions
 CLAUDE.md
 

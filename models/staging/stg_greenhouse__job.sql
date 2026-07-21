@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__job_tmp') }}
 
 ),
@@ -32,10 +32,14 @@ final as (
         _fivetran_synced,
         cast(closed_at as {{ dbt.type_timestamp() }}) as last_opening_closed_at,
         confidential as is_confidential,
+        cast(copied_from_id as {{ dbt.type_string() }}) as copied_from_id,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
+        cast(department_id as {{ dbt.type_string() }}) as department_id,
         cast(id as {{ dbt.type_string() }}) as job_id,
+        is_template,
         name as job_title,
         notes,
+        cast(opened_at as {{ dbt.type_timestamp() }}) as opened_at,
         cast(requisition_id as {{ dbt.type_string() }}) as requisition_id,
         status,
         cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at
@@ -46,8 +50,6 @@ final as (
         {% endif %}
 
     from fields
-
-    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

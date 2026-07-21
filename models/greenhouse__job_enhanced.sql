@@ -30,7 +30,7 @@ live_job_posts as (
         source_relation,
         job_id,
         sum(case when is_internal then 1 else 0 end) as count_live_internal_posts,
-        sum(case when is_external then 1 else 0 end) as count_live_external_posts,
+        sum(case when not is_internal then 1 else 0 end) as count_live_external_posts,
         count(distinct lower(location_name)) as count_live_locations
 
     from {{ ref('stg_greenhouse__job_post') }}
@@ -45,9 +45,9 @@ job_openings as (
     select 
         source_relation,
         job_id,
-        sum(case when current_status = 'open' then 1 else 0 end) as count_active_openings,
-        sum(case when current_status = 'closed' then 1 else 0 end) as count_closed_openings,
-        sum(case when current_status = 'closed' and application_id is not null then 1 else 0 end) as count_hired_closed_openings
+        sum(case when current_status then 1 else 0 end) as count_active_openings,
+        sum(case when not current_status then 1 else 0 end) as count_closed_openings,
+        sum(case when not current_status and application_id is not null then 1 else 0 end) as count_hired_closed_openings
         
     from {{ ref('stg_greenhouse__job_opening') }}
 

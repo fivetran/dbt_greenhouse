@@ -6,98 +6,104 @@ models:
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
-      - name: applied_at
-        description: Timestamp of when the application was submitted. 
-      - name: candidate_id
-        description: Foreign key referencing the CANDIDATE who submitted the application.
-      - name: credited_to_user_id
-        description: Foreign key referencing the USER who will receive credit for this application.
-      - name: current_stage_id
-        description: Foreign key referencing the JOB_STAGE that the application is currently at in the pipeline. 
       - name: application_id
         description: Unique ID of the application.
         tests:
           - not_null
+      - name: candidate_id
+        description: Foreign key referencing the CANDIDATE who submitted the application.
+      - name: stage_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at in the pipeline (`stage_id` in source; previously `current_stage_id`).
+      - name: job_id
+        description: Foreign key referencing the JOB this application is for. Directly on the application in v3.
+      - name: coordinator_id
+        description: Foreign key referencing the USER who is coordinating this application.
+      - name: recruiter_id
+        description: Foreign key referencing the USER who is recruiting for this application.
+      - name: referrer_id
+        description: Foreign key referencing the referrer of this application.
       - name: last_activity_at
-        description: Timestamp of when the last activity was taken on this application. 
+        description: Timestamp of when the last activity was taken on this application.
       - name: location_address
         description: The content of the address question on a job post.
       - name: is_prospect
         description: >
-          Boolean that is true if this is a prospect application, which means that the associated person 
+          Boolean that is true if this is a prospect application, which means that the associated person
           is a prospect and has not yet applied for this job.
-      - name: prospect_owner_user_id
-        description: Foreign key referencing the USER ID of the prospect owner.
-      - name: prospect_pool_id
-        description: Foreign key referencing the PROSPECT_POOL that the application came from.
-      - name: prospect_stage_id
-        description: Foreign key referencing the ID of the application's PROSPECT_POOL_STAGE.
       - name: rejected_at
-        description: Timestamp of when the application was rejected. 
-      - name: rejected_reason_id
-        description: Foreign key referencing the REJECTION_REASON for the application.
+        description: Timestamp of when the application was rejected.
       - name: source_id
         description: Foreign key referencing the ID of the SOURCE of the application.
       - name: status
         description: One of - active, rejected, hired.
+      - name: created_at
+        description: Timestamp the application record was created.
+      - name: updated_at
+        description: Timestamp the application record was last updated.
       - name: referrer_name
-        description: Full name of the user who is credited with referring this application.
-      - name: prospect_owner_name
-        description: Full name of the prospect owner.
+        description: Full name of the referrer credited with this application.
+      - name: coordinator_name
+        description: Full name of the user coordinating this application.
+      - name: recruiter_name
+        description: Full name of the recruiter assigned to this application.
+      - name: coordinator_email
+        description: Email of the coordinator assigned to this application.
+      - name: recruiter_email
+        description: Email of the recruiter assigned to this application.
 
   - name: int_greenhouse__application_info
     description: Table capturing information about applications
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
-      - name: applied_at
-        description: Timestamp of when the application was submitted. 
-      - name: candidate_id
-        description: Foreign key referencing the CANDIDATE who submitted the application.
-      - name: credited_to_user_id
-        description: Foreign key referencing the USER who will receive credit for this application.
-      - name: current_stage_id
-        description: Foreign key referencing the JOB_STAGE that the application is currently at in the pipeline. 
       - name: application_id
         description: Unique ID of the application.
+      - name: candidate_id
+        description: Foreign key referencing the CANDIDATE who submitted the application.
+      - name: stage_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at (`stage_id` in source; previously `current_stage_id`).
+      - name: job_id
+        description: Foreign key referencing the JOB being applied for. Directly on the application in v3.
+      - name: coordinator_id
+        description: Foreign key referencing the USER coordinating this application (directly on application in v3).
+      - name: recruiter_id
+        description: Foreign key referencing the USER recruiting for this application (directly on application in v3).
       - name: last_activity_at
-        description: Timestamp of when the last activity was taken on this application. 
+        description: Timestamp of when the last activity was taken on this application.
       - name: location_address
         description: The content of the address question on a job post.
       - name: is_prospect
         description: >
-          Boolean that is true if this is a prospect application, which means that the associated person 
+          Boolean that is true if this is a prospect application, which means that the associated person
           is a prospect and has not yet applied for this job.
-      - name: prospect_owner_user_id
-        description: Foreign key referencing the USER ID of the prospect owner.
-      - name: prospect_pool_id
-        description: Foreign key referencing the PROSPECT_POOL that the application came from.
-      - name: prospect_stage_id
-        description: Foreign key referencing the ID of the application's PROSPECT_POOL_STAGE.
       - name: rejected_at
-        description: Timestamp of when the application was rejected. 
-      - name: rejected_reason_id
-        description: Foreign key referencing the REJECTION_REASON for the application.
+        description: Timestamp of when the application was rejected.
       - name: source_id
         description: Foreign key referencing the ID of the SOURCE of the application.
       - name: status
         description: One of - active, rejected, hired.
+      - name: created_at
+        description: Timestamp the application record was created.
+      - name: updated_at
+        description: Timestamp the application record was last updated.
       - name: referrer_name
-        description: Full name of the user who is credited with referring this application.
-      - name: prospect_owner_name
-        description: Full name of the prospect owner.
+        description: Full name of the referrer credited with this application.
+      - name: coordinator_name
+        description: Full name of the user coordinating this application.
+      - name: recruiter_name
+        description: Full name of the recruiter assigned to this application.
+      - name: coordinator_email
+        description: Email of the coordinator assigned to this application.
+      - name: recruiter_email
+        description: Email of the recruiter assigned to this application.
       - name: current_company
         description: The company at which the candidate currently works.
-      - name: coordinator_user_id
-        description: Foreign key referencing the USER who is responsible for coordinating this candidate.
       - name: candidate_created_at
-        description: Timestamp of when the candidate profile was created. 
+        description: Timestamp of when the candidate profile was created.
       - name: full_name
         description: First and last name of the candidate.
       - name: is_private
-        description: Boolean that is true if the candidate is private. 
-      - name: recruiter_user_id
-        description: Foreign key referencing the USER who is the recruiter assigned to this candidate.
+        description: Boolean that is true if the candidate is private.
       - name: current_title
         description: The candidate's current title.
       - name: last_updated_at
@@ -105,53 +111,39 @@ models:
       - name: phone
         description: Comma-separated aggregated list of the candidate's phone numbers and the type of phone they are.
       - name: email
-        description: Comma-separated list of the candidate's email addresses. 
+        description: Comma-separated list of the candidate's email addresses.
       - name: resume_url
-        description: URL of the candidate's most recently uploaded resume. 
+        description: URL of the candidate's most recently uploaded resume.
       - name: linkedin_url
-        description: URL of the candidate's most recently added LinkedIn link. 
+        description: URL of the candidate's most recently added LinkedIn link.
       - name: github_url
-        description: URL of the candidate's most recently added Github link. 
-      - name: coordinator_name
-        description: Full name of the user who is responsible for coordinating with this candidate.
-      - name: recruiter_name
-        description: Full name of the candidate's assigned recruiter.
-      - name: coordinator_email
-        description: Email of the user who is responsible for coordinating with this candidate.
-      - name: recruiter_email
-        description: Email of the candidate's assigned recruiter.
+        description: URL of the candidate's most recently added Github link.
       - name: candidate_tags
-        description: Comma-separated list of tags attached to this candidate. 
+        description: Comma-separated list of tags attached to this candidate.
       - name: current_job_stage
-        description: Current stage that the application is at in the hiring pipeline. 
+        description: Current stage that the application is at in the hiring pipeline.
       - name: sourced_from
-        description: Where the application was sourced from. 
+        description: Where the application was sourced from.
       - name: sourced_from_type
-        description: The category of source that the application came from. 
+        description: The category of source that the application came from.
       - name: count_activities
         description: Total count of activities completed on this candidate's profile.
       - name: job_title
-        description: Title of the job role the candidate is applying for. 
+        description: Title of the job role the candidate is applying for.
       - name: job_offices
-        description: Semicolon-separated list of the offices that the job is listed under. 
+        description: Semicolon-separated list of the offices that the job is listed under.
       - name: job_departments
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: Semicolon-separated list of the departments that the job is listed under.
       - name: job_parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: Semicolon-separated list of the *parent* departments that the job is listed under.
       - name: job_status
         description: Current status of the job being applied for.
       - name: hiring_managers
         description: Comma-separated list of the full names of the job's hiring managers.
-      - name: job_id
-        description: Foreign key referencing the JOB being applied for. 
       - name: job_requisition_id
         description: The id of the requisition corresponding to this job posting, if applicable.
       - name: job_sourcers
-        description: Comma-separated list of the full names of the job's recruiting sourcers. 
-      - name: prospect_pool
-        description: Name given to the applicant's prospect pool. 
-      - name: prospect_stage
-        description: Current stage of the applicant within its prospect pool, if applicable. 
+        description: Comma-separated list of the full names of the job's recruiting sourcers.
       - name: candidate_gender
         description: Description of the applicant's gender identity.
       - name: candidate_disability_status
@@ -161,9 +153,7 @@ models:
       - name: candidate_veteran_status
         description: Description of the applicant's veteran status.
       - name: application_job_key
-        description: >
-          Unique key hashed on `application_id` `job_id`, and `source_relation`. This has to be done as the table contains both 
-          candidates and prospects.
+        description: Unique key hashed on `application_id`, `job_id`, and `source_relation`.
         tests:
           - unique
           - not_null

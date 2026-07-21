@@ -26,7 +26,8 @@ final as (
         source_relation,
         _fivetran_synced,
         cast(candidate_id as {{ dbt.type_string() }}) as candidate_id,
-        cast(tag_id as {{ dbt.type_string() }}) as tag_id
+        index,
+        tag_name
 
     from fields
 )

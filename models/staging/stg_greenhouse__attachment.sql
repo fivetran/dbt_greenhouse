@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__attachment_tmp') }}
 
 ),
@@ -16,7 +16,7 @@ fields as (
             )
         }}
         {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}
-        
+
     from base
 ),
 
@@ -25,10 +25,13 @@ final as (
     select
         source_relation,
         _fivetran_synced,
+        cast(application_id as {{ dbt.type_string() }}) as application_id,
         cast(candidate_id as {{ dbt.type_string() }}) as candidate_id,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         filename,
-        index,
+        cast(id as {{ dbt.type_string() }}) as id,
         type,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at,
         url
 
     from fields

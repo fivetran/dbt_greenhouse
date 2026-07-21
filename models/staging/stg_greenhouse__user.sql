@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__user_tmp') }}
 
 ),
@@ -16,7 +16,7 @@ fields as (
             )
         }}
         {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}
-        
+
     from base
 ),
 
@@ -25,11 +25,14 @@ final as (
     select
         source_relation,
         _fivetran_synced,
+        cast(agency_id as {{ dbt.type_string() }}) as agency_id,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
-        disabled as is_disabled,
-        cast(employee_id as {{ dbt.type_string() }}) as employee_id, -- external
+        deactivated as is_disabled,
+        cast(employee_id as {{ dbt.type_string() }}) as employee_id,
         first_name || ' ' || last_name as full_name,
         cast(id as {{ dbt.type_string() }}) as user_id,
+        job_title,
+        primary_email,
         site_admin as is_site_admin,
         cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at
 

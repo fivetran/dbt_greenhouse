@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__scheduled_interviewer_tmp') }}
 
 ),
@@ -20,13 +20,18 @@ fields as (
 ),
 
 final as (
-    
+
     select
         source_relation,
         _fivetran_synced,
-        cast(interviewer_id as {{ dbt.type_string() }}) as interviewer_user_id,
-        cast(scheduled_interview_id as {{ dbt.type_string() }}) as scheduled_interview_id,
-        cast(scorecard_id as {{ dbt.type_string() }}) as scorecard_id
+        cast(id as {{ dbt.type_string() }}) as id,
+        cast(user_id as {{ dbt.type_string() }}) as interviewer_user_id,
+        cast(interview_id as {{ dbt.type_string() }}) as scheduled_interview_id,
+        cast(scorecard_id as {{ dbt.type_string() }}) as scorecard_id,
+        email,
+        response_status,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 
     from fields
 )

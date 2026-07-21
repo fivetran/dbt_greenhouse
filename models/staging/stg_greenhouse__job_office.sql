@@ -2,7 +2,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__job_office_tmp') }}
 
 ),
@@ -21,12 +21,13 @@ fields as (
 ),
 
 final as (
-    
+
     select
         source_relation,
         _fivetran_synced,
-        cast(office_id as {{ dbt.type_string() }}) as office_id,
-        cast(job_id as {{ dbt.type_string() }}) as job_id
+        index,
+        cast(job_id as {{ dbt.type_string() }}) as job_id,
+        cast(office_id as {{ dbt.type_string() }}) as office_id
 
     from fields
 )

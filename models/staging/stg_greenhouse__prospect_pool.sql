@@ -2,7 +2,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__prospect_pool_tmp') }}
 
 ),
@@ -21,17 +21,18 @@ fields as (
 ),
 
 final as (
-    
+
     select
         source_relation,
         _fivetran_synced,
         active as is_active,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
+        description,
         cast(id as {{ dbt.type_string() }}) as prospect_pool_id,
-        name as prospect_pool_name
+        name as prospect_pool_name,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 
     from fields
-
-    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

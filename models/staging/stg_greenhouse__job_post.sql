@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__job_post_tmp') }}
 
 ),
@@ -20,25 +20,30 @@ fields as (
 ),
 
 final as (
-    
+
     select
         source_relation,
         _fivetran_synced,
+        active,
         content,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
-        external as is_external,
+        cast(demographic_question_set_id as {{ dbt.type_string() }}) as demographic_question_set_id,
+        featured,
+        cast(first_published_at as {{ dbt.type_timestamp() }}) as first_published_at,
         cast(id as {{ dbt.type_string() }}) as job_post_id,
         internal as is_internal,
         internal_content,
+        cast(job_board_id as {{ dbt.type_string() }}) as job_board_id,
         cast(job_id as {{ dbt.type_string() }}) as job_id,
+        language_code,
         live as is_live,
-        location_name,
+        public_url,
         title,
         cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at
 
     from fields
 
-    where not coalesce(_fivetran_deleted, false)
+    where active
 )
 
 select * from final

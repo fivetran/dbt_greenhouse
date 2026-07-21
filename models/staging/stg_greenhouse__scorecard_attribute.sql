@@ -20,16 +20,17 @@ fields as (
 ),
 
 final as (
-    
+
     select
         source_relation,
         _fivetran_synced,
-        index,
-        name as attribute_name,
+        cast(id as {{ dbt.type_string() }}) as id,
+        cast(job_candidate_attribute_id as {{ dbt.type_string() }}) as job_candidate_attribute_id,
+        candidate_attribute_rating,
         note,
-        rating,
         cast(scorecard_id as {{ dbt.type_string() }}) as scorecard_id,
-        type as attribute_category
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 
     from fields
 )
