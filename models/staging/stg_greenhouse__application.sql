@@ -38,7 +38,7 @@ final as (
         cast(rejected_at as {{ dbt.type_timestamp() }}) as rejected_at,
         cast(source_id as {{ dbt.type_string() }}) as source_id,
         status,
-        cast(stage_id as {{ dbt.type_string() }}) as current_stage_id,
+        cast(stage_id as {{ dbt.type_string() }}) as stage_id,
         cast(coordinator_id as {{ dbt.type_string() }}) as coordinator_id,
         cast(job_id as {{ dbt.type_string() }}) as job_id,
         cast(job_post_id as {{ dbt.type_string() }}) as job_post_id,

@@ -355,6 +355,20 @@ sources:
             description: Title of the job post.
           - name: updated_at
             description: Timestamp of when the job post was last updated.
+          - name: active
+            description: If true, the post has not been deleted. Deleted posts are excluded by default.
+          - name: featured
+            description: If true, the post is currently featured on the organization's internal job board. Only internal posts can be featured.
+          - name: first_published_at
+            description: Timestamp the post first transitioned to live. Null for posts that have never been published.
+          - name: job_board_id
+            description: Foreign key referencing the JOB_BOARD this post is published to.
+          - name: language_code
+            description: ISO 639-1 locale of the post (e.g. en, fr, ja). Null when no locale has been chosen.
+          - name: public_url
+            description: Canonical public URL of the post on its job board. Null when the post has no associated job board or the board has no public URL configured.
+          - name: demographic_question_set_id
+            description: Foreign key referencing the demographic question set surfaced to candidates on this post for DE&I reporting. Null when the post does not collect demographic data.
 
       - name: job_post_location
         identifier: "{{ var('greenhouse_job_post_location_identifier', 'job_post_location')}}"
@@ -687,3 +701,24 @@ sources:
             description: Timestamp the stage was created.
           - name: updated_at
             description: Timestamp the stage was last updated.
+
+      - name: rejection_reason
+        identifier: "{{ var('greenhouse_rejection_reason_identifier', 'rejection_reason')}}"
+        description: Table storing the organization's candidate rejection reason definitions.
+        config:
+          freshness: null
+        columns:
+          - name: id
+            description: Unique ID of the rejection reason.
+          - name: name
+            description: Display label shown to recruiters when rejecting a candidate (e.g. Not a cultural fit, Lacking skill(s)/qualification(s)). Unique within the organization.
+          - name: type_id
+            description: Id of the rejection reason type this reason rolls up to. Stable across all reasons sharing the same categorization.
+          - name: type_key
+            description: Stable machine-readable identifier for the reason type. One of WE_REJECTED_THEM, THEY_REJECTED_US, NONE_SPECIFIED, or SECURITY_CONCERN.
+          - name: type_name
+            description: Display name of the rejection reason type. One of We rejected them, They rejected us, None specified, or Security concern.
+          - name: created_at
+            description: Timestamp the rejection reason was created.
+          - name: updated_at
+            description: Timestamp the rejection reason was last updated.

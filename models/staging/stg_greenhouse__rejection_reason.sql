@@ -2,7 +2,7 @@
 with base as (
 
     select *
-    from {{ ref('stg_greenhouse__candidate_tag_tmp') }}
+    from {{ ref('stg_greenhouse__rejection_reason_tmp') }}
 
 ),
 
@@ -11,8 +11,8 @@ fields as (
     select
         {{
             fivetran_utils.fill_staging_columns(
-                source_columns=adapter.get_columns_in_relation(ref('stg_greenhouse__candidate_tag_tmp')),
-                staging_columns=get_candidate_tag_columns()
+                source_columns=adapter.get_columns_in_relation(ref('stg_greenhouse__rejection_reason_tmp')),
+                staging_columns=get_rejection_reason_columns()
             )
         }}
         {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}
@@ -25,8 +25,11 @@ final as (
         source_relation,
         _fivetran_synced,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
-        cast(id as {{ dbt.type_string() }}) as tag_id,
-        name as tag_name,
+        cast(id as {{ dbt.type_string() }}) as rejection_reason_id,
+        name,
+        cast(type_id as {{ dbt.type_string() }}) as type_id,
+        type_key,
+        type_name,
         cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 
     from fields

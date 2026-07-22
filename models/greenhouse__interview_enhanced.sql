@@ -54,7 +54,7 @@ final as (
 
     from interview
     left join job_stage
-        on interview.interview_id = job_stage.job_stage_id
+        on interview.job_interview_id = job_stage.job_stage_id
         and interview.source_relation = job_stage.source_relation
     left join application 
         on interview.application_id = application.application_id

@@ -39,6 +39,7 @@ vars:
     greenhouse_candidate_social_media_address_identifier: "candidate_social_media_address"
     greenhouse_source_identifier: "source"
     greenhouse_candidate_tag_identifier: "candidate_tag"
+    greenhouse_rejection_reason_identifier: "rejection_reason"
     greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
 
@@ -262,6 +263,17 @@ seeds:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         source_type_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+    rejection_reason:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        type_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+    candidate_tag:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
     users:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"

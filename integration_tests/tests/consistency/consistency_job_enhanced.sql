@@ -3,13 +3,18 @@
     enabled=var('fivetran_validation_tests_enabled', false)
 ) }}
 
+{% set columns_to_exclude = [
+    'copied_from_id', 'is_template', 'notes', 'created_at', 'last_updated_at',
+    'count_live_locations'
+] + var('consistency_test_exclude_columns', []) %}
+
 with prod as (
-    select {{ dbt_utils.star(from=ref('greenhouse__job_enhanced'), except=var('consistency_test_exclude_columns', [])) }}
+    select {{ dbt_utils.star(from=ref('greenhouse__job_enhanced'), except=columns_to_exclude) }}
     from {{ target.schema }}_greenhouse_prod.greenhouse__job_enhanced
 ),
 
 dev as (
-    select {{ dbt_utils.star(from=ref('greenhouse__job_enhanced'), except=var('consistency_test_exclude_columns', [])) }}
+    select {{ dbt_utils.star(from=ref('greenhouse__job_enhanced'), except=columns_to_exclude) }}
     from {{ target.schema }}_greenhouse_dev.greenhouse__job_enhanced
 ), 
 

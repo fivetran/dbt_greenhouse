@@ -1,7 +1,7 @@
 with candidate_tag as (
 
     select *
-    from {{ ref('stg_greenhouse__candidate_tag') }}
+    from {{ ref('stg_greenhouse__candidate_tag_link') }}
 
 ),
 

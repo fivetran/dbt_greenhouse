@@ -3,7 +3,11 @@
     enabled=var('fivetran_validation_tests_enabled', false)
 ) }}
 
-{% set columns_to_exclude = ['candidate_tags', 'email'] + var('consistency_test_exclude_columns', [])%}
+{% set columns_to_exclude = [
+    'candidate_tags', 'email',
+    'applied_at', 'prospect_pool_id', 'prospect_stage_id', 'prospect_owner_user_id', 'prospect_pool', 'prospect_stage', 'prospect_owner_name', 'rejected_reason_id', 'credited_to_user_id',
+    'job_id', 'coordinator_id', 'recruiter_id', 'coordinator_email', 'recruiter_email', 'created_at', 'updated_at', 'referrer_id'
+] + var('consistency_test_exclude_columns', []) %}
 
 with prod as (
     select {{ dbt_utils.star(from=ref('greenhouse__application_enhanced'), except=columns_to_exclude) }}
