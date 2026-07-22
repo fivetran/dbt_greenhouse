@@ -9,7 +9,9 @@ interview_metrics as (
     select 
         source_relation,
         application_id,
+        {% if var('greenhouse_using_job_hiring_team', True) %}
         max(case when interviewer_is_hiring_manager then 1 else 0 end) as has_interviewed_w_hiring_manager,
+        {% endif %}
         count(distinct scheduled_interview_id) as count_interviews,
         count(distinct scorecard_id) as count_interview_scorecards,
         count(distinct interviewer_user_id) as count_distinct_interviewers,
@@ -24,8 +26,9 @@ final as (
 
     select 
         application.*,
+        {% if var('greenhouse_using_job_hiring_team', True) %}
         coalesce(interview_metrics.has_interviewed_w_hiring_manager, 0) = 1 as has_interviewed_w_hiring_manager,
-
+        {% endif %}
         coalesce(interview_metrics.count_interviews, 0) as count_interviews,
         coalesce(interview_metrics.count_interview_scorecards, 0) as count_interview_scorecards,
         coalesce(interview_metrics.count_distinct_interviewers, 0) as count_distinct_interviewers,

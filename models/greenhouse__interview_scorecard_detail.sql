@@ -26,7 +26,9 @@ join_w_attributes as (
         interview.application_id,
         interview.job_title,
         interview.job_id,
+        {% if var('greenhouse_using_job_hiring_team', True) %}
         interview.hiring_managers,
+        {% endif %}
         interview.interview_scorecard_key
         
     from interview 
