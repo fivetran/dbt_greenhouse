@@ -261,7 +261,7 @@ seeds:
     source:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        type_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        source_type_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
     users:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"

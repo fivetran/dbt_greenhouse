@@ -27,8 +27,10 @@ final as (
         application.status as current_application_status,
         application.job_title,
 
+        {% if var('greenhouse_using_job_hiring_team', True) %}
         application.hiring_managers like ('%' || interview.interviewer_name || '%')  as interviewer_is_hiring_manager,
         application.hiring_managers,
+        {% endif %}
         application.recruiter_name
 
         {% if var('greenhouse_using_job_office', True) %}

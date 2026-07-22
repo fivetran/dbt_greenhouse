@@ -79,9 +79,13 @@ join_info as (
 
         job.job_title,
         job.status as job_status,
+        job.requisition_id as job_requisition_id
+
+        {% if var('greenhouse_using_job_hiring_team', True) %}
+        ,
         job.hiring_managers,
-        job.requisition_id as job_requisition_id,
         job.sourcers as job_sourcers
+        {% endif %}
 
         {% if var('greenhouse_using_job_office', True) %}
         ,
