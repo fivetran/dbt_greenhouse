@@ -2,45 +2,38 @@
 
 [PR #46](https://github.com/fivetran/dbt_greenhouse/pull/46) includes the following updates:
 
-## Schema/Data Change
-**23 total changes • 18 possible breaking changes**
+## Schema/Data Changes
+**21 total changes • 18 possible breaking changes**
+
+Updates the package to support the [Greenhouse **Harvest API v3**](https://harvestdocs.greenhouse.io/docs/overview-and-philosophy) connector schema. All staging, intermediate, and end models reflect the v3 source table and column names.
 
 | Data Model(s) | Change type | Old | New | Notes |
 | ------------- | ----------- | --- | --- | ----- |
-| `stg_greenhouse__job_application`<br>`stg_greenhouse__job_department`<br>`stg_greenhouse__tag`<br>`stg_greenhouse__interview`<br>`stg_greenhouse__hiring_team` | Models removed | — | — | These staging views no longer exist. `job_id` and `department_id` are now directly on their respective source tables. `tag_name` is denormalized onto `candidate_tag_link`. The `interview` and `hiring_team` source tables are replaced in v3. |
-| `stg_greenhouse__job_stage` | Model removed | — | — | Replaced by `stg_greenhouse__job_interview_stage`, a new model sourced from the v3 `job_interview_stage` table that also absorbs the old `stg_greenhouse__interview`. Update any direct references. |
-| `stg_greenhouse__hiring_team` | Model replaced | `stg_greenhouse__hiring_team` | `stg_greenhouse__job_hiring_manager`<br>`stg_greenhouse__job_owner` | The v3 `hiring_team` table is split into two source tables. `stg_greenhouse__job_owner` includes a `type` column (`sourcer`, `recruiter`, `coordinator`) in place of the old `role` column. |
-| `stg_greenhouse__application` | Columns removed | `applied_at`, `credited_to_user_id`, `prospect_owner_user_id`, `prospect_pool_id`, `prospect_stage_id`, `rejected_reason_id` | — | Removed from the v3 `application` source table. |
-| `stg_greenhouse__application` | Columns added | — | `job_id`, `coordinator_id`, `recruiter_id`, `referrer_id`, `job_post_id`, `needs_decision`, `created_at`, `updated_at` | `job_id` was previously only on the `job_application` bridge table. `coordinator_id` and `recruiter_id` moved from `candidate` to `application` in v3. |
-| `stg_greenhouse__candidate` | Columns removed | `coordinator_id`, `recruiter_id`, `new_candidate_id` | — | `coordinator_id` and `recruiter_id` moved to `stg_greenhouse__application` in v3. |
-| `stg_greenhouse__candidate_tag` | Column removed | `tag_id` | — | Removed in v3; `tag_name` is now denormalized directly onto `candidate_tag_link`. |
-| `stg_greenhouse__candidate_tag` | Columns added | — | `index`, `tag_name` | `index` is part of the composite PK; `tag_name` replaces the `tag_id` join to the tag dimension. |
-| `stg_greenhouse__attachment` | Column removed | `index` | — | Removed in v3; `id` is the new primary key. |
-| `stg_greenhouse__job_opening` | Column type changed | `current_status` (string: `open`/`closed`) | `current_status` (boolean: `true`/`false`) | Source column changed from `status` to `is_open` (boolean) in v3. |
-| `stg_greenhouse__scorecard` | Columns removed | `candidate_id`, `interview`, `overall_recommendation` | — | Removed from the v3 `scorecard` source table. |
-| `stg_greenhouse__scorecard` | Column renamed + values changed | `overall_recommendation` | `candidate_rating` | Values change from `definitely_not, no, yes, strong_yes, no_decision` to `strong_no, no, yes, strong_yes, no_decision`. |
-| `stg_greenhouse__scorecard` | Columns added | — | `interviewer_id`, `candidate_rating`, `interview_kit_id`, `status`, `notes`, `notes_with_tags`, `private_notes`, `private_notes_with_tags`, `public_notes`, `public_notes_with_tags` | New columns available in v3. |
-| `stg_greenhouse__scorecard_attribute` | Model restructured | Sourced from `scorecard_attribute` (`index`, `name`, `rating`, `type`, `note`) | Sourced from `scorecard_candidate_attribute` (`id`, `job_candidate_attribute_id`, `candidate_attribute_rating`, `note`, `created_at`, `updated_at`) | Source table renamed and fully restructured in v3. Attribute name and type are now referenced by ID rather than denormalized strings. |
-| `greenhouse__application_enhanced` | Column removed | `applied_at` | — | Permanently removed in v3 with no direct equivalent. `created_at` is available but reflects record creation, not application submission. |
-| `greenhouse__application_enhanced` | Columns removed | `prospect_pool_id`, `prospect_stage_id`, `prospect_owner_user_id`, `prospect_pool`, `prospect_stage`, `prospect_owner_name`, `rejected_reason_id` | — | Prospect pipeline data is no longer available on the application in v3. `rejected_reason_id` is also removed. |
-| `greenhouse__application_enhanced` | Column renamed | `credited_to_user_id` | `referrer_id` | Replaced by the v3 `referrer_id` source field; update downstream references. |
-| `greenhouse__application_enhanced` | Columns added | — | `job_id`, `coordinator_id`, `recruiter_id`, `coordinator_email`, `recruiter_email`, `created_at`, `updated_at` | `coordinator_id` and `recruiter_id` moved from the candidate to the application in v3. |
-| `greenhouse__interview_enhanced` | Column renamed + values changed | `overall_recommendation` | `candidate_rating` | Values change from `definitely_not, no, yes, strong_yes, no_decision` to `strong_no, no, yes, strong_yes, no_decision`. |
-| `greenhouse__interview_enhanced` | Column removed | `candidate_id` | — | Removed from the v3 `scorecard` source table. |
-| `greenhouse__interview_scorecard_detail` | Model restructured | Columns: `index`, `attribute_name`, `rating`, `attribute_category`, `overall_recommendation` | Columns: `id`, `job_candidate_attribute_id`, `candidate_attribute_rating`, `candidate_rating` | Reflects full restructure of the v3 `scorecard_candidate_attribute` source table. |
-| `greenhouse__interview_scorecard_detail` | Surrogate key grain change | `scorecard_attribute_key` = `interview_scorecard_key` + `index` | `scorecard_attribute_key` = `interview_scorecard_key` + `id` | `index` removed from source; `id` is the new primary key. All existing key values change. |
-| `greenhouse__job_enhanced` | Known gap | `count_live_locations` | Returns 0 | `location_name` moved to the new `job_post_location` source table in v3. Will be restored in a follow-up release. |
+| `greenhouse__application_enhanced` | Columns added/removed | Removed: `applied_at`, `prospect_pool_id`, `prospect_stage_id`, `prospect_owner_user_id`, `prospect_pool`, `prospect_stage`, `prospect_owner_name`, `rejected_reason_id` | Added: `job_id`, `coordinator_id`, `recruiter_id`, `coordinator_email`, `recruiter_email`, `created_at`, `updated_at` | **Possible breaking change.** `applied_at` and prospect pipeline data permanently removed in v3. `coordinator_id` and `recruiter_id` moved from the candidate to the application. |
+| `greenhouse__application_enhanced` | Columns added/removed | Removed: `credited_to_user_id` | Added: `referrer_id` | **Possible breaking change.** Replaced by the v3 `referrer_id` source field; update downstream references. |
+| `greenhouse__interview_enhanced` | Columns added/removed | Removed: `overall_recommendation` | Added: `candidate_rating` | **Possible breaking change.** Values change from `definitely_not, no, yes, strong_yes, no_decision` to `strong_no, no, yes, strong_yes, no_decision`. |
+| `greenhouse__interview_enhanced` | Column removed | Removed: `candidate_id` | — | **Possible breaking change.** Removed from the v3 `scorecard` source table. |
+| `greenhouse__interview_scorecard_detail` | Columns removed/added | Removed: `index`, `attribute_name`, `rating`, `attribute_category`, `overall_recommendation` | Added: `id`, `job_candidate_attribute_id`, `candidate_attribute_rating`, `candidate_rating` | **Possible breaking change.** Reflects full restructure of the v3 `scorecard_candidate_attribute` source table. |
+| `greenhouse__interview_scorecard_detail` | Surrogate key grain change | `scorecard_attribute_key` = `interview_scorecard_key` + `index` | `scorecard_attribute_key` = `interview_scorecard_key` + `id` | **Possible breaking change.** `index` removed from source; `id` is the new primary key. All existing key values change. |
+| `greenhouse__job_enhanced` | Possible data change | `count_live_locations` | Returns distinct location count via `job_post_location` | `location_name` moved to the new `job_post_location` source table in v3; now computed by joining to `stg_greenhouse__job_post_location`. |
+| `stg_greenhouse__job_application`<br>`stg_greenhouse__job_department`<br>`stg_greenhouse__tag`<br>`stg_greenhouse__interview`<br>`stg_greenhouse__hiring_team` | Models removed | — | — | **Possible breaking change.** These staging views no longer exist. `job_id` and `department_id` are now directly on their respective source tables. `tag_name` is denormalized onto `candidate_tag_link`. The `interview` and `hiring_team` source tables are replaced in v3. |
+| `stg_greenhouse__job_stage` | Model removed | — | — | **Possible breaking change.** Replaced by `stg_greenhouse__job_interview_stage`, a new model sourced from the v3 `job_interview_stage` table that also absorbs the old `stg_greenhouse__interview`. Update any direct references. |
+| `stg_greenhouse__email_address` | Model renamed | `stg_greenhouse__email_address` | `stg_greenhouse__candidate_email_address` | **Possible breaking change.** Renamed in v3 to match the source table rename from `email_address` to `candidate_email_address`. Update any direct references. |
+| `stg_greenhouse__hiring_team` | Model replaced | `stg_greenhouse__hiring_team` | `stg_greenhouse__job_hiring_manager`<br>`stg_greenhouse__job_owner` | **Possible breaking change.** The v3 `hiring_team` table is split into two source tables. `stg_greenhouse__job_owner` includes a `type` column (`sourcer`, `recruiter`, `coordinator`) in place of the old `role` column. |
+| `stg_greenhouse__application` | Columns added/removed | Removed:<br>`applied_at`, `credited_to_user_id`, `prospect_owner_user_id`, `prospect_pool_id`, `prospect_stage_id`, `rejected_reason_id` | Added:<br>`job_id`, `coordinator_id`, `recruiter_id`, `referrer_id`, `job_post_id`, `needs_decision`, `created_at`, `updated_at` | **Possible breaking change.** `job_id` was previously only on the `job_application` bridge table. `coordinator_id` and `recruiter_id` moved from `candidate` to `application` in v3. |
+| `stg_greenhouse__candidate` | Columns removed | `coordinator_id`, `recruiter_id`, `new_candidate_id` | — | **Possible breaking change.** `coordinator_id` and `recruiter_id` moved to `stg_greenhouse__application` in v3. |
+| `stg_greenhouse__candidate_tag` | Columns added/removed | Removed:<br>`tag_id` | Added:<br>`index`, `tag_name` | **Possible breaking change.** `tag_id` removed in v3; `tag_name` is now denormalized directly onto `candidate_tag_link`. `index` is part of the composite PK. |
+| `stg_greenhouse__attachment` | Column removed | `index` | — | **Possible breaking change.** Removed in v3; `id` is the new primary key. |
+| `stg_greenhouse__job_opening` | Column type changed | `current_status` (string: `open`/`closed`) | `current_status` (boolean: `true`/`false`) | **Possible breaking change.** Source column changed from `status` to `is_open` (boolean) in v3. |
+| `stg_greenhouse__scorecard` | Columns added/removed | Removed:<br>`candidate_id`, `interview`, `overall_recommendation` | Added:<br>`interviewer_id`, `candidate_rating`, `interview_kit_id`, `status`, `notes`, `notes_with_tags`, `private_notes`, `private_notes_with_tags`, `public_notes`, `public_notes_with_tags` | **Possible breaking change.** Removed from the v3 `scorecard` source table; new columns available in v3. |
+| `stg_greenhouse__scorecard` | Column renamed + values changed | `overall_recommendation` | `candidate_rating` | **Possible breaking change.** Values change from `definitely_not, no, yes, strong_yes, no_decision` to `strong_no, no, yes, strong_yes, no_decision`. |
+| `stg_greenhouse__scorecard_attribute` | Model restructured | Sourced from `scorecard_attribute` (`index`, `name`, `rating`, `type`, `note`) | Sourced from `scorecard_candidate_attribute` (`id`, `job_candidate_attribute_id`, `candidate_attribute_rating`, `note`, `created_at`, `updated_at`) | **Possible breaking change.** Source table renamed and fully restructured in v3. Attribute name and type are now referenced by ID rather than denormalized strings. |
+| `stg_greenhouse__job_interview_stage` | Model added | — | — | New staging model sourced from the v3 `job_interview_stage` table; absorbs functionality from the removed `stg_greenhouse__job_stage` and `stg_greenhouse__interview` models. |
+| `stg_greenhouse__job_post_location` | Model added | — | — | New staging model sourced from the v3 `job_post_location` table; provides per-post location data required to compute `count_live_locations` in `greenhouse__job_enhanced`. |
 
-## Feature Update
-- Updates the package to support the Greenhouse **Harvest API v3** connector schema. All staging, intermediate, and end models reflect the v3 source table and column names.
-
-## Bug Fix
-- Fixed a runtime error in `int_greenhouse__candidate_contacts` where the `order_resumes` CTE ordered by `index`, a column removed from `stg_greenhouse__attachment` in v3. Now orders by `created_at` to correctly select the most recently uploaded resume.
-- Fixed a runtime error in `int_greenhouse__candidate_contacts` where the `emails` CTE referenced `stg_greenhouse__email_address`, which was renamed to `stg_greenhouse__candidate_email_address` in v3.
 
 ## Under the Hood
-- Updates all source identifier variables and integration test seed files to reflect v3 source table names.
-- Removes `_fivetran_deleted` soft-delete filters from all staging models where the column no longer exists in v3.
+- Updates all source identifier variables and integration test seed files to reflect v3 source table names. 
 
 # dbt_greenhouse v1.4.0
 
