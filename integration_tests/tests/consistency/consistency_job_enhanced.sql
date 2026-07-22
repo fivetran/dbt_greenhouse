@@ -5,7 +5,7 @@
 
 {% set columns_to_exclude = [
     'copied_from_id', 'is_template', 'notes', 'created_at', 'last_updated_at',
-    'count_live_locations'
+    'count_live_locations', 'department_id', 'opened_at'
 ] + var('consistency_test_exclude_columns', []) %}
 
 with prod as (

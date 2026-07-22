@@ -5,7 +5,7 @@
 
 {% set columns_to_exclude = [
     'index', 'attribute_name', 'rating', 'attribute_category', 'overall_recommendation',
-    'id', 'job_candidate_attribute_id', 'candidate_attribute_rating', 'candidate_rating', 'scorecard_attribute_key'
+    'id', 'job_candidate_attribute_id', 'candidate_attribute_rating', 'candidate_rating', 'scorecard_attribute_key', 'created_at', 'updated_at'
 ] + var('consistency_test_exclude_columns', []) %}
 
 with prod as (

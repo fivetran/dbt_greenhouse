@@ -43,7 +43,7 @@ models:
       - name: source_id
         description: Id of the source the application is attributed to (e.g. a job board, an event, an employee referral source). Null if no source is set.
       - name: status
-        description: Lifecycle status of the application. `in_process` for active candidates, `rejected` for rejected applications, `hired` once an offer is closed, and `converted` for prospect applications promoted to a candidate application.
+        description: Lifecycle status of the application. `active` for in-process candidates, `rejected` for rejected applications, `hired` once an offer is closed, and `converted` for prospect applications promoted to a candidate application.
       - name: stage_id
         description: Id of the interview stage the candidate is currently in. Null for prospect applications and applications in a terminal state.
       - name: coordinator_id
@@ -288,6 +288,8 @@ models:
         description: True if the stage is on the job's current interview plan. Inactive stages are retained so that historical application_stage rows continue to resolve, but no new applications enter them.
       - name: sort_order
         description: Position of this stage within the job's interview plan, ascending. The first stage (Application Review) is 0; Offer is always last.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
@@ -582,6 +584,8 @@ models:
         description: Notes visible to the full hiring team.
       - name: public_notes_with_tags
         description: Public notes with mention markup preserved.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
@@ -604,8 +608,10 @@ models:
         description: Timestamp of when this attribute rating was created.
       - name: updated_at
         description: Timestamp of when this attribute rating was last updated.
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: _fivetran_synced
-        description: "{{ doc('_fivetran_synced') }}" 
+        description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__social_media_address
     description: Table capturing social media links (ie linkedin, github) provided by candidates. 

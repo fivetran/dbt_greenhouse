@@ -53,7 +53,7 @@ sources:
           - name: source_id
             description: Foreign key referencing the SOURCE of the application.
           - name: status
-            description: Lifecycle status of the application (`in_process`, `rejected`, `hired`, `converted`).
+            description: Lifecycle status of the application (`active`, `rejected`, `hired`, `converted`).
           - name: stage_id
             description: Foreign key referencing the current JOB_INTERVIEW_STAGE. Breaking rename from `current_stage_id` in v2.
           - name: coordinator_id

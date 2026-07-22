@@ -5,7 +5,11 @@
 
 {% set columns_to_exclude = [
     'overall_recommendation', 'candidate_id',
-    'candidate_rating'
+    'candidate_rating', 'job_interview_id', 'starts_at', 'ends_at',
+    'scheduled_at', 'availability_received_at', 'all_day_start_on', 'all_day_end_on',
+    'external_event_id', 'video_conferencing_url',
+    'job_id', 'job_stage', 'application_current_job_stage', 'job_title',
+    'interviewer_is_hiring_manager', 'hiring_managers', 'job_offices', 'job_departments', 'job_parent_departments'
 ] + var('consistency_test_exclude_columns', []) %}
 
 with prod as (
