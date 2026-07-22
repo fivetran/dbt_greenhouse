@@ -17,31 +17,29 @@ vars:
     greenhouse_application_history_identifier: "application_history"
     greenhouse_attachment_identifier: "attachment"
     greenhouse_candidate_identifier: "candidate"
-    greenhouse_candidate_tag_identifier: "candidate_tag_link"
+    greenhouse_candidate_tag_link_identifier: "candidate_tag_link"
     greenhouse_department_identifier: "department"
     greenhouse_eeoc_identifier: "eeoc"
-    greenhouse_email_address_identifier: "candidate_email_address"
-    greenhouse_hiring_team_identifier: "hiring_team"
-    greenhouse_interview_identifier: "job_interview_stage"
+    greenhouse_candidate_email_address_identifier: "candidate_email_address"
     greenhouse_job_identifier: "job"
     greenhouse_job_hiring_manager_identifier: "job_hiring_manager"
     greenhouse_job_office_identifier: "job_office"
-    greenhouse_job_opening_identifier: "opening"
+    greenhouse_opening_identifier: "opening"
     greenhouse_job_owner_identifier: "job_owner"
     greenhouse_job_post_identifier: "job_post"
-    greenhouse_job_stage_identifier: "job_interview_stage"
+    greenhouse_job_interview_stage_identifier: "job_interview_stage"
     greenhouse_office_identifier: "office"
-    greenhouse_phone_number_identifier: "candidate_phone_number"
+    greenhouse_candidate_phone_number_identifier: "candidate_phone_number"
     greenhouse_prospect_pool_identifier: "prospect_pool"
-    greenhouse_prospect_stage_identifier: "prospect_pool_stage"
-    greenhouse_scheduled_interview_identifier: "interview"
-    greenhouse_scheduled_interviewer_identifier: "interviewer"
+    greenhouse_prospect_pool_stage_identifier: "prospect_pool_stage"
+    greenhouse_interview_identifier: "interview"
+    greenhouse_interviewer_identifier: "interviewer"
     greenhouse_scorecard_identifier: "scorecard"
-    greenhouse_scorecard_attribute_identifier: "scorecard_candidate_attribute"
-    greenhouse_social_media_address_identifier: "candidate_social_media_address"
+    greenhouse_scorecard_candidate_attribute_identifier: "scorecard_candidate_attribute"
+    greenhouse_candidate_social_media_address_identifier: "candidate_social_media_address"
     greenhouse_source_identifier: "source"
-    greenhouse_tag_identifier: "candidate_tag"
-    greenhouse_user_identifier: "users"
+    greenhouse_candidate_tag_identifier: "candidate_tag"
+    greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
 
   # Comment out when generating docs
@@ -123,10 +121,6 @@ seeds:
         submitted_at: timestamp
         created_at: timestamp
         updated_at: timestamp
-    hiring_team:
-      +column_types:
-        job_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
     job_hiring_manager:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -193,14 +187,24 @@ seeds:
     job_post:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        created_at: timestamp
         job_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_board_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        demographic_question_set_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
         updated_at: timestamp
         first_published_at: timestamp
         active: boolean
         internal: boolean
         live: boolean
         featured: boolean
+    job_post_location:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_post_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        office_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        custom_location_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
     office:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -258,11 +262,6 @@ seeds:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         type_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-    candidate_tag:
-      +column_types:
-        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        created_at: timestamp
-        updated_at: timestamp
     users:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"

@@ -20,9 +20,9 @@ sources:
         description: Table capturing lists of activities on a candidate's profile, including interviews, notes, and emails.
         columns:
           - name: body
-            description: Content of the activity taken. 
+            description: Content of the activity taken.
           - name: candidate_id
-            description: Foreign key referencing the CANDIDATE whose profile was acted upon. 
+            description: Foreign key referencing the CANDIDATE whose profile was acted upon.
           - name: created_at
             description: Timestamp of when the activity occurred.
           - name: id
@@ -30,7 +30,7 @@ sources:
           - name: subject
             description: Subject of the activity.
           - name: user_id
-            description: Foreign key referencing the USER who performed the activity. 
+            description: Foreign key referencing the USER who performed the activity.
 
       - name: application
         identifier: "{{ var('greenhouse_application_identifier', 'application')}}"
@@ -55,7 +55,7 @@ sources:
           - name: status
             description: Lifecycle status of the application (`in_process`, `rejected`, `hired`, `converted`).
           - name: stage_id
-            description: Foreign key referencing the current JOB_INTERVIEW_STAGE.
+            description: Foreign key referencing the current JOB_INTERVIEW_STAGE. Breaking rename from `current_stage_id` in v2.
           - name: coordinator_id
             description: Foreign key referencing the USER assigned as coordinator.
           - name: job_id
@@ -75,19 +75,18 @@ sources:
           - name: updated_at
             description: Timestamp the application record was last updated.
 
-
       - name: application_history
         identifier: "{{ var('greenhouse_application_history_identifier', 'application_history')}}"
         description: Table capturing the history of applications as they advance through job stages.
         config:
           enabled: "{{ var('greenhouse_using_app_history', true) and var('greenhouse_sources', []) == [] }}"
-        columns: 
+        columns:
           - name: application_id
             description: Foreign key referencing the APPLICATION that was updated.
           - name: new_stage_id
             description: Foreign key referencing the JOB_STAGE that the application was advanced to.
           - name: new_status
-            description: Status of the application as of this updated. 
+            description: Status of the application as of this update.
           - name: updated_at
             description: Timestamp of when the application was advanced.
 
@@ -95,16 +94,22 @@ sources:
         identifier: "{{ var('greenhouse_attachment_identifier', 'attachment')}}"
         description: Table capturing files attached to the candidate profile.
         columns:
+          - name: id
+            description: Unique identifier for the attachment.
           - name: candidate_id
             description: Foreign key referencing the CANDIDATE who uploaded the attachment.
+          - name: application_id
+            description: Foreign key referencing the APPLICATION this attachment is associated with.
           - name: filename
-            description: Name of the file
-          - name: index
-            description: Index of the file upload amongst this candidate's attachments.
+            description: Name of the file.
           - name: type
-            description: One of ["resume", "cover_letter", "admin_only"]
+            description: One of ["resume", "cover_letter", "admin_only"].
           - name: url
-            description: Url of where the attachment is stored.
+            description: URL of where the attachment is stored.
+          - name: created_at
+            description: Timestamp the attachment was created.
+          - name: updated_at
+            description: Timestamp the attachment was last updated.
 
       - name: candidate
         identifier: "{{ var('greenhouse_candidate_identifier', 'candidate')}}"
@@ -135,14 +140,16 @@ sources:
           - name: time_zone
             description: The candidate's preferred time zone.
 
-      - name: candidate_tag
-        identifier: "{{ var('greenhouse_candidate_tag_identifier', 'candidate_tag_link')}}"
-        description: Table associating candidate's with their attached tags. 
+      - name: candidate_tag_link
+        identifier: "{{ var('greenhouse_candidate_tag_link_identifier', 'candidate_tag_link')}}"
+        description: Table associating candidates with their attached tags (source table `candidate_tag_link` in v3).
         columns:
           - name: candidate_id
-            description: Foreign key referencing the CANDIDATE who is tagged. 
-          - name: tag_id
-            description: Foreign key referencing the TAG attached to this candidate. 
+            description: Foreign key referencing the CANDIDATE who is tagged.
+          - name: index
+            description: Position of this tag in the candidate's tag list. Part of the composite primary key with `candidate_id`.
+          - name: tag_name
+            description: Denormalized name of the tag. References `candidate_tag.name`.
 
       - name: department
         identifier: "{{ var('greenhouse_department_identifier', 'department')}}"
@@ -158,19 +165,27 @@ sources:
             description: The department's name.
           - name: parent_id
             description: Self-referencing parent department ID.
+          - name: created_at
+            description: Timestamp the department was created.
+          - name: updated_at
+            description: Timestamp the department was last updated.
 
       - name: eeoc
         identifier: "{{ var('greenhouse_eeoc_identifier', 'eeoc')}}"
-        description: Table capturing EEOC data provided by candidates. 
+        description: Table capturing EEOC data provided by candidates.
         config:
           enabled: "{{ var('greenhouse_using_eeoc', true) and var('greenhouse_sources', []) == [] }}"
         columns:
+          - name: id
+            description: Unique identifier for the EEOC response.
           - name: application_id
-            description: Foreign key referencing the ID of the application with this EEOC data. 
+            description: Foreign key referencing the ID of the application with this EEOC data.
+          - name: candidate_id
+            description: Foreign key referencing the CANDIDATE who submitted this response.
           - name: disability_status_description
             description: Description of the applicant's disability status.
           - name: disability_status_id
-            description: Foreign key referencing the status' DEMOGRAPHIC_ANSWER_OPTION ID. 
+            description: Foreign key referencing the status' DEMOGRAPHIC_ANSWER_OPTION ID.
           - name: gender_description
             description: Description of the applicant's gender identity.
           - name: gender_id
@@ -185,15 +200,19 @@ sources:
             description: Description of the applicant's veteran status.
           - name: veteran_status_id
             description: Foreign key referencing the veteran status' DEMOGRAPHIC_ANSWER_OPTION ID.
+          - name: created_at
+            description: Timestamp the EEOC record was created.
+          - name: updated_at
+            description: Timestamp the EEOC record was last updated.
 
-      - name: email_address
-        identifier: "{{ var('greenhouse_email_address_identifier', 'candidate_email_address')}}"
-        description: Table storing email addresses associated with candidates. 
+      - name: candidate_email_address
+        identifier: "{{ var('greenhouse_candidate_email_address_identifier', 'candidate_email_address')}}"
+        description: Table storing email addresses associated with candidates (source table `candidate_email_address` in v3).
         columns:
           - name: candidate_id
             description: Foreign key referencing the CANDIDATE whose email this is.
           - name: index
-            description: Index of this individual email among all emails associated with this candidate. 
+            description: Index of this individual email among all emails associated with this candidate.
           - name: type
             description: Type of email address - work, other, personal.
           - name: value
@@ -202,6 +221,8 @@ sources:
       - name: job_hiring_manager
         identifier: "{{ var('greenhouse_job_hiring_manager_identifier', 'job_hiring_manager')}}"
         description: Table capturing hiring managers assigned to each job.
+        config:
+          enabled: "{{ var('greenhouse_using_job_hiring_team', true) and var('greenhouse_sources', []) == [] }}"
         columns:
           - name: id
             description: Unique ID of the job hiring manager record.
@@ -217,6 +238,8 @@ sources:
       - name: job_owner
         identifier: "{{ var('greenhouse_job_owner_identifier', 'job_owner')}}"
         description: Table capturing owners (recruiters, sourcers, coordinators) assigned to each job.
+        config:
+          enabled: "{{ var('greenhouse_using_job_hiring_team', true) and var('greenhouse_sources', []) == [] }}"
         columns:
           - name: id
             description: Unique ID of the job owner record.
@@ -254,11 +277,19 @@ sources:
           - name: status
             description: One of open, closed, draft.
           - name: updated_at
-            description: Timestamp of when the job was last updated. 
+            description: Timestamp of when the job was last updated.
+          - name: department_id
+            description: Foreign key referencing the DEPARTMENT this job belongs to. Previously available only via the job_department bridge table.
+          - name: copied_from_id
+            description: Foreign key referencing the JOB this was cloned from. Null for jobs created from scratch.
+          - name: is_template
+            description: True if this job is a template used to scaffold new jobs rather than an active requisition.
+          - name: opened_at
+            description: Timestamp of when the job first transitioned to open.
 
       - name: job_office
         identifier: "{{ var('greenhouse_job_office_identifier', 'job_office')}}"
-        description: Table relating jobs to the offices they exist in. 
+        description: Table relating jobs to the offices they exist in.
         config:
           enabled: "{{ var('greenhouse_using_job_office', true) and var('greenhouse_sources', []) == [] }}"
         columns:
@@ -266,14 +297,16 @@ sources:
             description: Foreign key referencing the OFFICE associated with this job.
           - name: job_id
             description: Foreign key referencing the JOB.
+          - name: index
+            description: Position of this office in the job's office list. Part of the composite primary key.
 
-      - name: job_opening
-        identifier: "{{ var('greenhouse_job_opening_identifier', 'opening')}}"
-        description: Table capturing openings made for jobs.
+      - name: opening
+        identifier: "{{ var('greenhouse_opening_identifier', 'opening')}}"
+        description: Table capturing openings made for jobs (source table `opening` in v3, previously `job_opening`).
         columns:
           - name: application_id
             description: >
-              Foreign key referencing the APPLICATION that was used to fill this opening. 
+              Foreign key referencing the APPLICATION that was used to fill this opening.
               This should only be set on a closed opening, null otherwise.
           - name: close_reason_id
             description: Foreign key referencing the CLOSE_REASON for this opening.
@@ -283,16 +316,24 @@ sources:
             description: Unique ID of the job opening.
           - name: job_id
             description: >
-              Foreign key referencing the id of the JOB that this opening exists for. 
+              Foreign key referencing the id of the JOB that this opening exists for.
               A job can have multiple openings.
           - name: opened_at
             description: Timestamp of when the job was opened.
           - name: opening_id
-            description: Opening ID visible from the UI. 
-          - name: status
-            description: Either "open" or "closed".
+            description: Opening ID visible from the UI.
+          - name: is_open
+            description: True if the opening is currently available to be filled. Replaces the string `status` column from v2.
+          - name: sort_order
+            description: Position of this opening within the job's openings list.
+          - name: target_start_on
+            description: Target start date for the hire that will fill this opening (YYYY-MM-DD). Null when no target start date has been set.
+          - name: created_at
+            description: Timestamp the opening was created.
+          - name: updated_at
+            description: Timestamp the opening was last updated.
 
-      - name: job_post 
+      - name: job_post
         identifier: "{{ var('greenhouse_job_post_identifier', 'job_post')}}"
         description: Table capturing the online job posts for an organization's jobs (as seen on the Job Board).
         columns:
@@ -300,28 +341,47 @@ sources:
             description: The text of the job post as posted to the external job board.
           - name: created_at
             description: Timestamp of when the job post was created.
-          - name: external
-            description: If true, this job post has been posted (or is to be posted) on an external job board.
           - name: id
             description: Unique ID of the job post.
           - name: internal
-            description: If true, this job post has been posted (or is to be posted) on an internal job board.
+            description: If true, this job post is on an internal job board and visible only to existing employees.
           - name: internal_content
             description: The text of the job post if posted to the internal job board, if different than the external job board.
           - name: job_id
             description: Foreign key referencing the JOB this post is for.
           - name: live
             description: If true, this job post status is set to live.
-          - name: location_name
-            description: Name of the location for this job.
           - name: title
-            description: Title of the job post. 
+            description: Title of the job post.
           - name: updated_at
-            description: Timestamp of when the job post was last updated. 
+            description: Timestamp of when the job post was last updated.
 
-      - name: job_stage
-        identifier: "{{ var('greenhouse_job_stage_identifier', 'job_interview_stage')}}"
-        description: Table capturing each stage of a job's interview plan (`job_interview_stage` in v3). Consolidates the v2 `job_stage` and `interview` tables.
+      - name: job_post_location
+        identifier: "{{ var('greenhouse_job_post_location_identifier', 'job_post_location')}}"
+        description: Table capturing the locations associated with job posts. Replaces the deprecated `location_name` column on the `job_post` table in v3.
+        config:
+          enabled: "{{ var('greenhouse_using_job_post_location', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: id
+            description: Unique ID of the location entry.
+          - name: job_post_id
+            description: Foreign key referencing the JOB_POST this location is attached to.
+          - name: office_id
+            description: Foreign key referencing the OFFICE this location resolves to. Populated when type is `office`; null otherwise.
+          - name: custom_location_id
+            description: Id of the board-scoped custom location this entry resolves to. Populated when type is `custom_list`; null otherwise.
+          - name: plain_text_location
+            description: Free-text location string shown on the job post. Populated when type is `free_text`; null otherwise.
+          - name: type
+            description: How this location is sourced. One of `free_text`, `office`, or `custom_list`.
+          - name: created_at
+            description: Timestamp the location entry was created.
+          - name: updated_at
+            description: Timestamp the location entry was last updated.
+
+      - name: job_interview_stage
+        identifier: "{{ var('greenhouse_job_interview_stage_identifier', 'job_interview_stage')}}"
+        description: Table capturing each stage of a job's interview plan (source table `job_interview_stage` in v3). Consolidates the v2 `job_stage` and `interview` tables.
         columns:
           - name: id
             description: Unique ID of the interview stage.
@@ -330,7 +390,7 @@ sources:
           - name: name
             description: Name of the stage as it appears on the job's interview plan.
           - name: active
-            description: True if the stage is on the job's current interview plan.
+            description: True if the stage is on the job's current interview plan. Inactive stages are retained so historical application_stage rows continue to resolve.
           - name: sort_order
             description: Position of this stage within the job's interview plan, ascending. The first stage is 0.
           - name: created_at
@@ -340,7 +400,7 @@ sources:
 
       - name: office
         identifier: "{{ var('greenhouse_office_identifier', 'office')}}"
-        description: Table capturing an organization's offices. 
+        description: Table capturing an organization's offices.
         config:
           enabled: "{{ var('greenhouse_using_job_office', true) and var('greenhouse_sources', []) == [] }}"
         columns:
@@ -348,20 +408,24 @@ sources:
             description: An arbitrary ID provided by an external source; does not map to another entity in Greenhouse.
           - name: id
             description: Unique ID of the office.
-          - name: location_name
-            description: The office's location.
+          - name: location
+            description: The office's physical location. Source column renamed from `location_name` in v2.
           - name: name
             description: The office's name.
           - name: parent_id
-            description: Self-referencing id of the office's parent office. 
-          - name: primary_contact_user_id
+            description: Self-referencing id of the office's parent office.
+          - name: primary_in_house_contact_user_id
             description: >
-              Foreign key referencing the id of the USER who will be the primary in-house contact for 
-              this office. This user must be a site-admin.
+              Foreign key referencing the id of the USER who will be the primary in-house contact for
+              this office. Source column renamed from `primary_contact_user_id` in v2.
+          - name: created_at
+            description: Timestamp the office was created.
+          - name: updated_at
+            description: Timestamp the office was last updated.
 
-      - name: phone_number
-        identifier: "{{ var('greenhouse_phone_number_identifier', 'candidate_phone_number')}}"
-        description: Table capturing phone numbers associated with candidates. 
+      - name: candidate_phone_number
+        identifier: "{{ var('greenhouse_candidate_phone_number_identifier', 'candidate_phone_number')}}"
+        description: Table capturing phone numbers associated with candidates (source table `candidate_phone_number` in v3).
         columns:
           - name: candidate_id
             description: Foreign key referencing the CANDIDATE with this phone.
@@ -370,11 +434,11 @@ sources:
           - name: type
             description: Type of phone.
           - name: value
-            description: Candidate's phone number. 
+            description: Candidate's phone number.
 
-      - name: scheduled_interview
-        identifier: "{{ var('greenhouse_scheduled_interview_identifier', 'interview')}}"
-        description: Table storing interviews scheduled for the specified application (source table `interview` in v3).
+      - name: interview
+        identifier: "{{ var('greenhouse_interview_identifier', 'interview')}}"
+        description: Table storing interviews scheduled for the specified application (source table `interview` in v3, previously `scheduled_interview`).
         columns:
           - name: id
             description: Unique identifier for the scheduled interview.
@@ -395,9 +459,9 @@ sources:
           - name: updated_at
             description: Timestamp the record was last updated.
           - name: starts_at
-            description: Timestamp the interview is scheduled to start.
+            description: Interview start timestamp. Previously `start` (reserved word, dialect-quoted) aliased as `start_at` in v2.
           - name: ends_at
-            description: Timestamp the interview is scheduled to end.
+            description: Interview end timestamp. Previously sourced as `coalesce(ends, end)` aliased as `end_at` in v2.
           - name: scheduled_at
             description: Timestamp the interview was first placed on calendar.
           - name: availability_received_at
@@ -409,11 +473,11 @@ sources:
           - name: external_event_id
             description: Calendar event id on the organizer's external calendar.
           - name: video_conferencing_url
-            description: Video conferencing link.
+            description: Video conferencing link auto-populated by Zoom, Google Meet, or Teams integrations.
 
-      - name: scheduled_interviewer
-        identifier: "{{ var('greenhouse_scheduled_interviewer_identifier', 'interviewer')}}"
-        description: Table relating users to the scheduled interviews they participated in (source table `interviewer` in v3).
+      - name: interviewer
+        identifier: "{{ var('greenhouse_interviewer_identifier', 'interviewer')}}"
+        description: Table relating users to the scheduled interviews they participated in (source table `interviewer` in v3, previously `scheduled_interviewer`).
         columns:
           - name: id
             description: Unique identifier for the interviewer record.
@@ -430,59 +494,76 @@ sources:
           - name: created_at
             description: Timestamp the record was created.
           - name: updated_at
-            description: Timestamp the record was last updated. 
+            description: Timestamp the record was last updated.
 
       - name: scorecard
+        identifier: "{{ var('greenhouse_scorecard_identifier', 'scorecard')}}"
         description: All submitted scorecards for candidate interviews.
         columns:
           - name: application_id
             description: Foreign key referencing the APPLICATION for which the scorecard was submitted.
-          - name: candidate_id
-            description: Foreign key referencing the CANDIDATE who was interviewed and scored.
           - name: created_at
             description: Timestamp of when the scorecard was created.
           - name: id
             description: Unique ID of the scorecard.
-          - name: interview
-            description: Title of the interview. 
           - name: interviewed_at
-            description: Timestamp of when the interview begun. 
-          - name: overall_recommendation
-            description: One of - definitely_not, no, yes, strong_yes, no_decision.
+            description: Timestamp of when the interview begun.
+          - name: candidate_rating
+            description: Overall recommendation recorded on the scorecard. Replaces `overall_recommendation` from v2. Values - strong_no, no, yes, strong_yes, no_decision.
+          - name: interviewer_id
+            description: Foreign key referencing the USER designated as the interviewer on this scorecard.
+          - name: interview_kit_id
+            description: Foreign key referencing the interview kit (question set) used for this scorecard.
           - name: submitted_at
             description: Timestamp of when the scorecard was submitted.
-          - name: submitted_by_user_id
-            description: Foreign key referencing the USER who submitted the scorecard.
-          - name: updated_at 
+          - name: submitter_id
+            description: Foreign key referencing the USER who submitted the scorecard. Previously named `submitted_by_user_id` in v2.
+          - name: updated_at
             description: Timestamp of when the scorecard was last updated.
+          - name: notes
+            description: Free-text interviewer notes.
+          - name: notes_with_tags
+            description: Notes with @-mention markup preserved.
+          - name: private_notes
+            description: Notes visible only to the submitter and admins.
+          - name: private_notes_with_tags
+            description: Private notes with @-mention markup preserved.
+          - name: public_notes
+            description: Notes visible to all users with candidate access.
+          - name: public_notes_with_tags
+            description: Public notes with @-mention markup preserved.
+          - name: status
+            description: Submission state of the scorecard. One of `in_progress` or `complete`.
 
-      - name: scorecard_attribute
-        identifier: "{{ var('greenhouse_scorecard_attribute_identifier', 'scorecard_candidate_attribute')}}"
-        description: Table capturing ratings along individual standards within each scorecard. 
+      - name: scorecard_candidate_attribute
+        identifier: "{{ var('greenhouse_scorecard_candidate_attribute_identifier', 'scorecard_candidate_attribute')}}"
+        description: Table capturing ratings along individual attribute standards within each scorecard (source table `scorecard_candidate_attribute` in v3).
         columns:
-          - name: index
-            description: Index of this rating/standard amongst the attributes of this scorecard.
-          - name: name
-            description: Name of the scorecard attribute. 
-          - name: note
-            description: Additional from the interviewer regarding the attribute score. 
-          - name: rating
-            description: Rating given to the candidate along this individual scorecard attribute. 
+          - name: id
+            description: Unique identifier for the scorecard attribute rating. Proper PK added in v3; was absent in v2.
           - name: scorecard_id
             description: Foreign key referencing the SCORECARD this attribute rating belongs to.
-          - name: type
-            description: Category of the attribute. 
+          - name: job_candidate_attribute_id
+            description: Foreign key referencing the attribute definition. Replaces the removed `name` and `type` columns from v2.
+          - name: candidate_attribute_rating
+            description: Interviewer's rating for this attribute. Replaces the `rating` column from v2.
+          - name: note
+            description: Additional notes from the interviewer regarding the attribute score.
+          - name: created_at
+            description: Timestamp the attribute rating was created.
+          - name: updated_at
+            description: Timestamp the attribute rating was last updated.
 
-      - name: social_media_address
-        identifier: "{{ var('greenhouse_social_media_address_identifier', 'candidate_social_media_address')}}"
-        description: Table capturing social media links (ie linkedin, github) provided by candidates. 
+      - name: candidate_social_media_address
+        identifier: "{{ var('greenhouse_candidate_social_media_address_identifier', 'candidate_social_media_address')}}"
+        description: Table capturing social media links (ie linkedin, github) provided by candidates (source table `candidate_social_media_address` in v3).
         columns:
           - name: candidate_id
             description: Foreign key referencing the CANDIDATE associated with these links.
           - name: index
             description: Index of the social media link amongst the candidate's stored links.
           - name: value
-            description: The candidate's social media link. 
+            description: The candidate's social media link.
 
       - name: source
         identifier: "{{ var('greenhouse_source_identifier', 'source')}}"
@@ -491,37 +572,46 @@ sources:
           freshness: null
         columns:
           - name: id
-            description: Unique ID of the source. 
+            description: Unique ID of the source.
           - name: name
             description: Name of the source.
-          - name: source_type_id
-            description: ID of the category of source. 
-          - name: source_type_name
+          - name: type_id
+            description: ID of the category of source. Previously named `source_type_id` in v2.
+          - name: type_name
             description: >
-              Name of the source category. One of - attend_events, referrals, third_party_boards, 
+              Name of the source category. One of - attend_events, referrals, third_party_boards,
               candidate_search, other, social_media, company_marketing, agencies, prospecting.
+              Previously named `source_type_name` in v2.
+          - name: created_at
+            description: Timestamp the source was created.
+          - name: updated_at
+            description: Timestamp the source was last updated.
 
-      - name: tag
-        identifier: "{{ var('greenhouse_tag_identifier', 'candidate_tag')}}"
-        description: Table storing candidate tags.
+      - name: candidate_tag
+        identifier: "{{ var('greenhouse_candidate_tag_identifier', 'candidate_tag')}}"
+        description: Table storing candidate tag definitions (source table `candidate_tag` in v3).
         config:
           freshness: null
         columns:
           - name: id
-            description: Unique ID of the tag. 
-          - name: name 
+            description: Unique ID of the tag.
+          - name: name
             description: Title of the tag as it appears in the UI.
+          - name: created_at
+            description: Timestamp the tag was created.
+          - name: updated_at
+            description: Timestamp the tag was last updated.
 
-      - name: user
-        identifier: "{{ var('greenhouse_user_identifier', 'users')}}"
-        description: Table of an organization's Greenhouse users.
+      - name: users
+        identifier: "{{ var('greenhouse_users_identifier', 'users')}}"
+        description: Table of an organization's Greenhouse users (source table `users` in v3).
         config:
           freshness: null
         columns:
           - name: created_at
             description: Timestamp of when the user was created.
           - name: deactivated
-            description: Boolean that is true if the user account has been deactivated.
+            description: Boolean that is true if the user account has been deactivated (previously `disabled` in v2).
           - name: employee_id
             description: The user's external employee id.
           - name: first_name
@@ -534,19 +624,35 @@ sources:
             description: If true, this user is a site admin, which means the user has full permissions on all non-private jobs.
           - name: updated_at
             description: Timestamp of when the user was updated.
+          - name: agency_id
+            description: Foreign key referencing the AGENCY this user belongs to. Null for in-house users.
+          - name: job_title
+            description: Free-form job title from the user's Greenhouse profile. Null when unset.
+          - name: primary_email
+            description: Sign-in email address. Empty string for service accounts.
 
       - name: user_email
         identifier: "{{ var('greenhouse_user_email_identifier', 'user_email')}}"
-        description: Table associating Greenhouse users with their emails. 
+        description: Table associating Greenhouse users with their emails.
         columns:
+          - name: id
+            description: Unique identifier for the user email record. Proper PK added in v3; was absent in v2.
           - name: email
             description: User's email.
           - name: user_id
-            description: Foreign key referencing the USER who has this email. 
+            description: Foreign key referencing the USER who has this email.
+          - name: verified
+            description: True once the user has confirmed this address via the verification link. False when verification is pending.
+          - name: verification_token_sent_at
+            description: Timestamp when the verification email was dispatched. Null when no verification email has been sent.
+          - name: created_at
+            description: Timestamp the email address record was created.
+          - name: updated_at
+            description: Timestamp the email address record was last updated.
 
       - name: prospect_pool
         identifier: "{{ var('greenhouse_prospect_pool_identifier', 'prospect_pool')}}"
-        description: Table capturing prospect pool groups. 
+        description: Table capturing prospect pool groups.
         config:
           enabled: "{{ var('greenhouse_using_prospects', true) and var('greenhouse_sources', []) == [] }}"
         columns:
@@ -555,17 +661,29 @@ sources:
           - name: id
             description: Unique ID of the prospect pool.
           - name: name
-            description: Name given to the prospect pool. 
+            description: Name given to the prospect pool.
+          - name: description
+            description: Free-text purpose statement set by the organization. Null when no description has been set.
+          - name: created_at
+            description: Timestamp the prospect pool was created.
+          - name: updated_at
+            description: Timestamp the prospect pool was last updated.
 
-      - name: prospect_stage
-        identifier: "{{ var('greenhouse_prospect_stage_identifier', 'prospect_pool_stage')}}"
-        description: Table capturing stages prospects in different pools advance through. 
+      - name: prospect_pool_stage
+        identifier: "{{ var('greenhouse_prospect_pool_stage_identifier', 'prospect_pool_stage')}}"
+        description: Table capturing stages prospects in different pools advance through (source table `prospect_pool_stage` in v3).
         config:
           enabled: "{{ var('greenhouse_using_prospects', true) and var('greenhouse_sources', []) == [] }}"
         columns:
           - name: id
-            description: Unique id of the prospect stage. 
+            description: Unique id of the prospect stage.
           - name: name
-            description: Name of the prospect stage. 
+            description: Name of the prospect stage.
           - name: prospect_pool_id
             description: Foreign key referencing the PROSPECT_POOL the stage belongs to.
+          - name: sort_order
+            description: Position of this stage within the pool, ascending. Lower values appear first.
+          - name: created_at
+            description: Timestamp the stage was created.
+          - name: updated_at
+            description: Timestamp the stage was last updated.

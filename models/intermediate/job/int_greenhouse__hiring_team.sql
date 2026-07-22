@@ -1,3 +1,5 @@
+{{ config(enabled=var('greenhouse_using_job_hiring_team', True)) }}
+
 with job_hiring_manager as (
 
     select *

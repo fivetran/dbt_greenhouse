@@ -24,7 +24,7 @@ emails as (
         candidate_id,
         {{ fivetran_utils.string_agg("'<' || email || '>'" , "', '") }} as email
 
-    from {{ ref('stg_greenhouse__email_address') }}
+    from {{ ref('stg_greenhouse__candidate_email_address') }}
 
     group by 1, 2
 ),
@@ -34,7 +34,7 @@ order_resumes as (
 
     select 
         *,
-        row_number() over(partition by candidate_id {{ fivetran_utils.partition_by_source_relation(package_name='greenhouse') }} order by index desc) as resume_row_num
+        row_number() over(partition by candidate_id {{ fivetran_utils.partition_by_source_relation(package_name='greenhouse') }} order by created_at desc) as resume_row_num
     from {{ ref('stg_greenhouse__attachment') }}
 
     where lower(type) = 'resume'

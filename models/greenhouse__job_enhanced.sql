@@ -26,16 +26,28 @@ job_applications as (
 
 live_job_posts as (
 
-    select 
-        source_relation,
-        job_id,
-        sum(case when is_internal then 1 else 0 end) as count_live_internal_posts,
-        sum(case when not is_internal then 1 else 0 end) as count_live_external_posts,
-        count(distinct lower(location_name)) as count_live_locations
+    select
+        job_post.source_relation,
+        job_post.job_id,
+        sum(case when job_post.is_internal then 1 else 0 end) as count_live_internal_posts,
+        sum(case when not job_post.is_internal then 1 else 0 end) as count_live_external_posts
+        {% if var('greenhouse_using_job_post_location', True) %}
+        , count(distinct coalesce(job_post_location.plain_text_location, office.office_name)) as count_live_locations
+        {% else %}
+        , 0 as count_live_locations
+        {% endif %}
 
-    from {{ ref('stg_greenhouse__job_post') }}
+    from {{ ref('stg_greenhouse__job_post') }} as job_post
+    {% if var('greenhouse_using_job_post_location', True) %}
+    left join {{ ref('stg_greenhouse__job_post_location') }} as job_post_location
+        on job_post.job_post_id = job_post_location.job_post_id
+        and job_post.source_relation = job_post_location.source_relation
+    left join {{ ref('stg_greenhouse__office') }} as office
+        on job_post_location.office_id = office.office_id
+        and job_post_location.source_relation = office.source_relation
+    {% endif %}
 
-    where is_live
+    where job_post.is_live
 
     group by 1, 2
 ),

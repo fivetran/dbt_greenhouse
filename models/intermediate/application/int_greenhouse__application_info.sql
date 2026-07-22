@@ -111,7 +111,7 @@ join_info as (
         on application.candidate_id = candidate_tag.candidate_id
         and application.source_relation = candidate_tag.source_relation
     left join job_stage
-        on application.stage_id = job_stage.job_stage_id
+        on application.current_stage_id = job_stage.job_stage_id
         and application.source_relation = job_stage.source_relation
     left join source
         on application.source_id = source.source_id

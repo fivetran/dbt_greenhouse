@@ -1,3 +1,4 @@
+{% if var('greenhouse_using_job_hiring_team', True) %}
 with hiring_team as (
 
     select *
@@ -5,6 +6,9 @@ with hiring_team as (
 ),
 
 job as (
+{% else %}
+with job as (
+{% endif %}
 
     select *
     from {{ ref('stg_greenhouse__job') }}
@@ -28,12 +32,16 @@ job_department as (
 
 final as (
 
-    select 
-        job.*,
+    select
+        job.*
+
+        {% if var('greenhouse_using_job_hiring_team', True) %}
+        ,
         hiring_team.hiring_managers,
         hiring_team.sourcers,
         hiring_team.recruiters,
         hiring_team.coordinators
+        {% endif %}
 
         {% if var('greenhouse_using_job_office', True) %}
         ,
@@ -48,9 +56,12 @@ final as (
         {% endif %}
 
     from job
+
+    {% if var('greenhouse_using_job_hiring_team', True) %}
     left join hiring_team
         on job.job_id = hiring_team.job_id
         and job.source_relation = hiring_team.source_relation
+    {% endif %}
 
     {% if var('greenhouse_using_job_office', True) %}
     left join job_office

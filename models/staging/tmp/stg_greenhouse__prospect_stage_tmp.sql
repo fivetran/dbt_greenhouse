@@ -4,6 +4,6 @@
     fivetran_utils.union_connections(
         connection_dictionary='greenhouse_sources',
         single_source_name='greenhouse',
-        single_table_name='prospect_stage'
+        single_table_name='prospect_pool_stage'
     )
 }}

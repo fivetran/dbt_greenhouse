@@ -13,8 +13,8 @@ models:
         description: Unique ID of the application.
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE who submitted the application.
-      - name: stage_id
-        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at (`stage_id` in source; previously `current_stage_id`).
+      - name: current_stage_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at (`stage_id` in source).
       - name: job_id
         description: Foreign key referencing the JOB being applied for. Directly on the application in v3.
       - name: coordinator_id
@@ -187,17 +187,17 @@ models:
         description: Foreign key referencing the APPLICATION that is being interviewed.
       - name: created_at
         description: Timestamp of when the interview was created.
-      - name: ends_at
+      - name: end_at
         description: Timestamp of when the interview is scheduled to end. Will be a date if the interview is all-day.
       - name: scheduled_interview_id
         description: Unique ID of the scheduled interview.
-      - name: job_interview_id
+      - name: interview_id
         description: Foreign key referencing the JOB_INTERVIEW_STAGE step that this scheduled interview maps to.
       - name: location
         description: The location of the interview.
       - name: organizer_user_id
         description: Foreign key referencing the USER who organized the interview.
-      - name: starts_at
+      - name: start_at
         description: Timestamp of when the interview is scheduled to start. Will be a date if the interview is all-day.
       - name: status
         description: One of - scheduled, awaiting_feedback, complete.

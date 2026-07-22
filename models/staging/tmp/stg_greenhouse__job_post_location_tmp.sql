@@ -1,9 +1,9 @@
-{{ config(enabled=var('greenhouse_using_job_hiring_team', True)) }}
+{{ config(enabled=var('greenhouse_using_job_post_location', True)) }}
 
 {{
     fivetran_utils.union_connections(
         connection_dictionary='greenhouse_sources',
         single_source_name='greenhouse',
-        single_table_name='job_hiring_manager'
+        single_table_name='job_post_location'
     )
 }}

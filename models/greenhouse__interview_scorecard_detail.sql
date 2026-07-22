@@ -20,7 +20,7 @@ join_w_attributes as (
         interview.interviewer_name,
         interview.interview_name,
         
-        interview.starts_at as interview_start_at,
+        interview.start_at as interview_start_at,
         interview.scorecard_submitted_at,
 
         interview.application_id,

@@ -28,7 +28,7 @@ interview_w_scorecard as (
         scheduled_interview.*,
 
         job_interview_stage.stage_name as interview_name,
-        {{ dbt.datediff('scheduled_interview.starts_at', 'scheduled_interview.ends_at', 'minute') }} as duration_interview_minutes,
+        {{ dbt.datediff('scheduled_interview.start_at', 'scheduled_interview.end_at', 'minute') }} as duration_interview_minutes,
         scorecard.scorecard_id,
         scorecard.candidate_rating,
         scorecard.submitted_at as scorecard_submitted_at,
@@ -46,7 +46,7 @@ interview_w_scorecard as (
         on scheduled_interviewer.scorecard_id = scorecard.scorecard_id
         and scheduled_interviewer.source_relation = scorecard.source_relation
     left join job_interview_stage
-        on scheduled_interview.job_interview_id = job_interview_stage.job_stage_id
+        on scheduled_interview.interview_id = job_interview_stage.job_stage_id
         and scheduled_interview.source_relation = job_interview_stage.source_relation
 ),
 

@@ -26,7 +26,6 @@ final as (
         application.current_job_stage as application_current_job_stage,
         application.status as current_application_status,
         application.job_title,
-        application.job_id,
 
         application.hiring_managers like ('%' || interview.interviewer_name || '%')  as interviewer_is_hiring_manager,
         application.hiring_managers,
@@ -53,7 +52,7 @@ final as (
 
     from interview
     left join job_stage
-        on interview.job_interview_id = job_stage.job_stage_id
+        on interview.interview_id = job_stage.job_stage_id
         and interview.source_relation = job_stage.source_relation
     left join application 
         on interview.application_id = application.application_id

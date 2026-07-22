@@ -44,8 +44,8 @@ models:
         description: Id of the source the application is attributed to (e.g. a job board, an event, an employee referral source). Null if no source is set.
       - name: status
         description: Lifecycle status of the application. `in_process` for active candidates, `rejected` for rejected applications, `hired` once an offer is closed, and `converted` for prospect applications promoted to a candidate application.
-      - name: stage_id
-        description: Id of the interview stage the candidate is currently in. Null for prospect applications and applications in a terminal state. Breaking rename from `current_stage_id` in v2 — update downstream references.
+      - name: current_stage_id
+        description: Id of the interview stage the candidate is currently in. Null for prospect applications and applications in a terminal state.
       - name: coordinator_id
         description: Id of the user assigned as coordinator on the application's job. Null when unassigned.
       - name: job_id
@@ -61,7 +61,7 @@ models:
       - name: needs_decision
         description: True when the application is waiting on a hiring-team decision (scorecard completion, advance/reject, etc.) in its current stage.
       - name: created_at
-        description: Timestamp the application record was created. Note: this is the system creation timestamp, not equivalent to the deprecated `applied_at` field.
+        description: Timestamp the application record was created. Note this is the system creation timestamp, not equivalent to the deprecated `applied_at` field.
       - name: updated_at
         description: Timestamp the application record was last updated.
       - name: _fivetran_synced
@@ -157,7 +157,7 @@ models:
     description: Table storing an organization’s job departments.
     columns:
       - name: source_relation
-        description: "{{ doc(‘source_relation’) }}"
+        description: "{{ doc('source_relation') }}"
       - name: department_id
         description: Unique identifier for the department (`id` in source).
         tests:
@@ -173,7 +173,7 @@ models:
       - name: updated_at
         description: Timestamp the department was last updated.
       - name: _fivetran_synced
-        description: "{{ doc(‘_fivetran_synced’) }}"
+        description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__eeoc
     description: Table capturing EEOC data provided by candidates.
@@ -211,7 +211,7 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__email_address
+  - name: stg_greenhouse__candidate_email_address
     description: Table storing email addresses associated with candidates.
     columns:
       - name: candidate_id
@@ -409,7 +409,33 @@ models:
       - name: demographic_question_set_id
         description: Id of the demographic question set surfaced to candidates on this post for DE&I reporting. Null when the post does not collect demographic data.
       - name: _fivetran_synced
-        description: "{{ doc(‘_fivetran_synced’) }}"
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__job_post_location
+    description: Table capturing the locations associated with job posts. Replaces the deprecated `location_name` column on the `job_post` table in v3.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: job_post_location_id
+        description: Unique identifier for the location entry (`id` in source).
+        tests:
+          - not_null
+      - name: job_post_id
+        description: Id of the job post this location is attached to. A single post can have multiple rows — one per location it is published in.
+      - name: office_id
+        description: Id of the organization office this location resolves to. Populated when `type` is `office`; null otherwise.
+      - name: custom_location_id
+        description: Id of the board-scoped custom location this entry resolves to. Populated when `type` is `custom_list`; null otherwise.
+      - name: plain_text_location
+        description: Free-text location string shown on the job post (e.g. New York, NY, Remote (US)). Populated when `type` is `free_text`; null for `office` and `custom_list` rows.
+      - name: type
+        description: How this location is sourced. One of `free_text`, `office`, or `custom_list`.
+      - name: created_at
+        description: Timestamp the location entry was created.
+      - name: updated_at
+        description: Timestamp the location entry was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__office
     description: Table capturing an organization’s offices.
@@ -433,7 +459,7 @@ models:
       - name: updated_at
         description: Timestamp the office was last updated.
       - name: _fivetran_synced
-        description: "{{ doc(‘_fivetran_synced’) }}"
+        description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__phone_number
     description: Table capturing phone numbers associated with candidates. 
@@ -458,8 +484,8 @@ models:
           - not_null
       - name: application_id
         description: Id of the application this interview was scheduled for.
-      - name: job_interview_id
-        description: Id of the job interview stage this scheduled interview maps to. Previously `interview_id` in v2.
+      - name: interview_id
+        description: Id of the job interview stage this scheduled interview maps to (`job_interview_id` in source).
       - name: job_id
         description: Id of the job this interview is associated with.
       - name: location
@@ -472,18 +498,18 @@ models:
         description: Timestamp the interview record was created.
       - name: last_updated_at
         description: Timestamp the interview record was last updated (`updated_at` in source).
-      - name: starts_at
-        description: Timestamp the interview is scheduled to start. Previously `start_at` in v2.
-      - name: ends_at
-        description: Timestamp the interview is scheduled to end. Previously `end_at` in v2.
+      - name: start_at
+        description: Timestamp the interview is scheduled to start (`starts_at` in source).
+      - name: end_at
+        description: Timestamp the interview is scheduled to end (`ends_at` in source).
       - name: scheduled_at
         description: Timestamp the interview was first placed on calendar via a Greenhouse integration.
       - name: availability_received_at
         description: Timestamp availability was received from the candidate, used to compute time-to-schedule.
       - name: all_day_start_on
-        description: Start date for all-day events. Set instead of `starts_at` when the interview spans a full day.
+        description: Start date for all-day events. Set instead of `start_at` when the interview spans a full day.
       - name: all_day_end_on
-        description: End date for all-day events. Set instead of `ends_at` when the interview spans a full day.
+        description: End date for all-day events. Set instead of `end_at` when the interview spans a full day.
       - name: external_event_id
         description: Calendar event id on the organizer's external calendar (e.g. Google Calendar, Outlook).
       - name: video_conferencing_url
@@ -639,7 +665,7 @@ models:
       - name: primary_email
         description: Primary email address on the user’s account — the sign-in identifier and address Greenhouse uses for outbound mail. Empty string for service accounts.
       - name: _fivetran_synced
-        description: "{{ doc(‘_fivetran_synced’) }}"
+        description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__user_email
     description: Table associating Greenhouse users with their emails.

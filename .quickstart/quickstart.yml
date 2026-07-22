@@ -17,6 +17,11 @@ table_variables:
   greenhouse_using_job_department:
     - department
     - job_department
+  greenhouse_using_job_hiring_team:
+    - job_hiring_manager
+    - job_owner
+  greenhouse_using_job_post_location:
+    - job_post_location
 
   _fivetran_quickstart_candidate_tag:
     - candidate_tag
@@ -24,10 +29,6 @@ table_variables:
     - phone_number
   _fivetran_quickstart_social_media_address:
     - social_media_address
-  _fivetran_quickstart_tag:
-    - tag
-  _fivetran_quickstart_tags:
-    - tags
 
 destination_configurations:
   databricks:

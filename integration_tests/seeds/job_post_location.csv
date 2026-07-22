@@ -1,0 +1,4 @@
+id,_fivetran_synced,job_post_id,office_id,custom_location_id,plain_text_location,type,created_at,updated_at
+1001,2021-02-03 02:08:46,4307484003,,,"New York, NY",free_text,2021-01-01 00:00:00,2021-01-01 00:00:00
+1002,2021-02-03 02:08:46,4307484003,,,"Remote (US)",free_text,2021-01-01 00:00:00,2021-01-01 00:00:00
+1003,2021-02-03 02:08:42,4206198003,,,San Francisco,free_text,2020-10-26 00:00:00,2020-10-26 00:00:00
