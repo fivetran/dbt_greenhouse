@@ -3,18 +3,13 @@
     enabled=var('fivetran_validation_tests_enabled', false)
 ) }}
 
-{% set columns_to_exclude = [
-    'index', 'attribute_name', 'rating', 'attribute_category', 'overall_recommendation',
-    'id', 'job_candidate_attribute_id', 'candidate_attribute_rating', 'candidate_rating', 'scorecard_attribute_key', 'created_at', 'updated_at'
-] + var('consistency_test_exclude_columns', []) %}
-
 with prod as (
-    select {{ dbt_utils.star(from=ref('greenhouse__interview_scorecard_detail'), except=columns_to_exclude) }}
+    select {{ dbt_utils.star(from=ref('greenhouse__interview_scorecard_detail'), except=var('consistency_test_exclude_columns', [])) }}
     from {{ target.schema }}_greenhouse_prod.greenhouse__interview_scorecard_detail
 ),
 
 dev as (
-    select {{ dbt_utils.star(from=ref('greenhouse__interview_scorecard_detail'), except=columns_to_exclude) }}
+    select {{ dbt_utils.star(from=ref('greenhouse__interview_scorecard_detail'), except=var('consistency_test_exclude_columns', [])) }}
     from {{ target.schema }}_greenhouse_dev.greenhouse__interview_scorecard_detail
 ), 
 
