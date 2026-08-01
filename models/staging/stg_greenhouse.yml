@@ -87,7 +87,7 @@ models:
     description: Table capturing files attached to the candidate profile.
     columns:
       - name: source_relation
-        description: “{{ doc('source_relation') }}”
+        description: "{{ doc('source_relation') }}"
       - name: id
         description: Unique identifier for the attachment.
       - name: candidate_id
@@ -105,7 +105,7 @@ models:
       - name: updated_at
         description: Timestamp the attachment was last updated.
       - name: _fivetran_synced
-        description: “{{ doc('_fivetran_synced') }}”
+        description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__candidate
     description: Table capturing an organization's candidates.
@@ -140,7 +140,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__candidate_tag_link
-    description: Table associating candidates with their attached tags. Sources from `candidate_tag_link` in v3.
+    description: Table associating candidates with their attached tags.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -154,7 +154,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__department
-    description: Table storing an organization’s job departments.
+    description: Table storing an organization's job departments.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -167,7 +167,7 @@ models:
       - name: name
         description: Display name of the department (e.g. Engineering, Marketing).
       - name: parent_department_id
-        description: Id of the parent department in the organization’s department tree. Null for top-level departments (`parent_id` in source).
+        description: Id of the parent department in the organization's department tree. Null for top-level departments (`parent_id` in source).
       - name: created_at
         description: Timestamp the department was created.
       - name: updated_at
@@ -226,7 +226,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__job_hiring_manager
-    description: Table capturing hiring managers assigned to each job. Replaces the v2 `hiring_team` table (hiring_managers role).
+    description: Table capturing hiring managers assigned to each job. Replaces the V2 API `hiring_team` table.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -371,7 +371,7 @@ models:
       - name: target_start_on
         description: Target start date for the hire filling this opening. Null when not set.
       - name: _fivetran_synced
-        description: “{{ doc('_fivetran_synced') }}”
+        description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__job_post
     description: Table capturing the online job posts for an organization’s jobs (as seen on the Job Board).
@@ -399,7 +399,7 @@ models:
       - name: active
         description: True if the post has not been deleted. Deleted posts are excluded by default.
       - name: featured
-        description: True if the post is currently featured on the organization’s internal job board. Only internal posts can be featured.
+        description: True if the post is currently featured on the organization's internal job board. Only internal posts can be featured.
       - name: first_published_at
         description: Timestamp the post first transitioned to live. Null for posts that have never been published.
       - name: job_board_id
@@ -414,7 +414,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__job_post_location
-    description: Table capturing the locations associated with job posts. Replaces the deprecated `location_name` column on the `job_post` table in v3.
+    description: Table capturing the locations associated with job posts. Replaces the deprecated `JOB_POST.location_name` column.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -440,7 +440,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__office
-    description: Table capturing an organization’s offices.
+    description: Table capturing an organization's offices.
     columns:
       - name: office_id
         description: Unique identifier for the office (`id` in source).
@@ -453,9 +453,9 @@ models:
       - name: parent_office_id
         description: Id of the parent office when offices are organized hierarchically. Null for top-level offices (`parent_id` in source).
       - name: location_name
-        description: Free-form physical location string for the office (e.g. New York, NY, USA). Null for offices that have no location set. Sourced from `location` in v3.
+        description: Free-form physical location string for the office (e.g. New York, NY, USA). Null for offices that have no location set.
       - name: primary_contact_user_id
-        description: Id of the Greenhouse user designated as the office’s primary internal contact. Null when no contact has been assigned. Sourced from `primary_in_house_contact_user_id` in v3.
+        description: Id of the Greenhouse user designated as the office's primary internal contact. Null when no contact has been assigned. Sourced from `primary_in_house_contact_user_id` in v3.
       - name: created_at
         description: Timestamp the office was created.
       - name: updated_at
@@ -520,7 +520,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__scheduled_interviewer
-    description: Table relating users to the scheduled interviews they participated in (source table `interviewer` in v3).
+    description: Table relating users to the scheduled interviews they participated in (source table `interviewer`).
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -646,7 +646,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__user
-    description: Table of an organization’s Greenhouse users.
+    description: Table of an organization's Greenhouse users.
     columns:
       - name: user_id
         description: Unique identifier for the Greenhouse user (`id` in source).
@@ -655,7 +655,7 @@ models:
       - name: created_at
         description: Timestamp the user account was created.
       - name: employee_id
-        description: Partner-supplied external employee identifier, typically the user’s HRIS or payroll id. Null when no employee id has been set.
+        description: Partner-supplied external employee identifier, typically the user's HRIS or payroll id. Null when no employee id has been set.
       - name: full_name
         description: Full name of the user, concatenated from `first_name` and `last_name`.
       - name: is_site_admin
@@ -663,13 +663,13 @@ models:
       - name: last_updated_at
         description: Timestamp the user record was last updated (`updated_at` in source).
       - name: is_disabled
-        description: True if the user has been deactivated. Deactivated users cannot sign in or be assigned to new jobs, but their historical activity is preserved. Sourced from `deactivated` in v3.
+        description: True if the user has been deactivated. Deactivated users cannot sign in or be assigned to new jobs, but their historical activity is preserved. Sourced from `deactivated`.
       - name: agency_id
         description: Id of the staffing agency this user belongs to. Null for in-house users; non-null identifies the user as an external agency recruiter.
       - name: job_title
-        description: Free-form job title set on the user’s Greenhouse profile (e.g. Senior Recruiter). Null when unset.
+        description: Free-form job title set on the user's Greenhouse profile (e.g. Senior Recruiter). Null when unset.
       - name: primary_email
-        description: Primary email address on the user’s account — the sign-in identifier and address Greenhouse uses for outbound mail. Empty string for service accounts.
+        description: Primary email address on the user's account — the sign-in identifier and address Greenhouse uses for outbound mail. Empty string for service accounts.
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
@@ -677,7 +677,7 @@ models:
     description: Table associating Greenhouse users with their emails.
     columns:
       - name: id
-        description: Unique identifier for the user email record. Proper PK added in v3; was absent in v2.
+        description: Unique identifier for the user email record.
       - name: user_id
         description: Id of the Greenhouse user this email address belongs to.
       - name: email
