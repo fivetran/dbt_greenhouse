@@ -15,7 +15,7 @@ models:
       - name: stage_id
         description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at in the pipeline (`stage_id` in source; previously `current_stage_id`).
       - name: job_id
-        description: Foreign key referencing the JOB this application is for. Directly on the application in v3.
+        description: Foreign key referencing the JOB this application is for.
       - name: coordinator_id
         description: Foreign key referencing the USER who is coordinating this application.
       - name: recruiter_id
@@ -63,11 +63,11 @@ models:
       - name: stage_id
         description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at (`stage_id` in source; previously `current_stage_id`).
       - name: job_id
-        description: Foreign key referencing the JOB being applied for. Directly on the application in v3.
+        description: Foreign key referencing the JOB being applied for.
       - name: coordinator_id
-        description: Foreign key referencing the USER coordinating this application (directly on application in v3).
+        description: Foreign key referencing the USER coordinating this application.
       - name: recruiter_id
-        description: Foreign key referencing the USER recruiting for this application (directly on application in v3).
+        description: Foreign key referencing the USER recruiting for this application.
       - name: last_activity_at
         description: Timestamp of when the last activity was taken on this application.
       - name: location_address

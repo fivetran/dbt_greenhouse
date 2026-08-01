@@ -16,11 +16,11 @@ models:
       - name: stage_id
         description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at.
       - name: job_id
-        description: Foreign key referencing the JOB being applied for. Directly on the application in v3.
+        description: Foreign key referencing the JOB being applied for.
       - name: coordinator_id
-        description: Foreign key referencing the USER coordinating this application (directly on application in v3).
+        description: Foreign key referencing the USER coordinating this application.
       - name: recruiter_id
-        description: Foreign key referencing the USER recruiting for this application (directly on application in v3).
+        description: Foreign key referencing the USER recruiting for this application.
       - name: referrer_id
         description: Foreign key referencing the referrer of this application (replaces `credited_to_user_id`).
       - name: last_activity_at
