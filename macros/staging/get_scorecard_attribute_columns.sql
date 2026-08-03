@@ -1,6 +1,7 @@
 {% macro get_scorecard_attribute_columns() %}
 
 {% set columns = [
+    {"name": "_fivetran_deleted", "datatype": "boolean"},
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
     {"name": "candidate_attribute_rating", "datatype": dbt.type_string()},
     {"name": "created_at", "datatype": dbt.type_timestamp()},

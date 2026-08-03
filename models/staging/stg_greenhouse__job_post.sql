@@ -44,6 +44,7 @@ final as (
     from fields
 
     where active
+        and not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

@@ -44,6 +44,8 @@ final as (
         cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at
 
     from fields
+
+    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

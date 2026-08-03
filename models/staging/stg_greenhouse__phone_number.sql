@@ -31,6 +31,7 @@ final as (
 
     from fields
 
+    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

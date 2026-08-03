@@ -1,6 +1,7 @@
 {% macro get_user_email_columns() %}
 
 {% set columns = [
+    {"name": "_fivetran_deleted", "datatype": "boolean"},
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
     {"name": "created_at", "datatype": dbt.type_timestamp()},
     {"name": "email", "datatype": dbt.type_string()},

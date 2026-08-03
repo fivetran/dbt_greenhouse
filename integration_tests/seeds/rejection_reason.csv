@@ -1,4 +1,4 @@
-id,name,type_id,type_key,type_name,created_at,updated_at,_fivetran_synced
-1,Not a cultural fit,1,WE_REJECTED_THEM,We rejected them,2021-01-01 00:00:00,2021-01-01 00:00:00,2021-01-01 00:00:00
-2,Wasn't interested,2,THEY_REJECTED_US,They rejected us,2021-01-02 00:00:00,2021-01-02 00:00:00,2021-01-02 00:00:00
-3,Lacking skill(s)/qualification(s),1,WE_REJECTED_THEM,We rejected them,2021-01-03 00:00:00,2021-01-03 00:00:00,2021-01-03 00:00:00
+id,_fivetran_deleted,name,type_id,type_key,type_name,created_at,updated_at,_fivetran_synced
+1,false,Not a cultural fit,1,WE_REJECTED_THEM,We rejected them,2021-01-01 00:00:00,2021-01-01 00:00:00,2021-01-01 00:00:00
+2,false,Wasn't interested,2,THEY_REJECTED_US,They rejected us,2021-01-02 00:00:00,2021-01-02 00:00:00,2021-01-02 00:00:00
+3,false,Lacking skill(s)/qualification(s),1,WE_REJECTED_THEM,We rejected them,2021-01-03 00:00:00,2021-01-03 00:00:00,2021-01-03 00:00:00

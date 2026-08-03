@@ -38,6 +38,8 @@ final as (
         cast(target_start_on as date) as target_start_on
 
     from fields
+
+    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

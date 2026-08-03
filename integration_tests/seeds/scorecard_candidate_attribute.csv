@@ -1,3 +1,3 @@
-id,scorecard_id,_fivetran_synced,job_candidate_attribute_id,note,candidate_attribute_rating,created_at,updated_at
-9001003,5436818003,2020-12-16 19:53:34.705,301003,,strong_yes,2020-12-16 19:53:34.705,2020-12-16 19:53:34.705
-9002003,5894431003,2021-02-03 11:44:08.624,302003,,yes,2021-02-03 11:44:08.624,2021-02-03 11:44:08.624
+id,_fivetran_deleted,scorecard_id,_fivetran_synced,job_candidate_attribute_id,note,candidate_attribute_rating,created_at,updated_at
+9001003,false,5436818003,2020-12-16 19:53:34.705,301003,,strong_yes,2020-12-16 19:53:34.705,2020-12-16 19:53:34.705
+9002003,false,5894431003,2021-02-03 11:44:08.624,302003,,yes,2021-02-03 11:44:08.624,2021-02-03 11:44:08.624

@@ -1,3 +1,3 @@
-id,_fivetran_synced,company,created_at,first_name,last_name,private,last_activity_at,title,updated_at,can_email,preferred_name,time_zone
-21926020003,2021-02-08 19:34:10.605,,2021-02-01 22:52:04.606,Spongebob,Squarepants,false,2018-02-08 19:29:13.992,,2018-02-08 19:29:14.012,true,,
-19338492003,2020-12-18 08:44:26.086,nowhere,2020-12-17 21:50:04.689,Patrick,Star,false,2019-12-17 21:50:04.689,,2020-12-17 21:50:04.689,true,,
+id,_fivetran_deleted,_fivetran_synced,company,created_at,first_name,last_name,private,last_activity_at,title,updated_at,can_email,preferred_name,time_zone
+21926020003,false,2021-02-08 19:34:10.605,,2021-02-01 22:52:04.606,Spongebob,Squarepants,false,2018-02-08 19:29:13.992,,2018-02-08 19:29:14.012,true,,
+19338492003,false,2020-12-18 08:44:26.086,nowhere,2020-12-17 21:50:04.689,Patrick,Star,false,2019-12-17 21:50:04.689,,2020-12-17 21:50:04.689,true,,

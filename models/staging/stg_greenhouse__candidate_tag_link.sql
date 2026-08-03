@@ -30,6 +30,8 @@ final as (
         tag_name
 
     from fields
+
+    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

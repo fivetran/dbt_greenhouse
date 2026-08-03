@@ -1,6 +1,7 @@
 {% macro get_job_interview_stage_columns() %}
 
 {% set columns = [
+    {"name": "_fivetran_deleted", "datatype": "boolean"},
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
     {"name": "active", "datatype": "boolean"},
     {"name": "created_at", "datatype": dbt.type_timestamp()},

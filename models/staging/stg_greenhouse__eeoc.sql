@@ -42,6 +42,8 @@ final as (
         cast(veteran_status_id as {{ dbt.type_string() }}) as veteran_status_id
 
     from fields
+
+    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

@@ -1,6 +1,7 @@
 {% macro get_phone_number_columns() %}
 
 {% set columns = [
+    {"name": "_fivetran_deleted", "datatype": "boolean"},
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
     {"name": "candidate_id", "datatype": dbt.type_int()},
     {"name": "index", "datatype": dbt.type_int()},

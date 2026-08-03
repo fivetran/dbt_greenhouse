@@ -1,2 +1,2 @@
-id,job_id,user_id,created_at,updated_at,_fivetran_synced
-1001,4156002003,4177753003,2020-11-04 14:54:02.724,2020-11-04 14:54:02.724,2020-11-04 14:54:02.724
+id,_fivetran_deleted,job_id,user_id,created_at,updated_at,_fivetran_synced
+1001,false,4156002003,4177753003,2020-11-04 14:54:02.724,2020-11-04 14:54:02.724,2020-11-04 14:54:02.724

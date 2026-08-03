@@ -33,6 +33,8 @@ final as (
         cast(user_id as {{ dbt.type_string() }}) as user_id
 
     from fields
+
+    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final
