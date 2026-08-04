@@ -1,4 +1,4 @@
-{% macro get_scheduled_interview_columns() %}
+{% macro get_interview_columns() %}
 
 {% set columns = [
     {"name": "_fivetran_deleted", "datatype": "boolean"},

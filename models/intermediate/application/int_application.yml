@@ -13,7 +13,7 @@ models:
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE who submitted the application.
       - name: stage_id
-        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at in the pipeline (`stage_id` in source; previously `current_stage_id`).
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at in the pipeline.
       - name: job_id
         description: Foreign key referencing the JOB this application is for.
       - name: coordinator_id
@@ -61,7 +61,7 @@ models:
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE who submitted the application.
       - name: stage_id
-        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at (`stage_id` in source; previously `current_stage_id`).
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at.
       - name: job_id
         description: Foreign key referencing the JOB being applied for.
       - name: coordinator_id
@@ -133,9 +133,9 @@ models:
       - name: job_offices
         description: Semicolon-separated list of the offices that the job is listed under.
       - name: job_departments
-        description: Semicolon-separated list of the departments that the job is listed under.
+        description: The department that the job is listed under.
       - name: job_parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under.
+        description: The *parent* department that the job is listed under.
       - name: job_status
         description: Current status of the job being applied for.
       - name: hiring_managers

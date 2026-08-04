@@ -24,11 +24,12 @@ final as (
     select
         source_relation,
         _fivetran_synced,
-        active,
+        active as is_active,
         content,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
+        case when not internal then true else false end as is_external,
         cast(demographic_question_set_id as {{ dbt.type_string() }}) as demographic_question_set_id,
-        featured,
+        featured as is_featured,
         cast(first_published_at as {{ dbt.type_timestamp() }}) as first_published_at,
         cast(id as {{ dbt.type_string() }}) as job_post_id,
         internal as is_internal,
@@ -43,8 +44,7 @@ final as (
 
     from fields
 
-    where active
-        and not coalesce(_fivetran_deleted, false)
+    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

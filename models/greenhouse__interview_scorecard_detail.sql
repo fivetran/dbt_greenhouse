@@ -4,16 +4,16 @@ with interview as (
     from {{ ref('greenhouse__interview_enhanced') }}
 ),
 
-scorecard_attribute as (
+scorecard_candidate_attribute as (
 
     select *
-    from {{ ref('stg_greenhouse__scorecard_attribute') }}
+    from {{ ref('stg_greenhouse__scorecard_candidate_attribute') }}
 ),
 
 join_w_attributes as (
 
     select
-        scorecard_attribute.*,
+        scorecard_candidate_attribute.*,
         interview.candidate_rating,
     
         interview.candidate_name,
@@ -26,15 +26,15 @@ join_w_attributes as (
         interview.application_id,
         interview.job_title,
         interview.job_id,
-        {% if var('greenhouse_using_job_hiring_team', True) %}
+        {% if var('greenhouse_using_job_hiring_manager', True) %}
         interview.hiring_managers,
         {% endif %}
         interview.interview_scorecard_key
         
     from interview 
-    left join scorecard_attribute
-        on interview.scorecard_id = scorecard_attribute.scorecard_id
-        and interview.source_relation = scorecard_attribute.source_relation
+    left join scorecard_candidate_attribute
+        on interview.scorecard_id = scorecard_candidate_attribute.scorecard_id
+        and interview.source_relation = scorecard_candidate_attribute.source_relation
 ),
 
 final as (

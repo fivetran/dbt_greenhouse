@@ -1,16 +1,22 @@
-{{ config(enabled=var('greenhouse_using_job_hiring_team', True)) }}
+{{ config(enabled=var('greenhouse_using_job_hiring_manager', True) or var('greenhouse_using_job_owner', True)) }}
 
-with job_hiring_manager as (
+with
+
+{% if var('greenhouse_using_job_hiring_manager', True) %}
+job_hiring_manager as (
 
     select *
     from {{ ref('stg_greenhouse__job_hiring_manager') }}
 ),
+{% endif %}
 
+{% if var('greenhouse_using_job_owner', True) %}
 job_owner as (
 
     select *
     from {{ ref('stg_greenhouse__job_owner') }}
 ),
+{% endif %}
 
 greenhouse_user as (
 
@@ -20,6 +26,7 @@ greenhouse_user as (
 
 combined as (
 
+    {% if var('greenhouse_using_job_hiring_manager', True) %}
     select
         source_relation,
         job_id,
@@ -27,9 +34,13 @@ combined as (
         'hiring_manager' as role
 
     from job_hiring_manager
+    {% endif %}
 
+    {% if var('greenhouse_using_job_hiring_manager', True) and var('greenhouse_using_job_owner', True) %}
     union all
+    {% endif %}
 
+    {% if var('greenhouse_using_job_owner', True) %}
     select
         source_relation,
         job_id,
@@ -37,6 +48,7 @@ combined as (
         type as role
 
     from job_owner
+    {% endif %}
 ),
 
 user_info as (

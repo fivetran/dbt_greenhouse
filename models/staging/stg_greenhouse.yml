@@ -27,7 +27,7 @@ models:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: application_id
-        description: Unique identifier for the application (`id` in source).
+        description: Unique identifier for the application.
         tests:
           - not_null
       - name: candidate_id
@@ -113,23 +113,23 @@ models:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: candidate_id
-        description: Unique identifier for the candidate (`id` in source).
+        description: Unique identifier for the candidate.
         tests:
           - not_null
       - name: current_company
-        description: Current company the candidate works at (`company` in source).
+        description: Current company the candidate works at.
       - name: created_at
         description: Timestamp the candidate record was created.
       - name: full_name
         description: Full name of the candidate, concatenated from `first_name` and `last_name`.
       - name: current_title
-        description: Current job title of the candidate (`title` in source).
+        description: Current job title of the candidate.
       - name: last_updated_at
-        description: Timestamp the candidate record was last updated (`updated_at` in source).
+        description: Timestamp the candidate record was last updated.
       - name: last_activity_at
-        description: Timestamp of the most recent activity on this candidate (`last_activity_at` in source; source column was previously named `last_activity`).
+        description: Timestamp of the most recent activity on this candidate.
       - name: is_private
-        description: True if the candidate profile is marked private, restricting visibility to authorized users (`private` in source).
+        description: True if the candidate profile is marked private, restricting visibility to authorized users.
       - name: can_email
         description: True if the candidate has not opted out of email communications.
       - name: preferred_name
@@ -149,7 +149,7 @@ models:
       - name: index
         description: Position of this tag among the candidate's tags. Part of the composite primary key with `candidate_id`.
       - name: tag_name
-        description: Name of the tag attached to this candidate. Denormalized from the tag dimension (`tag_name` in source).
+        description: Name of the tag attached to this candidate. Denormalized from the tag dimension.
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
@@ -159,15 +159,15 @@ models:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: department_id
-        description: Unique identifier for the department (`id` in source).
+        description: Unique identifier for the department.
         tests:
           - not_null
       - name: external_department_id
-        description: Partner-supplied identifier for the department, typically the matching id from an HRIS or other external system. Null when no external id has been set (`external_id` in source).
+        description: Partner-supplied identifier for the department, typically the matching id from an HRIS or other external system. Null when no external id has been set.
       - name: name
         description: Display name of the department (e.g. Engineering, Marketing).
       - name: parent_department_id
-        description: Id of the parent department in the organization's department tree. Null for top-level departments (`parent_id` in source).
+        description: Id of the parent department in the organization's department tree. Null for top-level departments.
       - name: created_at
         description: Timestamp the department was created.
       - name: updated_at
@@ -178,6 +178,8 @@ models:
   - name: stg_greenhouse__eeoc
     description: Table capturing EEOC data provided by candidates.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: id
         description: Unique identifier for the EEOC response.
       - name: application_id
@@ -214,6 +216,8 @@ models:
   - name: stg_greenhouse__candidate_email_address
     description: Table storing email addresses associated with candidates.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE whose email this is.
       - name: index
@@ -226,7 +230,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__job_hiring_manager
-    description: Table capturing hiring managers assigned to each job. Replaces the V2 API `hiring_team` table.
+    description: Table capturing hiring managers assigned to each job.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -246,7 +250,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__job_owner
-    description: Table capturing owners (recruiters, sourcers, coordinators) assigned to each job. Replaces the v2 `hiring_team` table (non-hiring-manager roles).
+    description: Table capturing owners (recruiters, sourcers, coordinators) assigned to each job.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -270,10 +274,10 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__job_interview_stage
-    description: Table capturing each stage of a job's interview plan. Consolidates the v2 `job_stage` and `interview` tables into a single model sourced from `job_interview_stage`.
+    description: Table capturing each stage of a job's interview plan.
     columns:
       - name: job_stage_id
-        description: Unique identifier for the interview stage (`id` in source).
+        description: Unique identifier for the interview stage.
         tests:
           - not_null
       - name: job_id
@@ -281,9 +285,9 @@ models:
       - name: created_at
         description: Timestamp the stage was created.
       - name: stage_name
-        description: Name of the stage as it appears on the job's interview plan (e.g. Application Review, Phone Screen, Onsite, Offer) (`name` in source).
+        description: Name of the stage as it appears on the job's interview plan (e.g. Application Review, Phone Screen, Onsite, Offer).
       - name: last_updated_at
-        description: Timestamp the stage was last updated (`updated_at` in source).
+        description: Timestamp the stage was last updated.
       - name: active
         description: True if the stage is on the job's current interview plan. Inactive stages are retained so that historical application_stage rows continue to resolve, but no new applications enter them.
       - name: sort_order
@@ -296,18 +300,20 @@ models:
   - name: stg_greenhouse__job
     description: Table capturing all jobs stored in Greenhouse.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: job_id
-        description: Unique identifier for the job (`id` in source).
+        description: Unique identifier for the job.
         tests:
           - not_null
       - name: last_opening_closed_at
-        description: Timestamp the job most recently transitioned to closed (`closed_at` in source).
+        description: Timestamp the job most recently transitioned to closed.
       - name: is_confidential
-        description: True if the job is marked confidential, restricting its visibility within the organization (`confidential` in source).
+        description: True if the job is marked confidential, restricting its visibility within the organization.
       - name: created_at
         description: Timestamp the job was created.
       - name: job_title
-        description: Internal name of the job as configured by the hiring team (`name` in source).
+        description: Internal name of the job as configured by the hiring team.
       - name: notes
         description: Internal notes on the job, visible to hiring team members.
       - name: requisition_id
@@ -315,9 +321,9 @@ models:
       - name: status
         description: Lifecycle status of the job (open, draft, closed).
       - name: last_updated_at
-        description: Timestamp the job was last updated (`updated_at` in source).
+        description: Timestamp the job was last updated.
       - name: department_id
-        description: Id of the department this job belongs to. Previously available only via the `job_department` bridge table.
+        description: Id of the department this job belongs to.
       - name: copied_from_id
         description: Id of the job this job was cloned from, if applicable. Null for jobs created from scratch.
       - name: is_template
@@ -330,6 +336,8 @@ models:
   - name: stg_greenhouse__job_office
     description: Table relating jobs to the offices they exist in.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: job_id
         description: Id of the job this office assignment belongs to. Part of the composite primary key with `index`.
       - name: office_id
@@ -339,9 +347,11 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__job_opening
+  - name: stg_greenhouse__opening
     description: Table capturing openings made for jobs.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: application_id
         description: >
           Foreign key referencing the APPLICATION that was used to fill this opening. 
@@ -351,7 +361,7 @@ models:
       - name: closed_at
         description: Timestamp of when this opening was closed.
       - name: job_opening_id
-        description: Unique ID of the job opening (`id` in source).
+        description: Unique ID of the job opening.
       - name: job_id
         description: >
           Foreign key referencing the id of the JOB that this opening exists for.
@@ -359,9 +369,9 @@ models:
       - name: opened_at
         description: Timestamp of when the job was opened.
       - name: opening_text_id
-        description: Opening ID visible from the UI (`opening_id` in source).
+        description: Opening ID visible from the UI.
       - name: current_status
-        description: True if the opening is currently open (`is_open` in source; source type changed from string to boolean in v3).
+        description: True if the opening is currently open..
       - name: created_at
         description: Timestamp the opening record was created.
       - name: updated_at
@@ -376,8 +386,10 @@ models:
   - name: stg_greenhouse__job_post
     description: Table capturing the online job posts for an organization’s jobs (as seen on the Job Board).
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: job_post_id
-        description: Unique identifier for the job post (`id` in source).
+        description: Unique identifier for the job post.
         tests:
           - not_null
       - name: content
@@ -385,17 +397,17 @@ models:
       - name: created_at
         description: Timestamp the job post was created.
       - name: is_internal
-        description: True if the post lives on an internal job board and is visible only to existing employees (`internal` in source). False for external (public-facing) posts.
+        description: True if the post lives on an internal job board and is visible only to existing employees. False for external (public-facing) posts.
       - name: internal_content
         description: HTML body shown on the internal job board. Null for external-only posts.
       - name: job_id
         description: Id of the parent job this post belongs to. A single job can have multiple posts.
       - name: is_live
-        description: True if the post is published and its job board is also live (`live` in source). A post on an unpublished board is not live.
+        description: True if the post is published and its job board is also live. A post on an unpublished board is not live.
       - name: title
         description: Public-facing title shown to candidates on the job board. Distinct from the internal `job.name`.
       - name: last_updated_at
-        description: Timestamp the post was last updated (`updated_at` in source).
+        description: Timestamp the post was last updated.
       - name: active
         description: True if the post has not been deleted. Deleted posts are excluded by default.
       - name: featured
@@ -419,7 +431,7 @@ models:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: job_post_location_id
-        description: Unique identifier for the location entry (`id` in source).
+        description: Unique identifier for the location entry.
         tests:
           - not_null
       - name: job_post_id
@@ -442,20 +454,22 @@ models:
   - name: stg_greenhouse__office
     description: Table capturing an organization's offices.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: office_id
-        description: Unique identifier for the office (`id` in source).
+        description: Unique identifier for the office.
         tests:
           - not_null
       - name: external_office_id
-        description: Stable identifier supplied by the customer or HRIS for cross-system reconciliation. Null when no external id has been set (`external_id` in source).
+        description: Stable identifier supplied by the customer or HRIS for cross-system reconciliation. Null when no external id has been set.
       - name: office_name
-        description: Display name of the office (e.g. San Francisco, Remote (US)). Unique among active offices in the same organization (`name` in source).
+        description: Display name of the office (e.g. San Francisco, Remote (US)). Unique among active offices in the same organization.
       - name: parent_office_id
-        description: Id of the parent office when offices are organized hierarchically. Null for top-level offices (`parent_id` in source).
+        description: Id of the parent office when offices are organized hierarchically. Null for top-level offices.
       - name: location_name
         description: Free-form physical location string for the office (e.g. New York, NY, USA). Null for offices that have no location set.
       - name: primary_contact_user_id
-        description: Id of the Greenhouse user designated as the office's primary internal contact. Null when no contact has been assigned. Sourced from `primary_in_house_contact_user_id` in v3.
+        description: Id of the Greenhouse user designated as the office's primary internal contact. Null when no contact has been assigned.
       - name: created_at
         description: Timestamp the office was created.
       - name: updated_at
@@ -463,9 +477,11 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__phone_number
-    description: Table capturing phone numbers associated with candidates. 
+  - name: stg_greenhouse__candidate_phone_number
+    description: Table capturing phone numbers associated with candidates.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE with this phone.
       - name: index
@@ -473,15 +489,17 @@ models:
       - name: phone_type
         description: Type of phone.
       - name: phone_number
-        description: Candidate's phone number. 
+        description: Candidate's phone number.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__scheduled_interview
-    description: Table storing interviews that have been scheduled for the specified application (source table `interview` in v3).
+  - name: stg_greenhouse__interview
+    description: Table storing interviews that have been scheduled for the specified application.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: scheduled_interview_id
-        description: Unique identifier for the scheduled interview (`id` in source).
+        description: Unique identifier for the scheduled interview.
         tests:
           - not_null
       - name: application_id
@@ -493,13 +511,13 @@ models:
       - name: location
         description: Location of the interview.
       - name: organizer_user_id
-        description: Id of the user who organized the interview (`organizer_id` in source).
+        description: Id of the user who organized the interview.
       - name: status
         description: One of `scheduled`, `awaiting_feedback`, `complete`.
       - name: created_at
         description: Timestamp the interview record was created.
       - name: last_updated_at
-        description: Timestamp the interview record was last updated (`updated_at` in source).
+        description: Timestamp the interview record was last updated.
       - name: starts_at
         description: Timestamp the interview is scheduled to start.
       - name: ends_at
@@ -519,7 +537,7 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__scheduled_interviewer
+  - name: stg_greenhouse__interviewer
     description: Table relating users to the scheduled interviews they participated in (source table `interviewer`).
     columns:
       - name: source_relation
@@ -529,9 +547,9 @@ models:
         tests:
           - not_null
       - name: interviewer_user_id
-        description: Id of the user conducting the interview (`user_id` in source; previously `interviewer_id` in v2).
+        description: Id of the user conducting the interview.
       - name: scheduled_interview_id
-        description: Id of the scheduled interview this record belongs to (`interview_id` in source; previously `scheduled_interview_id` in v2).
+        description: Id of the scheduled interview this record belongs to.
       - name: scorecard_id
         description: Id of the scorecard associated with this interviewer's feedback.
       - name: email
@@ -589,7 +607,7 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__scorecard_attribute
+  - name: stg_greenhouse__scorecard_candidate_attribute
     description: Table capturing per-attribute candidate ratings within each scorecard (source table `scorecard_candidate_attribute`).
     columns:
       - name: id
@@ -613,9 +631,11 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__social_media_address
-    description: Table capturing social media links (ie linkedin, github) provided by candidates. 
+  - name: stg_greenhouse__candidate_social_media_address
+    description: Table capturing social media links (ie linkedin, github) provided by candidates.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE associated with these links.
       - name: index
@@ -628,16 +648,18 @@ models:
   - name: stg_greenhouse__source
     description: Table capturing an organization's applicant sources.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: source_id
-        description: Unique identifier for the source (`id` in source).
+        description: Unique identifier for the source.
         tests:
           - not_null
       - name: source_name
-        description: Display name of the source as recruiters see it in Greenhouse (e.g. LinkedIn (Prospecting), Indeed, Referral) (`name` in source).
+        description: Display name of the source as recruiters see it in Greenhouse (e.g. LinkedIn (Prospecting), Indeed, Referral).
       - name: source_type_id
-        description: Id of the sourcing strategy this source rolls up to. Sourced from `type_id` in v3.
+        description: Id of the sourcing strategy this source rolls up to.
       - name: source_type_name
-        description: Display name of the sourcing strategy (e.g. Agencies, Referral, Third-party boards, Prospecting, Social media). Sourced from `type_name` in v3.
+        description: Display name of the sourcing strategy (e.g. Agencies, Referral, Third-party boards, Prospecting, Social media).
       - name: created_at
         description: Timestamp the source was created.
       - name: updated_at
@@ -645,11 +667,13 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__user
+  - name: stg_greenhouse__users
     description: Table of an organization's Greenhouse users.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: user_id
-        description: Unique identifier for the Greenhouse user (`id` in source).
+        description: Unique identifier for the Greenhouse user.
         tests:
           - not_null
       - name: created_at
@@ -659,11 +683,11 @@ models:
       - name: full_name
         description: Full name of the user, concatenated from `first_name` and `last_name`.
       - name: is_site_admin
-        description: True if the user holds the Site Admin role, granting unrestricted access to every non-confidential job and to organization-level settings (`site_admin` in source).
+        description: True if the user holds the Site Admin role, granting unrestricted access to every non-confidential job and to organization-level settings.
       - name: last_updated_at
-        description: Timestamp the user record was last updated (`updated_at` in source).
+        description: Timestamp the user record was last updated.
       - name: is_disabled
-        description: True if the user has been deactivated. Deactivated users cannot sign in or be assigned to new jobs, but their historical activity is preserved. Sourced from `deactivated`.
+        description: True if the user has been deactivated. Deactivated users cannot sign in or be assigned to new jobs, but their historical activity is preserved.
       - name: agency_id
         description: Id of the staffing agency this user belongs to. Null for in-house users; non-null identifies the user as an external agency recruiter.
       - name: job_title
@@ -676,6 +700,8 @@ models:
   - name: stg_greenhouse__user_email
     description: Table associating Greenhouse users with their emails.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: id
         description: Unique identifier for the user email record.
       - name: user_id
@@ -696,14 +722,16 @@ models:
   - name: stg_greenhouse__prospect_pool
     description: Table capturing prospect pool groups.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: prospect_pool_id
-        description: Unique identifier for the prospect pool (`id` in source).
+        description: Unique identifier for the prospect pool.
         tests:
           - not_null
       - name: is_active
-        description: True if the pool is currently in use. Inactive pools are hidden from CRM workflows but are retained so existing prospects remain queryable (`active` in source).
+        description: True if the pool is currently in use. Inactive pools are hidden from CRM workflows but are retained so existing prospects remain queryable.
       - name: prospect_pool_name
-        description: Name of the prospect pool, unique within the organization (`name` in source).
+        description: Name of the prospect pool, unique within the organization.
       - name: description
         description: Free-text purpose statement set by the organization (max 500 characters). Null when no description has been set.
       - name: created_at
@@ -713,13 +741,15 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__prospect_stage
+  - name: stg_greenhouse__prospect_pool_stage
     description: Table capturing stages prospects in different pools advance through.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: prospect_stage_id
-        description: Unique identifier for the prospect stage (`id` in source).
+        description: Unique identifier for the prospect stage.
       - name: prospect_stage_name
-        description: Name of the stage as it appears inside the prospect pool (`name` in source).
+        description: Name of the stage as it appears inside the prospect pool.
       - name: prospect_pool_id
         description: Id of the prospect pool this stage belongs to.
       - name: sort_order
@@ -737,7 +767,7 @@ models:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: rejection_reason_id
-        description: Unique identifier for the rejection reason (`id` in source).
+        description: Unique identifier for the rejection reason.
         tests:
           - not_null
       - name: name
@@ -756,16 +786,16 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__candidate_tag
-    description: Table storing candidate tag definitions. Sources from `candidate_tag` in v3.
+    description: Table storing candidate tag definitions.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: tag_id
-        description: Unique identifier for the tag (`id` in source).
+        description: Unique identifier for the tag.
         tests:
           - not_null
       - name: tag_name
-        description: Display label for the tag as it appears on candidate profiles (`name` in source). Unique per organization, case sensitive.
+        description: Display label for the tag as it appears on candidate profiles. Unique per organization, case sensitive.
       - name: created_at
         description: Timestamp the tag was created.
       - name: updated_at

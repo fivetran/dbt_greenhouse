@@ -1,4 +1,4 @@
-{{ config(enabled=var('greenhouse_using_job_hiring_team', True)) }}
+{{ config(enabled=var('greenhouse_using_job_hiring_manager', True)) }}
 
 with base as (
 

@@ -30,7 +30,7 @@ final as (
         cast(job_id as {{ dbt.type_string() }}) as job_id,
         name as stage_name,
         cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at,
-        active,
+        active as is_active,
         cast(sort_order as {{ dbt.type_int() }}) as sort_order
 
     from fields

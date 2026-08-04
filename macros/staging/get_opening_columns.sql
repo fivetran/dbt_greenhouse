@@ -1,4 +1,4 @@
-{% macro get_job_opening_columns() %}
+{% macro get_opening_columns() %}
 
 {% set columns = [
     {"name": "_fivetran_deleted", "datatype": "boolean"},

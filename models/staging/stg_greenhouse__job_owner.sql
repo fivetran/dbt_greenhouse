@@ -1,4 +1,4 @@
-{{ config(enabled=var('greenhouse_using_job_hiring_team', True)) }}
+{{ config(enabled=var('greenhouse_using_job_owner', True)) }}
 
 with base as (
 
@@ -29,8 +29,8 @@ final as (
         cast(id as {{ dbt.type_string() }}) as id,
         cast(job_id as {{ dbt.type_string() }}) as job_id,
         cast(user_id as {{ dbt.type_string() }}) as user_id,
-        type,
-        responsible,
+        lower(type) as type,
+        responsible as is_responsible,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 

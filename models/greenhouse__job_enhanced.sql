@@ -24,6 +24,28 @@ job_applications as (
     group by 1, 2
 ),
 
+job_post as (
+
+    select *
+    from {{ ref('stg_greenhouse__job_post') }}
+),
+
+{% if var('greenhouse_using_job_post_location', True) %}
+job_post_location as (
+
+    select *
+    from {{ ref('stg_greenhouse__job_post_location') }}
+),
+{% endif %}
+
+{% if var('greenhouse_using_job_post_location', True) and var('greenhouse_using_job_office', True) %}
+office as (
+
+    select *
+    from {{ ref('stg_greenhouse__office') }}
+),
+{% endif %}
+
 live_job_posts as (
 
     select
@@ -32,19 +54,25 @@ live_job_posts as (
         sum(case when job_post.is_internal then 1 else 0 end) as count_live_internal_posts,
         sum(case when not job_post.is_internal then 1 else 0 end) as count_live_external_posts
         {% if var('greenhouse_using_job_post_location', True) %}
-        , count(distinct coalesce(job_post_location.plain_text_location, office.office_name)) as count_live_locations
+            {% if var('greenhouse_using_job_office', True) %}
+        , count(distinct lower(coalesce(job_post_location.plain_text_location, office.office_name))) as count_live_locations
+            {% else %}
+        , count(distinct lower(job_post_location.plain_text_location)) as count_live_locations
+            {% endif %}
         {% else %}
         , 0 as count_live_locations
         {% endif %}
 
-    from {{ ref('stg_greenhouse__job_post') }} as job_post
+    from job_post
     {% if var('greenhouse_using_job_post_location', True) %}
-    left join {{ ref('stg_greenhouse__job_post_location') }} as job_post_location
+    left join job_post_location
         on job_post.job_post_id = job_post_location.job_post_id
         and job_post.source_relation = job_post_location.source_relation
-    left join {{ ref('stg_greenhouse__office') }} as office
+        {% if var('greenhouse_using_job_office', True) %}
+    left join office
         on job_post_location.office_id = office.office_id
         and job_post_location.source_relation = office.source_relation
+        {% endif %}
     {% endif %}
 
     where job_post.is_live
@@ -61,7 +89,7 @@ job_openings as (
         sum(case when not current_status then 1 else 0 end) as count_closed_openings,
         sum(case when not current_status and application_id is not null then 1 else 0 end) as count_hired_closed_openings
         
-    from {{ ref('stg_greenhouse__job_opening') }}
+    from {{ ref('stg_greenhouse__opening') }}
 
     group by 1, 2
 ),

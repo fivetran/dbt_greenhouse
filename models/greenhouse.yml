@@ -41,6 +41,10 @@ models:
         description: Timestamp the application record was created.
       - name: updated_at
         description: Timestamp the application record was last updated.
+      - name: agency_note_id
+        description: Foreign key referencing the note associated with the agency for this application, if applicable.
+      - name: needs_decision
+        description: Boolean that is true if the application is awaiting a hiring decision.
       - name: referrer_name
         description: Full name of the referrer credited with this application.
       - name: coordinator_name
@@ -73,6 +77,12 @@ models:
         description: URL of the candidate's most recently added LinkedIn link.
       - name: github_url
         description: URL of the candidate's most recently added Github link.
+      - name: can_email
+        description: Boolean that is true if the candidate can be emailed.
+      - name: preferred_name
+        description: The candidate's preferred name.
+      - name: time_zone
+        description: The candidate's time zone.
       - name: candidate_tags
         description: Comma-separated list of tags attached to this candidate.
       - name: current_job_stage
@@ -88,9 +98,9 @@ models:
       - name: job_offices
         description: Semicolon-separated list of the offices that the job is listed under.
       - name: job_departments
-        description: Semicolon-separated list of the departments that the job is listed under.
+        description: The department that the job is listed under.
       - name: job_parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under.
+        description: The *parent* department that the job is listed under.
       - name: job_status
         description: Current status of the job being applied for.
       - name: hiring_managers
@@ -155,9 +165,9 @@ models:
       - name: job_title
         description: Title of the job role the candidate is applying for. 
       - name: job_departments
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under. 
       - name: job_parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under. 
       - name: job_offices
         description: Semicolon-separated list of the offices that the job is listed under. 
       - name: job_id
@@ -183,6 +193,8 @@ models:
       Table of **scheduled** interviews joined with interviewer scorecards. Each record is unique to the 
       interview and interviewer and is enriched with data about the applicant and job. 
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that is being interviewed.
       - name: created_at
@@ -203,6 +215,16 @@ models:
         description: One of - scheduled, awaiting_feedback, complete.
       - name: last_updated_at
         description: Timestamp of when the interview was last updated.
+      - name: availability_received_at
+        description: Timestamp of when the candidate's availability was received.
+      - name: all_day_start_on
+        description: Date the interview starts on, if the interview is scheduled as an all-day event.
+      - name: all_day_end_on
+        description: Date the interview ends on, if the interview is scheduled as an all-day event.
+      - name: external_event_id
+        description: ID of the interview's associated event in an external calendar system.
+      - name: video_conferencing_url
+        description: URL for the interview's video conference, if applicable.
       - name: interview_name
         description: Title of the interview step.
       - name: duration_interview_minutes
@@ -247,9 +269,9 @@ models:
       - name: job_offices
         description: Semicolon-separated list of the offices that the job is listed under. 
       - name: job_departments
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under. 
       - name: job_parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under. 
       - name: job_id
         description: Foreign key referencing the JOB being interviewed for.
       - name: interviewer_is_hiring_manager
@@ -281,6 +303,10 @@ models:
         description: Rating given to the candidate for this individual scorecard attribute.
       - name: note
         description: Additional notes from the interviewer regarding the attribute.
+      - name: created_at
+        description: Timestamp of when the scorecard attribute rating was created.
+      - name: updated_at
+        description: Timestamp of when the scorecard attribute rating was last updated.
       - name: scorecard_id
         description: Foreign key referencing the SCORECARD this attribute rating belongs to.
       - name: candidate_rating
@@ -330,6 +356,14 @@ models:
         description: Notes on the hiring plan.
       - name: requisition_id
         description: The id of the requisition corresponding to this job posting, if applicable.
+      - name: copied_from_id
+        description: Foreign key referencing the JOB that this job was copied from, if applicable.
+      - name: department_id
+        description: Foreign key referencing the DEPARTMENT that the job is listed under.
+      - name: is_template
+        description: Boolean that is true if the job is a template job.
+      - name: opened_at
+        description: Timestamp of when the job was opened.
       - name: status
         description: One of open, closed, draft.
       - name: last_updated_at
@@ -347,9 +381,9 @@ models:
       - name: office_locations
         description: Semicolon-separated list of the locations that the job is listed under. 
       - name: departments 
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under. 
       - name: parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under. 
       - name: count_active_applications
         description: Total count of currently active applications.
       - name: count_hired_applications

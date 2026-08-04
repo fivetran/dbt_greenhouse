@@ -1,4 +1,4 @@
-{{ config(enabled=var('greenhouse_using_job_hiring_team', True)) }}
+{{ config(enabled=var('greenhouse_using_job_owner', True)) }}
 
 {{
     fivetran_utils.union_connections(

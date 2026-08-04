@@ -17,18 +17,19 @@ table_variables:
   greenhouse_using_job_department:
     - department
     - job_department
-  greenhouse_using_job_hiring_team:
+  greenhouse_using_job_hiring_manager:
     - job_hiring_manager
+  greenhouse_using_job_owner:
     - job_owner
   greenhouse_using_job_post_location:
     - job_post_location
 
-  _fivetran_quickstart_candidate_tag:
-    - candidate_tag
-  _fivetran_quickstart_phone_number:
-    - phone_number
-  _fivetran_quickstart_social_media_address:
-    - social_media_address
+  _fivetran_quickstart_candidate_tag_link:
+    - candidate_tag_link
+  _fivetran_quickstart_candidate_phone_number:
+    - candidate_phone_number
+  _fivetran_quickstart_candidate_social_media_address:
+    - candidate_social_media_address
 
 destination_configurations:
   databricks:

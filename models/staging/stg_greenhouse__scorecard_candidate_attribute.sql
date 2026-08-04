@@ -2,7 +2,7 @@
 with base as (
 
     select * 
-    from {{ ref('stg_greenhouse__scorecard_attribute_tmp') }}
+    from {{ ref('stg_greenhouse__scorecard_candidate_attribute_tmp') }}
 
 ),
 
@@ -11,8 +11,8 @@ fields as (
     select
         {{
             fivetran_utils.fill_staging_columns(
-                source_columns=adapter.get_columns_in_relation(ref('stg_greenhouse__scorecard_attribute_tmp')),
-                staging_columns=get_scorecard_attribute_columns()
+                source_columns=adapter.get_columns_in_relation(ref('stg_greenhouse__scorecard_candidate_attribute_tmp')),
+                staging_columns=get_scorecard_candidate_attribute_columns()
             )
         }}
         {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}

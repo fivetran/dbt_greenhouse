@@ -40,7 +40,7 @@ join_application_history as (
         application.full_name,
         application.status as current_status,
         application.recruiter_name,
-        {% if var('greenhouse_using_job_hiring_team', True) %}
+        {% if var('greenhouse_using_job_hiring_manager', True) %}
         application.hiring_managers,
         {% endif %}
         application.sourced_from,
@@ -99,7 +99,7 @@ activities_in_stages as (
         time_in_stages.full_name,
         time_in_stages.current_status,
         time_in_stages.recruiter_name,
-        {% if var('greenhouse_using_job_hiring_team', True) %}
+        {% if var('greenhouse_using_job_hiring_manager', True) %}
         time_in_stages.hiring_managers,
         {% endif %}
         time_in_stages.sourced_from,
@@ -136,7 +136,7 @@ activities_in_stages as (
     {% set count_eeoc_columns = 4 if var('greenhouse_using_eeoc', True) else 0 %}
     {% set count_office_columns = 1 if var('greenhouse_using_job_office', True) else 0 %}
     {% set count_department_columns = 2 if var('greenhouse_using_job_department', True) else 0 %}
-    {% set count_hiring_team_columns = 1 if var('greenhouse_using_job_hiring_team', True) else 0 %}
+    {% set count_hiring_team_columns = 1 if var('greenhouse_using_job_hiring_manager', True) else 0 %}
 
     {{ dbt_utils.group_by(count_eeoc_columns + count_office_columns + count_department_columns + count_hiring_team_columns + 15 + 1) }}
 )

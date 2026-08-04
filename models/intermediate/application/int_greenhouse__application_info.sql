@@ -7,7 +7,7 @@ with application as (
 candidate as (
 
     select *
-    from {{ ref('int_greenhouse__candidate_users') }}
+    from {{ ref('int_greenhouse__candidate_contacts') }}
 ),
 
 candidate_tag as (
@@ -59,12 +59,12 @@ join_info as (
         application.*,
         -- remove/rename overlapping columns + get custom columns
         {% if target.type == 'snowflake'%}
-        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_users'),
+        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_contacts'),
             except=["CANDIDATE_ID", "CREATED_AT", "_FIVETRAN_SYNCED", "LAST_ACTIVITY_AT", "SOURCE_RELATION"],
             relation_alias="candidate") }}
 
         {% else %}
-        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_users'),
+        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_contacts'),
             except=["candidate_id", "created_at", "_fivetran_synced", "last_activity_at", "source_relation"],
             relation_alias="candidate") }}
 
@@ -81,9 +81,13 @@ join_info as (
         job.status as job_status,
         job.requisition_id as job_requisition_id
 
-        {% if var('greenhouse_using_job_hiring_team', True) %}
+        {% if var('greenhouse_using_job_hiring_manager', True) %}
         ,
-        job.hiring_managers,
+        job.hiring_managers
+        {% endif %}
+
+        {% if var('greenhouse_using_job_owner', True) %}
+        ,
         job.sourcers as job_sourcers
         {% endif %}
 

@@ -57,7 +57,7 @@ sources:
           - name: status
             description: Lifecycle status of the application (`active`, `rejected`, `hired`, `converted`).
           - name: stage_id
-            description: Foreign key referencing the current JOB_INTERVIEW_STAGE. Renamed from `current_stage_id` in the V3 API.
+            description: Foreign key referencing the current JOB_INTERVIEW_STAGE.
           - name: coordinator_id
             description: Foreign key referencing the USER assigned as coordinator.
           - name: job_id
@@ -221,7 +221,7 @@ sources:
 
       - name: candidate_email_address
         identifier: "{{ var('greenhouse_candidate_email_address_identifier', 'candidate_email_address')}}"
-        description: Table storing email addresses associated with candidates. Renamed from `email_address` in the V3 API.
+        description: Table storing email addresses associated with candidates.
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the email address has been soft-deleted from Greenhouse.
@@ -238,7 +238,7 @@ sources:
         identifier: "{{ var('greenhouse_job_hiring_manager_identifier', 'job_hiring_manager')}}"
         description: Table capturing hiring managers assigned to each job.
         config:
-          enabled: "{{ var('greenhouse_using_job_hiring_team', true) and var('greenhouse_sources', []) == [] }}"
+          enabled: "{{ var('greenhouse_using_job_hiring_manager', true) and var('greenhouse_sources', []) == [] }}"
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the job hiring manager record has been soft-deleted from Greenhouse.
@@ -257,7 +257,7 @@ sources:
         identifier: "{{ var('greenhouse_job_owner_identifier', 'job_owner')}}"
         description: Table capturing owners (recruiters, sourcers, coordinators) assigned to each job.
         config:
-          enabled: "{{ var('greenhouse_using_job_hiring_team', true) and var('greenhouse_sources', []) == [] }}"
+          enabled: "{{ var('greenhouse_using_job_owner', true) and var('greenhouse_sources', []) == [] }}"
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the job owner record has been soft-deleted from Greenhouse.
@@ -301,7 +301,7 @@ sources:
           - name: updated_at
             description: Timestamp of when the job was last updated.
           - name: department_id
-            description: Foreign key referencing the DEPARTMENT this job belongs to. Previously available only via the job_department bridge table.
+            description: Foreign key referencing the DEPARTMENT this job belongs to.
           - name: copied_from_id
             description: Foreign key referencing the JOB this was cloned from. Null for jobs created from scratch.
           - name: is_template
@@ -326,7 +326,7 @@ sources:
 
       - name: opening
         identifier: "{{ var('greenhouse_opening_identifier', 'opening')}}"
-        description: Table capturing openings made for jobs (source table `opening` in v3, previously `job_opening`).
+        description: Table capturing openings made for jobs.
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the opening has been soft-deleted from Greenhouse.
@@ -349,7 +349,7 @@ sources:
           - name: opening_id
             description: Opening ID visible from the UI.
           - name: is_open
-            description: True if the opening is currently available to be filled. Replaces the deprecated `status` column in the V3 API.
+            description: True if the opening is currently available to be filled.
           - name: sort_order
             description: Position of this opening within the job's openings list.
           - name: target_start_on
@@ -400,7 +400,7 @@ sources:
 
       - name: job_post_location
         identifier: "{{ var('greenhouse_job_post_location_identifier', 'job_post_location')}}"
-        description: Table capturing the locations associated with job posts. Replaces the deprecated `JOB_POST.location_name` column in the V3 API.
+        description: Table capturing the locations associated with job posts.
         config:
           enabled: "{{ var('greenhouse_using_job_post_location', true) and var('greenhouse_sources', []) == [] }}"
         columns:
@@ -457,7 +457,7 @@ sources:
           - name: id
             description: Unique ID of the office.
           - name: location
-            description: The office's physical location. Renamed from `location_name` in the V3 API.
+            description: The office's physical location.
           - name: name
             description: The office's name.
           - name: parent_id
@@ -465,7 +465,7 @@ sources:
           - name: primary_in_house_contact_user_id
             description: >
               Foreign key referencing the id of the USER who will be the primary in-house contact for
-              this office. Source column renamed from `primary_contact_user_id` in v2.
+              this office.
           - name: created_at
             description: Timestamp the office was created.
           - name: updated_at
@@ -473,7 +473,7 @@ sources:
 
       - name: candidate_phone_number
         identifier: "{{ var('greenhouse_candidate_phone_number_identifier', 'candidate_phone_number')}}"
-        description: Table capturing phone numbers associated with candidates. Renamed from `phone_number` in the V3 API.
+        description: Table capturing phone numbers associated with candidates.
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the phone number has been soft-deleted from Greenhouse.
@@ -488,7 +488,7 @@ sources:
 
       - name: interview
         identifier: "{{ var('greenhouse_interview_identifier', 'interview')}}"
-        description: Table storing interviews scheduled for the specified application (source table `interview` in v3, previously `scheduled_interview`).
+        description: Table storing interviews scheduled for the specified application.
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the scheduled interview has been soft-deleted from Greenhouse.
@@ -511,9 +511,9 @@ sources:
           - name: updated_at
             description: Timestamp the record was last updated.
           - name: starts_at
-            description: Interview start timestamp. Renamed from `start` in the V3 API.
+            description: Interview start timestamp.
           - name: ends_at
-            description: Interview end timestamp. Previously sourced as `coalesce(ends, end)` aliased as `end_at` in v2.
+            description: Interview end timestamp.
           - name: scheduled_at
             description: Timestamp the interview was first placed on calendar.
           - name: availability_received_at
@@ -529,16 +529,16 @@ sources:
 
       - name: interviewer
         identifier: "{{ var('greenhouse_interviewer_identifier', 'interviewer')}}"
-        description: Table relating users to the scheduled interviews they participated in (previously named `scheduled_interviewer`).
+        description: Table relating users to the scheduled interviews they participated in.
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the interviewer record has been soft-deleted from Greenhouse.
           - name: id
             description: Unique identifier for the interviewer record.
           - name: user_id
-            description: Foreign key referencing the USER conducting the interview (previously `interviewer_id` in v2).
+            description: Foreign key referencing the USER conducting the interview.
           - name: interview_id
-            description: Foreign key referencing the SCHEDULED_INTERVIEW (previously `scheduled_interview_id` in v2).
+            description: Foreign key referencing the SCHEDULED_INTERVIEW.
           - name: scorecard_id
             description: Foreign key referencing the SCORECARD for this interviewer's feedback.
           - name: email
@@ -565,7 +565,7 @@ sources:
           - name: interviewed_at
             description: Timestamp of when the interview begun.
           - name: candidate_rating
-            description: Overall recommendation recorded on the scorecard. Replaces `overall_recommendation` from v2. Values - strong_no, no, yes, strong_yes, no_decision.
+            description: Overall recommendation recorded on the scorecard. Values - strong_no, no, yes, strong_yes, no_decision.
           - name: interviewer_id
             description: Foreign key referencing the USER designated as the interviewer on this scorecard.
           - name: interview_kit_id
@@ -573,7 +573,7 @@ sources:
           - name: submitted_at
             description: Timestamp of when the scorecard was submitted.
           - name: submitter_id
-            description: Foreign key referencing the USER who submitted the scorecard. Previously named `submitted_by_user_id`.
+            description: Foreign key referencing the USER who submitted the scorecard.
           - name: updated_at
             description: Timestamp of when the scorecard was last updated.
           - name: notes
@@ -593,18 +593,18 @@ sources:
 
       - name: scorecard_candidate_attribute
         identifier: "{{ var('greenhouse_scorecard_candidate_attribute_identifier', 'scorecard_candidate_attribute')}}"
-        description: Table capturing ratings along individual attribute standards within each scorecard. Previously named `scorecard_attribute`,
+        description: Table capturing ratings along individual attribute standards within each scorecard.
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the attribute rating has been soft-deleted from Greenhouse.
           - name: id
-            description: Unique identifier for the scorecard attribute rating. Proper PK added in v3; was absent in v2.
+            description: Unique identifier for the scorecard attribute rating.
           - name: scorecard_id
             description: Foreign key referencing the SCORECARD this attribute rating belongs to.
           - name: job_candidate_attribute_id
             description: Foreign key referencing the attribute definition. Replaces the removed `name` and `type` columns.
           - name: candidate_attribute_rating
-            description: Interviewer's rating for this attribute. Replaces the `rating` column from v2.
+            description: Interviewer's rating for this attribute.
           - name: note
             description: Additional notes from the interviewer regarding the attribute score.
           - name: created_at
@@ -614,7 +614,7 @@ sources:
 
       - name: candidate_social_media_address
         identifier: "{{ var('greenhouse_candidate_social_media_address_identifier', 'candidate_social_media_address')}}"
-        description: Table capturing social media links (ie linkedin, github) provided by candidates (previously named `social_media_address`).
+        description: Table capturing social media links (ie linkedin, github) provided by candidates.
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the social media link has been soft-deleted from Greenhouse.
@@ -638,12 +638,11 @@ sources:
           - name: name
             description: Name of the source.
           - name: type_id
-            description: ID of the category of source. Previously named `source_type_id`.
+            description: ID of the category of source.
           - name: type_name
             description: >
               Name of the source category. One of - attend_events, referrals, third_party_boards,
               candidate_search, other, social_media, company_marketing, agencies, prospecting.
-              Previously named `source_type_name` in v2.
           - name: created_at
             description: Timestamp the source was created.
           - name: updated_at
@@ -651,7 +650,7 @@ sources:
 
       - name: candidate_tag
         identifier: "{{ var('greenhouse_candidate_tag_identifier', 'candidate_tag')}}"
-        description: Table storing candidate tag definitions (source table `candidate_tag` in v3).
+        description: Table storing candidate tag definitions.
         config:
           freshness: null
         columns:
@@ -677,7 +676,7 @@ sources:
           - name: created_at
             description: Timestamp of when the user was created.
           - name: deactivated
-            description: Boolean that is true if the user account has been deactivated (previously named `disabled`).
+            description: Boolean that is true if the user account has been deactivated.
           - name: employee_id
             description: The user's external employee id.
           - name: first_name
@@ -704,7 +703,7 @@ sources:
           - name: _fivetran_deleted
             description: Boolean that is true if the user email record has been soft-deleted from Greenhouse.
           - name: id
-            description: Unique identifier for the user email record. Proper PK added in v3; was absent in v2.
+            description: Unique identifier for the user email record.
           - name: email
             description: User's email.
           - name: user_id
@@ -741,7 +740,7 @@ sources:
 
       - name: prospect_pool_stage
         identifier: "{{ var('greenhouse_prospect_pool_stage_identifier', 'prospect_pool_stage')}}"
-        description: Table capturing stages prospects in different pools advance through (previously named `prospect_stage`).
+        description: Table capturing stages prospects in different pools advance through.
         config:
           enabled: "{{ var('greenhouse_using_prospects', true) and var('greenhouse_sources', []) == [] }}"
         columns:

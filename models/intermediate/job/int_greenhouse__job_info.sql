@@ -1,4 +1,4 @@
-{% if var('greenhouse_using_job_hiring_team', True) %}
+{% if var('greenhouse_using_job_hiring_manager', True) or var('greenhouse_using_job_owner', True) %}
 with hiring_team as (
 
     select *
@@ -35,7 +35,7 @@ final as (
     select
         job.*
 
-        {% if var('greenhouse_using_job_hiring_team', True) %}
+        {% if var('greenhouse_using_job_hiring_manager', True) or var('greenhouse_using_job_owner', True) %}
         ,
         hiring_team.hiring_managers,
         hiring_team.sourcers,
@@ -57,7 +57,7 @@ final as (
 
     from job
 
-    {% if var('greenhouse_using_job_hiring_team', True) %}
+    {% if var('greenhouse_using_job_hiring_manager', True) or var('greenhouse_using_job_owner', True) %}
     left join hiring_team
         on job.job_id = hiring_team.job_id
         and job.source_relation = hiring_team.source_relation

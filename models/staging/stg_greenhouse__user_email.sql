@@ -30,7 +30,7 @@ final as (
         cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at,
         cast(user_id as {{ dbt.type_string() }}) as user_id,
         cast(verification_token_sent_at as {{ dbt.type_timestamp() }}) as verification_token_sent_at,
-        verified
+        verified as is_verified
 
     from fields
 

@@ -29,7 +29,7 @@ models:
       - name: ends_at
         description: Timestamp of when the interview is scheduled to end. Will be a date if the interview is all-day.
       - name: interview_name
-        description: Title of the interview step (from job_interview_stage).
+        description: Title of the interview step.
       - name: duration_interview_minutes
         description: From start to finish, the length of the interview in minutes.
       - name: scorecard_id
@@ -78,7 +78,7 @@ models:
       - name: ends_at
         description: Timestamp of when the interview is scheduled to end. Will be a date if the interview is all-day.
       - name: interview_name
-        description: Title of the interview step (from job_interview_stage).
+        description: Title of the interview step.
       - name: duration_interview_minutes
         description: From start to finish, the length of the interview in minutes.
       - name: scorecard_id

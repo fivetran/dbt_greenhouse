@@ -3,7 +3,7 @@
 with base as (
 
     select *
-    from {{ ref('stg_greenhouse__prospect_stage_tmp') }}
+    from {{ ref('stg_greenhouse__prospect_pool_stage_tmp') }}
 
 ),
 
@@ -12,8 +12,8 @@ fields as (
     select
         {{
             fivetran_utils.fill_staging_columns(
-                source_columns=adapter.get_columns_in_relation(ref('stg_greenhouse__prospect_stage_tmp')),
-                staging_columns=get_prospect_stage_columns()
+                source_columns=adapter.get_columns_in_relation(ref('stg_greenhouse__prospect_pool_stage_tmp')),
+                staging_columns=get_prospect_pool_stage_columns()
             )
         }}
         {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}
