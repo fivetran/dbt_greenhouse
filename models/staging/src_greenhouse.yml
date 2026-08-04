@@ -602,7 +602,7 @@ sources:
           - name: scorecard_id
             description: Foreign key referencing the SCORECARD this attribute rating belongs to.
           - name: job_candidate_attribute_id
-            description: Foreign key referencing the attribute definition. Replaces the removed `name` and `type` columns.
+            description: Foreign key referencing the attribute definition.
           - name: candidate_attribute_rating
             description: Interviewer's rating for this attribute.
           - name: note
@@ -647,23 +647,6 @@ sources:
             description: Timestamp the source was created.
           - name: updated_at
             description: Timestamp the source was last updated.
-
-      - name: candidate_tag
-        identifier: "{{ var('greenhouse_candidate_tag_identifier', 'candidate_tag')}}"
-        description: Table storing candidate tag definitions.
-        config:
-          freshness: null
-        columns:
-          - name: _fivetran_deleted
-            description: Boolean that is true if the tag has been soft-deleted from Greenhouse.
-          - name: id
-            description: Unique ID of the tag.
-          - name: name
-            description: Title of the tag as it appears in the UI.
-          - name: created_at
-            description: Timestamp the tag was created.
-          - name: updated_at
-            description: Timestamp the tag was last updated.
 
       - name: users
         identifier: "{{ var('greenhouse_users_identifier', 'users')}}"
@@ -759,25 +742,3 @@ sources:
           - name: updated_at
             description: Timestamp the stage was last updated.
 
-      - name: rejection_reason
-        identifier: "{{ var('greenhouse_rejection_reason_identifier', 'rejection_reason')}}"
-        description: Table storing the organization's candidate rejection reason definitions.
-        config:
-          freshness: null
-        columns:
-          - name: _fivetran_deleted
-            description: Boolean that is true if the rejection reason has been soft-deleted from Greenhouse.
-          - name: id
-            description: Unique ID of the rejection reason.
-          - name: name
-            description: Display label shown to recruiters when rejecting a candidate (e.g. Not a cultural fit, Lacking skill(s)/qualification(s)). Unique within the organization.
-          - name: type_id
-            description: Id of the rejection reason type this reason rolls up to. Stable across all reasons sharing the same categorization.
-          - name: type_key
-            description: Stable machine-readable identifier for the reason type. One of WE_REJECTED_THEM, THEY_REJECTED_US, NONE_SPECIFIED, or SECURITY_CONCERN.
-          - name: type_name
-            description: Display name of the rejection reason type. One of We rejected them, They rejected us, None specified, or Security concern.
-          - name: created_at
-            description: Timestamp the rejection reason was created.
-          - name: updated_at
-            description: Timestamp the rejection reason was last updated.

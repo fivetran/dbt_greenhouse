@@ -371,7 +371,7 @@ models:
       - name: opening_text_id
         description: Opening ID visible from the UI.
       - name: current_status
-        description: True if the opening is currently open..
+        description: Current status of the opening (open or closed).
       - name: created_at
         description: Timestamp the opening record was created.
       - name: updated_at
@@ -426,7 +426,7 @@ models:
         description: "{{ doc('_fivetran_synced') }}"
 
   - name: stg_greenhouse__job_post_location
-    description: Table capturing the locations associated with job posts. Replaces the deprecated `JOB_POST.location_name` column.
+    description: Table capturing the locations associated with job posts.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -761,44 +761,3 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
-  - name: stg_greenhouse__rejection_reason
-    description: Table storing the organization's candidate rejection reason definitions.
-    columns:
-      - name: source_relation
-        description: "{{ doc('source_relation') }}"
-      - name: rejection_reason_id
-        description: Unique identifier for the rejection reason.
-        tests:
-          - not_null
-      - name: name
-        description: Display label shown to recruiters when rejecting a candidate (e.g. Not a cultural fit, Lacking skill(s)/qualification(s)). Unique within the organization.
-      - name: type_id
-        description: Id of the rejection reason type this reason rolls up to. Stable across all reasons sharing the same categorization.
-      - name: type_key
-        description: Stable machine-readable identifier for the reason type. One of WE_REJECTED_THEM, THEY_REJECTED_US, NONE_SPECIFIED, or SECURITY_CONCERN.
-      - name: type_name
-        description: Display name of the rejection reason type used in Greenhouse reporting. One of We rejected them, They rejected us, None specified, or Security concern.
-      - name: created_at
-        description: Timestamp the rejection reason was created.
-      - name: updated_at
-        description: Timestamp the rejection reason was last updated.
-      - name: _fivetran_synced
-        description: "{{ doc('_fivetran_synced') }}"
-
-  - name: stg_greenhouse__candidate_tag
-    description: Table storing candidate tag definitions.
-    columns:
-      - name: source_relation
-        description: "{{ doc('source_relation') }}"
-      - name: tag_id
-        description: Unique identifier for the tag.
-        tests:
-          - not_null
-      - name: tag_name
-        description: Display label for the tag as it appears on candidate profiles. Unique per organization, case sensitive.
-      - name: created_at
-        description: Timestamp the tag was created.
-      - name: updated_at
-        description: Timestamp the tag was last updated.
-      - name: _fivetran_synced
-        description: "{{ doc('_fivetran_synced') }}"

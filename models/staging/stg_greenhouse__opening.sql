@@ -31,7 +31,7 @@ final as (
         cast(job_id as {{ dbt.type_string() }}) as job_id,
         cast(opened_at as {{ dbt.type_timestamp() }}) as opened_at,
         cast(opening_id as {{ dbt.type_string() }}) as opening_text_id,
-        is_open as current_status,
+        case when is_open then 'open' else 'closed' end as current_status,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at,
         sort_order,

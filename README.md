@@ -5,7 +5,7 @@ This dbt package transforms data from Fivetran's Greenhouse connector into analy
 
 ## Resources
 
-- Number of materialized models¹: 68
+- Number of materialized models¹: 64
 - Connector documentation
   - [Greenhouse connector documentation](https://fivetran.com/docs/connectors/applications/greenhouse)
   - [Greenhouse ERD](https://fivetran.com/docs/connectors/applications/greenhouse#schemainformation)

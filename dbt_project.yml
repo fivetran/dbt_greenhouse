@@ -33,7 +33,6 @@ vars:
     source: "{{ source('greenhouse', 'source') }}"
     user_email: "{{ source('greenhouse', 'user_email') }}"
     users: "{{ source('greenhouse', 'users') }}"
-    candidate_tag: "{{ source('greenhouse', 'candidate_tag') }}"
     job_post_location: "{{ source('greenhouse', 'job_post_location') }}"
 
 models:
