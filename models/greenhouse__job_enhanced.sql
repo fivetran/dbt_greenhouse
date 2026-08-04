@@ -85,9 +85,9 @@ job_openings as (
     select 
         source_relation,
         job_id,
-        sum(case when current_status then 1 else 0 end) as count_active_openings,
-        sum(case when not current_status then 1 else 0 end) as count_closed_openings,
-        sum(case when not current_status and application_id is not null then 1 else 0 end) as count_hired_closed_openings
+        sum(case when lower(current_status) = 'open' then 1 else 0 end) as count_active_openings,
+        sum(case when lower(current_status) = 'closed' then 1 else 0 end) as count_closed_openings,
+        sum(case when lower(current_status) = 'closed' and application_id is not null then 1 else 0 end) as count_hired_closed_openings
         
     from {{ ref('stg_greenhouse__opening') }}
 
