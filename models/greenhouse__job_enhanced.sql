@@ -52,7 +52,7 @@ live_job_posts as (
         job_post.source_relation,
         job_post.job_id,
         sum(case when job_post.is_internal then 1 else 0 end) as count_live_internal_posts,
-        sum(case when not job_post.is_internal then 1 else 0 end) as count_live_external_posts
+        sum(case when job_post.is_external then 1 else 0 end) as count_live_external_posts
         {% if var('greenhouse_using_job_post_location', True) %}
             {% if var('greenhouse_using_job_office', True) %}
         , count(distinct lower(coalesce(job_post_location.plain_text_location, office.office_name))) as count_live_locations

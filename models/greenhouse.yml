@@ -211,6 +211,8 @@ models:
         description: Foreign key referencing the USER who organized the interview.
       - name: starts_at
         description: Timestamp of when the interview is scheduled to start. Will be a date if the interview is all-day.
+      - name: scheduled_at
+        description: Timestamp of when the interview was scheduled. 
       - name: status
         description: One of - scheduled, awaiting_feedback, complete.
       - name: last_updated_at
