@@ -17,6 +17,8 @@ models:
         description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at.
       - name: job_id
         description: Foreign key referencing the JOB being applied for.
+      - name: job_post_id
+        description: Foreign key referencing the JOB_POST the candidate applied through.
       - name: coordinator_id
         description: Foreign key referencing the USER coordinating this application.
       - name: recruiter_id
