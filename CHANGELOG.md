@@ -1,3 +1,11 @@
+# dbt_greenhouse v1.4.1
+
+[PR #47](https://github.com/fivetran/dbt_greenhouse/pull/47) includes the following updates:
+
+## Feature Updates
+- Adds DuckDB as a supported destination.
+
+
 # dbt_greenhouse v1.4.0
 
 [PR #44](https://github.com/fivetran/dbt_greenhouse/pull/44) includes the following updates:
