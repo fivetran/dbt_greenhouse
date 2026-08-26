@@ -7,7 +7,7 @@
     {"name": "job_id", "datatype": dbt.type_int()},
     {"name": "user_id", "datatype": dbt.type_int()},
     {"name": "type", "datatype": dbt.type_string()},
-    {"name": "responsible", "datatype": dbt.type_boolean()},
+    {"name": "responsible", "datatype": dbt.type_string()},
     {"name": "created_at", "datatype": dbt.type_timestamp()},
     {"name": "updated_at", "datatype": dbt.type_timestamp()}
 ] %}
