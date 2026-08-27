@@ -4,9 +4,10 @@ with application as (
     from {{ ref('int_greenhouse__application_info') }}
 ),
 
+{% if var('greenhouse_using_interview', True) %}
 interview_metrics as (
 
-    select 
+    select
         source_relation,
         application_id,
         {% if var('greenhouse_using_job_hiring_manager', True) %}
@@ -21,11 +22,14 @@ interview_metrics as (
 
     group by 1, 2
 ),
+{% endif %}
 
 final as (
 
-    select 
-        application.*,
+    select
+        application.*
+        {% if var('greenhouse_using_interview', True) %}
+        ,
         {% if var('greenhouse_using_job_hiring_manager', True) %}
         coalesce(interview_metrics.has_interviewed_w_hiring_manager, 0) = 1 as has_interviewed_w_hiring_manager,
         {% endif %}
@@ -33,11 +37,14 @@ final as (
         coalesce(interview_metrics.count_interview_scorecards, 0) as count_interview_scorecards,
         coalesce(interview_metrics.count_distinct_interviewers, 0) as count_distinct_interviewers,
         interview_metrics.latest_interview_scheduled_at
+        {% endif %}
 
-    from application 
-    left join interview_metrics 
+    from application
+    {% if var('greenhouse_using_interview', True) %}
+    left join interview_metrics
         on application.application_id = interview_metrics.application_id
         and application.source_relation = interview_metrics.source_relation
+    {% endif %}
 )
 
 select * from final

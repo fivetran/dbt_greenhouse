@@ -13,7 +13,9 @@ job_applications as (
         sum(case when not is_prospect and status = 'hired' then 1 else 0 end) as count_hired_applications,
         sum(case when not is_prospect and status = 'rejected' then 1 else 0 end) as count_rejected_applications,
 
+        {% if var('greenhouse_using_interview', True) %}
         sum(case when count_interviews > 0 then 1 else 0 end) as count_interviewed_applications,
+        {% endif %}
 
         sum(case when is_prospect and status = 'active' then 1 else 0 end) as count_active_prospects,
         sum(case when is_prospect and status = 'converted' then 1 else 0 end) as count_converted_prospects,
@@ -101,7 +103,9 @@ final as (
         coalesce(job_applications.count_active_applications, 0) as count_active_applications,
         coalesce(job_applications.count_hired_applications, 0) as count_hired_applications,
         coalesce(job_applications.count_rejected_applications, 0) as count_rejected_applications,
+        {% if var('greenhouse_using_interview', True) %}
         coalesce(job_applications.count_interviewed_applications, 0) as count_interviewed_applications,
+        {% endif %}
         coalesce(job_applications.count_active_prospects, 0) as count_active_prospects,
         coalesce(job_applications.count_converted_prospects, 0) as count_converted_prospects,
         coalesce(job_applications.count_rejected_prospects, 0) as count_rejected_prospects,

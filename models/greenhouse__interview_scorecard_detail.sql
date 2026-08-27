@@ -1,3 +1,5 @@
+{{ config(enabled=var('greenhouse_using_interview', True) and var('greenhouse_using_interviewer', True)) }}
+
 with interview as (
 
     select *

@@ -489,6 +489,8 @@ sources:
       - name: interview
         identifier: "{{ var('greenhouse_interview_identifier', 'interview')}}"
         description: Table storing interviews scheduled for the specified application.
+        config:
+          enabled: "{{ var('greenhouse_using_interview', true) and var('greenhouse_sources', []) == [] }}"
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the scheduled interview has been soft-deleted from Greenhouse.
@@ -530,6 +532,8 @@ sources:
       - name: interviewer
         identifier: "{{ var('greenhouse_interviewer_identifier', 'interviewer')}}"
         description: Table relating users to the scheduled interviews they participated in.
+        config:
+          enabled: "{{ var('greenhouse_using_interviewer', true) and var('greenhouse_sources', []) == [] }}"
         columns:
           - name: _fivetran_deleted
             description: Boolean that is true if the interviewer record has been soft-deleted from Greenhouse.

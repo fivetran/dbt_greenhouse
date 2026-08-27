@@ -27,6 +27,8 @@ test_scenarios:
       greenhouse_using_job_post_location: false
       greenhouse_using_job_hiring_manager: false
       greenhouse_using_job_owner: false
+      greenhouse_using_interview: false
+      greenhouse_using_interviewer: false
     include_incremental: false
 
   - name: "MDLS"

@@ -1,3 +1,4 @@
+{{ config(enabled=var('greenhouse_using_interviewer', True)) }}
 
 with base as (
 

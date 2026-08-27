@@ -22,6 +22,10 @@ table_variables:
     - job_owner
   greenhouse_using_job_post_location:
     - job_post_location
+  greenhouse_using_interview:
+    - interview
+  greenhouse_using_interviewer:
+    - interviewer
 
   _fivetran_quickstart_candidate_tag_link:
     - candidate_tag_link
