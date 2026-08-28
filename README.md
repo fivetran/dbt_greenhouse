@@ -115,8 +115,8 @@ vars:
     greenhouse_using_job_hiring_manager: false # Disable if you do not have JOB_HIRING_MANAGER synced, or do not want to include hiring manager data in the job_enhanced transform model
     greenhouse_using_job_owner: false # Disable if you do not have JOB_OWNER synced, or do not want to include recruiter/sourcer/coordinator data in the job_enhanced transform model
     greenhouse_using_job_post_location: false # Disable if you do not have JOB_POST_LOCATION synced, or do not want to include location data in the job_enhanced transform model
-    greenhouse_using_interview: false # Disable if you do not have INTERVIEW synced, or do not want to run the greenhouse__interview_enhanced and greenhouse__interview_scorecard_detail transform models
-    greenhouse_using_interviewer: false # Disable if you do not have INTERVIEWER synced, or do not want to include interviewer/scorecard data in the greenhouse__interview_enhanced transform model
+    greenhouse_using_interview: false # Disable if you do not have INTERVIEW synced. Disables the greenhouse__interview_enhanced and greenhouse__interview_scorecard_detail transform models, and removes interview data from the greenhouse__application_enhanced and greenhouse__job_enhanced transform models
+    greenhouse_using_interviewer: false # Disable if you do not have INTERVIEWER synced. Disables the greenhouse__interview_scorecard_detail transform model and removes interviewer/scorecard data from the greenhouse__interview_enhanced and greenhouse__application_enhanced transform models
 ```
 *Note: This package only integrates the above variables. If you'd like to disable other models, please create an [issue](https://github.com/fivetran/dbt_greenhouse/issues) specifying which ones.*
 

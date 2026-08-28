@@ -1,12 +1,13 @@
 {{ config(enabled=var('greenhouse_using_interview', True)) }}
 
-with scorecard as (
+with
+{% if var('greenhouse_using_interviewer', True) %}
+scorecard as (
 
     select *
     from {{ ref('stg_greenhouse__scorecard') }}
 ),
 
-{% if var('greenhouse_using_interviewer', True) %}
 interviewer as (
 
     select *
