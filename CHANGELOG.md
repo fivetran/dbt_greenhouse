@@ -34,6 +34,14 @@ Updates the package to support the [Greenhouse **Harvest API v3**](https://harve
 ## Under the Hood
 - Updates all source identifier variables and integration test seed files to reflect v3 source table names. 
 
+# dbt_greenhouse v1.4.1
+
+[PR #47](https://github.com/fivetran/dbt_greenhouse/pull/47) includes the following updates:
+
+## Feature Updates
+- Adds DuckDB as a supported destination.
+
+
 # dbt_greenhouse v1.4.0
 
 [PR #44](https://github.com/fivetran/dbt_greenhouse/pull/44) includes the following updates:
