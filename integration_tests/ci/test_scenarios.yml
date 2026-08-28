@@ -32,6 +32,11 @@ test_scenarios:
       greenhouse_using_interviewer: false
     include_incremental: false
 
+  - name: "interview enabled, interviewer disabled"
+    vars:
+      greenhouse_using_interviewer: false
+    include_incremental: false
+
   - name: "MDLS"
     vars:
       fivetran_using_source_casing: true
