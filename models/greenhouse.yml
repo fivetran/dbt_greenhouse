@@ -9,6 +9,8 @@ models:
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
       - name: application_id
         description: Unique ID of the application.
       - name: candidate_id
@@ -137,9 +139,11 @@ models:
       - name: latest_interview_scheduled_at
         description: The latest time that the candidate was scheduled to be interviewed at (can be in the future).
 
-  - name: greenhouse__application_history 
+  - name: greenhouse__application_history
     description: If enabled, table capturing the history of applications as they advance through job stages.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that was updated.
       - name: new_stage_id
@@ -193,10 +197,12 @@ models:
   - name: greenhouse__interview_enhanced
     description: >
       Table of **scheduled** interviews joined with interviewer scorecards. Each record is unique to the 
-      interview and interviewer and is enriched with data about the applicant and job. 
+      interview and interviewer and is enriched with data about the applicant and job.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that is being interviewed.
       - name: created_at
@@ -341,9 +347,13 @@ models:
       - name: interview_scorecard_key
         description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
 
-  - name: greenhouse__job_enhanced 
+  - name: greenhouse__job_enhanced
     description: Table capturing information and metrics related to jobs. May contain custom columns.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
       - name: last_opening_closed_at
         description: Timestamp of when the last opening for this job closed.
       - name: is_confidential

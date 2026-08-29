@@ -6,6 +6,8 @@ models:
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
       - name: current_company
         description: The company at which the candidate currently works.
       - name: created_at
@@ -33,7 +35,13 @@ models:
       - name: linkedin_url
         description: URL of the candidate's most recently added LinkedIn link. 
       - name: github_url
-        description: URL of the candidate's most recently added Github link. 
+        description: URL of the candidate's most recently added Github link.
+      - name: can_email
+        description: True if the candidate has not opted out of email communications.
+      - name: preferred_name
+        description: The name the candidate prefers to go by, if different from their full name.
+      - name: time_zone
+        description: The candidate's preferred time zone.
 
   - name: int_greenhouse__candidate_tags
     description: Table aggregating tags associated with candidates.
