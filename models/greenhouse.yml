@@ -305,6 +305,10 @@ models:
       Table capturing the individual ratings given to interviewees along specific scorecard attributes.
       Each record is a unique scorecard attribute-interviewer-interview combination.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
       - name: id
         description: Unique ID of this scorecard attribute rating.
       - name: job_candidate_attribute_id
