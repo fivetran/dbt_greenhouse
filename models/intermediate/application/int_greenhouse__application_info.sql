@@ -7,7 +7,7 @@ with application as (
 candidate as (
 
     select *
-    from {{ ref('int_greenhouse__candidate_users') }}
+    from {{ ref('int_greenhouse__candidate_contacts') }}
 ),
 
 candidate_tag as (
@@ -19,7 +19,7 @@ candidate_tag as (
 job_stage as (
 
     select *
-    from {{ ref('stg_greenhouse__job_stage') }}
+    from {{ ref('stg_greenhouse__job_interview_stage') }}
 ),
 
 source as (
@@ -39,17 +39,10 @@ activity as (
     group by 1, 2
 ),
 
--- note: prospect applications can have multiple jobs, while canddiate ones are 1:1
 job as (
 
     select *
     from {{ ref('int_greenhouse__job_info') }}
-),
-
-job_application as (
-
-    select *
-    from {{ ref('stg_greenhouse__job_application') }}
 ),
 
 {% if var('greenhouse_using_eeoc', true) %}
@@ -60,35 +53,21 @@ eeoc as (
 ),
 {% endif %}
 
-{% if var('greenhouse_using_prospects', true) %}
-prospect_pool as (
-
-    select *
-    from {{ ref('stg_greenhouse__prospect_pool') }}
-),
-
-prospect_stage as (
-
-    select *
-    from {{ ref('stg_greenhouse__prospect_stage') }}
-),
-{% endif %}
-
 join_info as (
 
     select 
         application.*,
         -- remove/rename overlapping columns + get custom columns
         {% if target.type == 'snowflake'%}
-        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_users'), 
-            except=["CANDIDATE_ID", "NEW_CANDIDATE_ID", "CREATED_AT", "_FIVETRAN_SYNCED", "LAST_ACTIVITY_AT", "SOURCE_RELATION"], 
+        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_contacts'),
+            except=["CANDIDATE_ID", "CREATED_AT", "_FIVETRAN_SYNCED", "LAST_ACTIVITY_AT", "SOURCE_RELATION"],
             relation_alias="candidate") }}
 
         {% else %}
-        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_users'), 
-            except=["candidate_id", "new_candidate_id", "created_at", "_fivetran_synced", "last_activity_at", "source_relation"], 
+        {{ dbt_utils.star(from=ref('int_greenhouse__candidate_contacts'),
+            except=["candidate_id", "created_at", "_fivetran_synced", "last_activity_at", "source_relation"],
             relation_alias="candidate") }}
-        
+
         {% endif %}
         ,
         candidate.created_at as candidate_created_at,
@@ -100,10 +79,17 @@ join_info as (
 
         job.job_title,
         job.status as job_status,
-        job.hiring_managers,
-        job.job_id,
-        job.requisition_id as job_requisition_id,
+        job.requisition_id as job_requisition_id
+
+        {% if var('greenhouse_using_job_hiring_manager', True) %}
+        ,
+        job.hiring_managers
+        {% endif %}
+
+        {% if var('greenhouse_using_job_owner', True) %}
+        ,
         job.sourcers as job_sourcers
+        {% endif %}
 
         {% if var('greenhouse_using_job_office', True) %}
         ,
@@ -114,12 +100,6 @@ join_info as (
         ,
         job.departments as job_departments,
         job.parent_departments as job_parent_departments
-        {% endif %}
-
-        {% if var('greenhouse_using_prospects', true) %}
-        ,
-        prospect_pool.prospect_pool_name as prospect_pool,
-        prospect_stage.prospect_stage_name as prospect_stage
         {% endif %}
 
         {% if var('greenhouse_using_eeoc', true) %}
@@ -139,7 +119,7 @@ join_info as (
         on application.candidate_id = candidate_tag.candidate_id
         and application.source_relation = candidate_tag.source_relation
     left join job_stage
-        on application.current_stage_id = job_stage.job_stage_id
+        on application.stage_id = job_stage.job_stage_id
         and application.source_relation = job_stage.source_relation
     left join source
         on application.source_id = source.source_id
@@ -147,12 +127,9 @@ join_info as (
     left join activity
         on activity.candidate_id = candidate.candidate_id
         and activity.source_relation = candidate.source_relation
-    left join job_application
-        on application.application_id = job_application.application_id
-        and application.source_relation = job_application.source_relation
     left join job
-        on job_application.job_id = job.job_id
-        and job_application.source_relation = job.source_relation
+        on application.job_id = job.job_id
+        and application.source_relation = job.source_relation
 
     {% if var('greenhouse_using_eeoc', true) %}
     left join eeoc 
@@ -161,14 +138,6 @@ join_info as (
     {% endif -%}
 
 
-    {% if var('greenhouse_using_prospects', true) %}
-    left join prospect_pool 
-        on prospect_pool.prospect_pool_id = application.prospect_pool_id
-        and prospect_pool.source_relation = application.source_relation
-    left join prospect_stage
-        on prospect_stage.prospect_stage_id = application.prospect_stage_id
-        and prospect_stage.source_relation = application.source_relation
-    {% endif %}
 ),
 
 final as (

@@ -5,7 +5,7 @@ This dbt package transforms data from Fivetran's Greenhouse connector into analy
 
 ## Resources
 
-- Number of materialized models¹: 68
+- Number of materialized models¹: 64
 - Connector documentation
   - [Greenhouse connector documentation](https://fivetran.com/docs/connectors/applications/greenhouse)
   - [Greenhouse ERD](https://fivetran.com/docs/connectors/applications/greenhouse#schemainformation)
@@ -63,7 +63,7 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=1.4.0", "<1.5.0"]
+    version: [">=1.5.0", "<1.6.0"]
 ```
 
 ### Define database and schema variables
@@ -107,11 +107,16 @@ To disable the corresponding functionality in the package, you must set the rele
 
 ```yml
 vars:
-    greenhouse_using_prospects: false # Disable if you do not use prospects and/or do not have the PROPECT_POOL and PROSPECT_STAGE tables synced
+    greenhouse_using_prospects: false # Disable if you do not use prospects and/or do not have the PROSPECT_POOL and PROSPECT_POOL_STAGE tables synced
     greenhouse_using_eeoc: false # Disable if you do not have EEOC data synced and/or do not want to integrate it into the package models
     greenhouse_using_app_history: false # Disable if you do not have APPLICATION_HISTORY synced and/or do not want to run the application_history transform model
     greenhouse_using_job_office: false # Disable if you do not have JOB_OFFICE and/or OFFICE synced, or do not want to include offices in the job_enhanced transform model
-    greenhouse_using_job_department: false # Disable if you do not have JOB_DEPARTMENT and/or DEPARTMENT synced, or do not want to include offices in the job_enhanced transform model
+    greenhouse_using_job_department: false # Disable if you do not have DEPARTMENT synced, or do not want to include departments in the job_enhanced transform model
+    greenhouse_using_job_hiring_manager: false # Disable if you do not have JOB_HIRING_MANAGER synced, or do not want to include hiring manager data in the job_enhanced transform model
+    greenhouse_using_job_owner: false # Disable if you do not have JOB_OWNER synced, or do not want to include recruiter/sourcer/coordinator data in the job_enhanced transform model
+    greenhouse_using_job_post_location: false # Disable if you do not have JOB_POST_LOCATION synced, or do not want to include location data in the job_enhanced transform model
+    greenhouse_using_interview: false # Disable if you do not have INTERVIEW synced. Disables the greenhouse__interview_enhanced and greenhouse__interview_scorecard_detail transform models, and removes interview data from the greenhouse__application_enhanced and greenhouse__job_enhanced transform models
+    greenhouse_using_interviewer: false # Disable if you do not have INTERVIEWER synced. Disables the greenhouse__interview_scorecard_detail transform model and removes interviewer/scorecard data from the greenhouse__interview_enhanced and greenhouse__application_enhanced transform models
 ```
 *Note: This package only integrates the above variables. If you'd like to disable other models, please create an [issue](https://github.com/fivetran/dbt_greenhouse/issues) specifying which ones.*
 

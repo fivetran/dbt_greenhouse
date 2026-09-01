@@ -1,3 +1,5 @@
+{{ config(enabled=var('greenhouse_using_interview', True)) }}
+
 with interview as (
 
     select *
@@ -15,22 +17,26 @@ join_user_names as (
 
     select
         interview.*,
+        {% if var('greenhouse_using_interviewer', True) %}
         interviewer.full_name as interviewer_name,
         scorecard_submitter.full_name as scorecard_submitter_name,
-        organizer.full_name as organizer_name,
-        interviewer.email as interviewer_email
+        interviewer.email as interviewer_email,
+        {% endif %}
+        organizer.full_name as organizer_name
 
     from interview
 
+    {% if var('greenhouse_using_interviewer', True) %}
     left join greenhouse_user as interviewer
         on interview.interviewer_user_id = interviewer.user_id
         and interview.source_relation = interviewer.source_relation
     left join greenhouse_user as scorecard_submitter
         on interview.scorecard_submitted_by_user_id = scorecard_submitter.user_id
         and interview.source_relation = scorecard_submitter.source_relation
+    {% endif %}
     left join greenhouse_user as organizer
         on interview.organizer_user_id = organizer.user_id
-        and interview.source_relation = organizer.source_relation 
+        and interview.source_relation = organizer.source_relation
 
 )
 

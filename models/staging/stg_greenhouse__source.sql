@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__source_tmp') }}
 
 ),
@@ -20,14 +20,16 @@ fields as (
 ),
 
 final as (
-    
+
     select
         source_relation,
         _fivetran_synced,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(id as {{ dbt.type_string() }}) as source_id,
         name as source_name,
-        cast(source_type_id as {{ dbt.type_string() }}) as source_type_id,
-        source_type_name
+        cast(type_id as {{ dbt.type_string() }}) as source_type_id,
+        type_name as source_type_name,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 
     from fields
 

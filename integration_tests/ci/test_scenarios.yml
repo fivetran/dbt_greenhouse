@@ -25,6 +25,16 @@ test_scenarios:
       greenhouse_using_job_office: false
       greenhouse_using_eeoc: false
       greenhouse_using_prospects: false
+      greenhouse_using_job_post_location: false
+      greenhouse_using_job_hiring_manager: false
+      greenhouse_using_job_owner: false
+      greenhouse_using_interview: false
+      greenhouse_using_interviewer: false
+    include_incremental: false
+
+  - name: "interview enabled, interviewer disabled"
+    vars:
+      greenhouse_using_interviewer: false
     include_incremental: false
 
   - name: "MDLS"

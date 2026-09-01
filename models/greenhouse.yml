@@ -9,54 +9,64 @@ models:
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
-      - name: applied_at
-        description: Timestamp of when the application was submitted. 
-      - name: candidate_id
-        description: Foreign key referencing the CANDIDATE who submitted the application.
-      - name: credited_to_user_id
-        description: Foreign key referencing the USER who will receive credit for this application.
-      - name: current_stage_id
-        description: Foreign key referencing the JOB_STAGE that the application is currently at in the pipeline. 
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
       - name: application_id
         description: Unique ID of the application.
+      - name: candidate_id
+        description: Foreign key referencing the CANDIDATE who submitted the application.
+      - name: stage_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE the application is currently at.
+      - name: job_id
+        description: Foreign key referencing the JOB being applied for.
+      - name: job_post_id
+        description: Foreign key referencing the JOB_POST the candidate applied through.
+      - name: coordinator_id
+        description: Foreign key referencing the USER coordinating this application.
+      - name: recruiter_id
+        description: Foreign key referencing the USER recruiting for this application.
+      - name: referrer_id
+        description: Foreign key referencing the referrer of this application (replaces `credited_to_user_id`).
       - name: last_activity_at
-        description: Timestamp of when the last activity was taken on this application. 
+        description: Timestamp of when the last activity was taken on this application.
       - name: location_address
         description: The content of the address question on a job post.
       - name: is_prospect
         description: >
-          Boolean that is true if this is a prospect application, which means that the associated person 
+          Boolean that is true if this is a prospect application, which means that the associated person
           is a prospect and has not yet applied for this job.
-      - name: prospect_owner_user_id
-        description: Foreign key referencing the USER ID of the prospect owner.
-      - name: prospect_pool_id
-        description: Foreign key referencing the PROSPECT_POOL that the application came from.
-      - name: prospect_stage_id
-        description: Foreign key referencing the ID of the application's PROSPECT_POOL_STAGE.
       - name: rejected_at
-        description: Timestamp of when the application was rejected. 
-      - name: rejected_reason_id
-        description: Foreign key referencing the REJECTION_REASON for the application.
+        description: Timestamp of when the application was rejected.
       - name: source_id
         description: Foreign key referencing the ID of the SOURCE of the application.
       - name: status
         description: One of - active, rejected, hired.
+      - name: created_at
+        description: Timestamp the application record was created.
+      - name: updated_at
+        description: Timestamp the application record was last updated.
+      - name: agency_note_id
+        description: Foreign key referencing the note associated with the agency for this application, if applicable.
+      - name: needs_decision
+        description: Boolean that is true if the application is awaiting a hiring decision.
       - name: referrer_name
-        description: Full name of the user who is credited with referring this application.
-      - name: prospect_owner_name
-        description: Full name of the prospect owner.
+        description: Full name of the referrer credited with this application.
+      - name: coordinator_name
+        description: Full name of the user coordinating this application.
+      - name: recruiter_name
+        description: Full name of the recruiter assigned to this application.
+      - name: coordinator_email
+        description: Email of the coordinator assigned to this application.
+      - name: recruiter_email
+        description: Email of the recruiter assigned to this application.
       - name: current_company
         description: The company at which the candidate currently works.
-      - name: coordinator_user_id
-        description: Foreign key referencing the USER who is responsible for coordinating this candidate.
       - name: candidate_created_at
-        description: Timestamp of when the candidate profile was created. 
+        description: Timestamp of when the candidate profile was created.
       - name: full_name
         description: First and last name of the candidate.
       - name: is_private
-        description: Boolean that is true if the candidate is private. 
-      - name: recruiter_user_id
-        description: Foreign key referencing the USER who is the recruiter assigned to this candidate.
+        description: Boolean that is true if the candidate is private.
       - name: current_title
         description: The candidate's current title.
       - name: last_updated_at
@@ -64,53 +74,45 @@ models:
       - name: phone
         description: Comma-separated aggregated list of the candidate's phone numbers and the type of phone they are.
       - name: email
-        description: Comma-separated list of the candidate's email addresses. 
+        description: Comma-separated list of the candidate's email addresses.
       - name: resume_url
-        description: URL of the candidate's most recently uploaded resume. 
+        description: URL of the candidate's most recently uploaded resume.
       - name: linkedin_url
-        description: URL of the candidate's most recently added LinkedIn link. 
+        description: URL of the candidate's most recently added LinkedIn link.
       - name: github_url
-        description: URL of the candidate's most recently added Github link. 
-      - name: coordinator_name
-        description: Full name of the user who is responsible for coordinating with this candidate.
-      - name: recruiter_name
-        description: Full name of the candidate's assigned recruiter.
-      - name: coordinator_email
-        description: Email of the user who is responsible for coordinating with this candidate.
-      - name: recruiter_email
-        description: Email of the candidate's assigned recruiter.
+        description: URL of the candidate's most recently added Github link.
+      - name: can_email
+        description: Boolean that is true if the candidate can be emailed.
+      - name: preferred_name
+        description: The candidate's preferred name.
+      - name: time_zone
+        description: The candidate's time zone.
       - name: candidate_tags
-        description: Comma-separated list of tags attached to this candidate. 
+        description: Comma-separated list of tags attached to this candidate.
       - name: current_job_stage
-        description: Current stage that the application is at in the hiring pipeline. 
+        description: Current stage that the application is at in the hiring pipeline.
       - name: sourced_from
-        description: Where the application was sourced from. 
+        description: Where the application was sourced from.
       - name: sourced_from_type
-        description: The category of source that the application came from. 
+        description: The category of source that the application came from.
       - name: count_activities
         description: Total count of activities completed on this candidate's profile.
       - name: job_title
-        description: Title of the job role the candidate is applying for. 
+        description: Title of the job role the candidate is applying for.
       - name: job_offices
-        description: Semicolon-separated list of the offices that the job is listed under. 
+        description: Semicolon-separated list of the offices that the job is listed under.
       - name: job_departments
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under.
       - name: job_parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under.
       - name: job_status
         description: Current status of the job being applied for.
       - name: hiring_managers
         description: Comma-separated list of the full names of the job's hiring managers.
-      - name: job_id
-        description: Foreign key referencing the JOB being applied for. 
       - name: job_requisition_id
         description: The id of the requisition corresponding to this job posting, if applicable.
       - name: job_sourcers
-        description: Comma-separated list of the full names of the job's recruiting sourcers. 
-      - name: prospect_pool
-        description: Name given to the applicant's prospect pool. 
-      - name: prospect_stage
-        description: Current stage of the applicant within its prospect pool, if applicable. 
+        description: Comma-separated list of the full names of the job's recruiting sourcers.
       - name: candidate_gender
         description: Description of the applicant's gender identity.
       - name: candidate_disability_status
@@ -137,9 +139,11 @@ models:
       - name: latest_interview_scheduled_at
         description: The latest time that the candidate was scheduled to be interviewed at (can be in the future).
 
-  - name: greenhouse__application_history 
+  - name: greenhouse__application_history
     description: If enabled, table capturing the history of applications as they advance through job stages.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that was updated.
       - name: new_stage_id
@@ -167,9 +171,9 @@ models:
       - name: job_title
         description: Title of the job role the candidate is applying for. 
       - name: job_departments
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under. 
       - name: job_parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under. 
       - name: job_offices
         description: Semicolon-separated list of the offices that the job is listed under. 
       - name: job_id
@@ -193,40 +197,52 @@ models:
   - name: greenhouse__interview_enhanced
     description: >
       Table of **scheduled** interviews joined with interviewer scorecards. Each record is unique to the 
-      interview and interviewer and is enriched with data about the applicant and job. 
+      interview and interviewer and is enriched with data about the applicant and job.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that is being interviewed.
       - name: created_at
-        description: Timestamp of when the interview was created. 
-      - name: end_at
+        description: Timestamp of when the interview was created.
+      - name: ends_at
         description: Timestamp of when the interview is scheduled to end. Will be a date if the interview is all-day.
       - name: scheduled_interview_id
         description: Unique ID of the scheduled interview.
-      - name: interview_id
-        description: Foreign key referencing the id of the generic INTERVIEW step that this scheduled interview maps to. 
+      - name: job_interview_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE step that this scheduled interview maps to.
       - name: location
         description: The location of the interview.
       - name: organizer_user_id
         description: Foreign key referencing the USER who organized the interview.
-      - name: start_at
+      - name: starts_at
         description: Timestamp of when the interview is scheduled to start. Will be a date if the interview is all-day.
+      - name: scheduled_at
+        description: Timestamp of when the interview was scheduled. 
       - name: status
         description: One of - scheduled, awaiting_feedback, complete.
       - name: last_updated_at
         description: Timestamp of when the interview was last updated.
-      - name: job_stage_id
-        description: Foreign key referencing the JOB_STAGE that this interview is associated with.
+      - name: availability_received_at
+        description: Timestamp of when the candidate's availability was received.
+      - name: all_day_start_on
+        description: Date the interview starts on, if the interview is scheduled as an all-day event.
+      - name: all_day_end_on
+        description: Date the interview ends on, if the interview is scheduled as an all-day event.
+      - name: external_event_id
+        description: ID of the interview's associated event in an external calendar system.
+      - name: video_conferencing_url
+        description: URL for the interview's video conference, if applicable.
       - name: interview_name
         description: Title of the interview step.
       - name: duration_interview_minutes
-        description: From start the finish, the length of the interview in minutes.
+        description: From start to finish, the length of the interview in minutes.
       - name: scorecard_id
         description: Unique ID of the scorecard.
-      - name: candidate_id
-        description: Foreign key referencing the CANDIDATE who was interviewed and scored.
-      - name: overall_recommendation
-        description: One of - definitely_not, no, yes, strong_yes, no_decision.
+      - name: candidate_rating
+        description: Overall candidate rating from the scorecard. One of - strong_no, no, yes, strong_yes, no_decision.
       - name: scorecard_submitted_at
         description: Timestamp of when the scorecard was submitted.
       - name: scorecard_submitted_by_user_id
@@ -263,9 +279,9 @@ models:
       - name: job_offices
         description: Semicolon-separated list of the offices that the job is listed under. 
       - name: job_departments
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under. 
       - name: job_parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under. 
       - name: job_id
         description: Foreign key referencing the JOB being interviewed for.
       - name: interviewer_is_hiring_manager
@@ -286,23 +302,29 @@ models:
 
   - name: greenhouse__interview_scorecard_detail
     description: >
-      Table capturing the indiviudal ratings given to interviewees along specific scorecard attributes.
-      Each record is a unique scorecard attribute-interviewer-interview combination. 
+      Table capturing the individual ratings given to interviewees along specific scorecard attributes.
+      Each record is a unique scorecard attribute-interviewer-interview combination.
     columns:
-      - name: index
-        description: Index of this rating/standard amongst the attributes of this scorecard.
-      - name: attribute_name
-        description: Name of the scorecard attribute. 
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+      - name: id
+        description: Unique ID of this scorecard attribute rating.
+      - name: job_candidate_attribute_id
+        description: Foreign key referencing the attribute definition for this rating.
+      - name: candidate_attribute_rating
+        description: Rating given to the candidate for this individual scorecard attribute.
       - name: note
-        description: Additional from the interviewer regarding the attribute score. 
-      - name: rating
-        description: Rating given to the candidate along this individual scorecard attribute. 
+        description: Additional notes from the interviewer regarding the attribute.
+      - name: created_at
+        description: Timestamp of when the scorecard attribute rating was created.
+      - name: updated_at
+        description: Timestamp of when the scorecard attribute rating was last updated.
       - name: scorecard_id
         description: Foreign key referencing the SCORECARD this attribute rating belongs to.
-      - name: attribute_category
-        description: Category of the attribute. 
-      - name: overall_recommendation
-        description: One of - definitely_not, no, yes, strong_yes, no_decision.
+      - name: candidate_rating
+        description: Overall candidate rating from the scorecard. One of - strong_no, no, yes, strong_yes, no_decision.
       - name: candidate_name
         description: Full name of the interviewee. 
       - name: interviewer_name
@@ -322,16 +344,20 @@ models:
       - name: hiring_managers
         description: Comma-separated list of the full names of the job's hiring managers.
       - name: scorecard_attribute_key
-        description: Unique key hashed on `scorecard_id`, `index`, and `source_relation`.
+        description: Unique key hashed on `interview_scorecard_key`, `id`, and `source_relation`.
         tests:
           - unique
           - not_null
       - name: interview_scorecard_key
         description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
 
-  - name: greenhouse__job_enhanced 
+  - name: greenhouse__job_enhanced
     description: Table capturing information and metrics related to jobs. May contain custom columns.
     columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
       - name: last_opening_closed_at
         description: Timestamp of when the last opening for this job closed.
       - name: is_confidential
@@ -348,6 +374,14 @@ models:
         description: Notes on the hiring plan.
       - name: requisition_id
         description: The id of the requisition corresponding to this job posting, if applicable.
+      - name: copied_from_id
+        description: Foreign key referencing the JOB that this job was copied from, if applicable.
+      - name: department_id
+        description: Foreign key referencing the DEPARTMENT that the job is listed under.
+      - name: is_template
+        description: Boolean that is true if the job is a template job.
+      - name: opened_at
+        description: Timestamp of when the job was opened.
       - name: status
         description: One of open, closed, draft.
       - name: last_updated_at
@@ -365,9 +399,9 @@ models:
       - name: office_locations
         description: Semicolon-separated list of the locations that the job is listed under. 
       - name: departments 
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under. 
       - name: parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under. 
       - name: count_active_applications
         description: Total count of currently active applications.
       - name: count_hired_applications

@@ -7,7 +7,7 @@ with user_email as (
 greenhouse_user as (
 
     select *
-    from {{ ref('stg_greenhouse__user') }}
+    from {{ ref('stg_greenhouse__users') }}
 ),
 
 agg_emails as (

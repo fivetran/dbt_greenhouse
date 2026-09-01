@@ -2,7 +2,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__department_tmp') }}
 
 ),
@@ -17,7 +17,7 @@ fields as (
             )
         }}
         {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}
-        
+
     from base
 ),
 
@@ -26,10 +26,12 @@ final as (
     select
         source_relation,
         _fivetran_synced,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(external_id as {{ dbt.type_string() }}) as external_department_id,
         cast(id as {{ dbt.type_string() }}) as department_id,
         name,
-        cast(parent_id as {{ dbt.type_string() }}) as parent_department_id
+        cast(parent_id as {{ dbt.type_string() }}) as parent_department_id,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 
     from fields
 

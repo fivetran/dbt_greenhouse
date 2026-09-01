@@ -1,7 +1,8 @@
+{{ config(enabled=var('greenhouse_using_interview', True)) }}
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__interview_tmp') }}
 
 ),
@@ -16,7 +17,7 @@ fields as (
             )
         }}
         {{ fivetran_utils.apply_source_relation(package_name='greenhouse') }}
-        
+
     from base
 ),
 
@@ -25,12 +26,27 @@ final as (
     select
         source_relation,
         _fivetran_synced,
-        cast(id as {{ dbt.type_string() }}) as interview_id,
-        interview_kit_content,
-        cast(job_stage_id as {{ dbt.type_string() }}) as job_stage_id,
-        name
+        cast(id as {{ dbt.type_string() }}) as scheduled_interview_id,
+        cast(application_id as {{ dbt.type_string() }}) as application_id,
+        cast(job_interview_id as {{ dbt.type_string() }}) as job_interview_id,
+        cast(job_id as {{ dbt.type_string() }}) as job_id,
+        location,
+        cast(organizer_id as {{ dbt.type_string() }}) as organizer_user_id,
+        status,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at,
+        cast(starts_at as {{ dbt.type_timestamp() }}) as starts_at,
+        cast(ends_at as {{ dbt.type_timestamp() }}) as ends_at,
+        cast(scheduled_at as {{ dbt.type_timestamp() }}) as scheduled_at,
+        cast(availability_received_at as {{ dbt.type_timestamp() }}) as availability_received_at,
+        cast(all_day_start_on as date) as all_day_start_on,
+        cast(all_day_end_on as date) as all_day_end_on,
+        external_event_id,
+        video_conferencing_url
 
     from fields
+
+    where not coalesce(_fivetran_deleted, false)
 )
 
 select * from final

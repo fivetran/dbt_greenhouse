@@ -29,9 +29,9 @@ models:
         tests:
           - not_null
       - name: departments 
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under. 
       - name: parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under. 
 
   - name: int_greenhouse__job_offices
     description: Table aggregating the offices and locations associated with each job.
@@ -85,6 +85,6 @@ models:
       - name: locations
         description: Semicolon-separated list of the locations that the job is listed under. 
       - name: departments 
-        description: Semicolon-separated list of the departments that the job is listed under. 
+        description: The department that the job is listed under. 
       - name: parent_departments
-        description: Semicolon-separated list of the *parent* departments that the job is listed under. 
+        description: The *parent* department that the job is listed under. 

@@ -1,3 +1,5 @@
+{{ config(enabled=var('greenhouse_using_interview', True)) }}
+
 with interview as (
 
     select *
@@ -7,7 +9,7 @@ with interview as (
 job_stage as (
 
     select *
-    from {{ ref('stg_greenhouse__job_stage') }}
+    from {{ ref('stg_greenhouse__job_interview_stage') }}
 ),
 
 -- this has job info!
@@ -26,10 +28,13 @@ final as (
         application.current_job_stage as application_current_job_stage,
         application.status as current_application_status,
         application.job_title,
-        application.job_id,
 
+        {% if var('greenhouse_using_job_hiring_manager', True) and var('greenhouse_using_interviewer', True) %}
         application.hiring_managers like ('%' || interview.interviewer_name || '%')  as interviewer_is_hiring_manager,
+        {% endif %}
+        {% if var('greenhouse_using_job_hiring_manager', True) %}
         application.hiring_managers,
+        {% endif %}
         application.recruiter_name
 
         {% if var('greenhouse_using_job_office', True) %}
@@ -52,8 +57,8 @@ final as (
         {% endif %}
 
     from interview
-    left join job_stage 
-        on interview.job_stage_id = job_stage.job_stage_id
+    left join job_stage
+        on interview.job_interview_id = job_stage.job_stage_id
         and interview.source_relation = job_stage.source_relation
     left join application 
         on interview.application_id = application.application_id

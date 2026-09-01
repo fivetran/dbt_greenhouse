@@ -2,7 +2,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__office_tmp') }}
 
 ),
@@ -21,17 +21,19 @@ fields as (
 ),
 
 final as (
-    
+
     select
         source_relation,
         _fivetran_synced,
+        cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(external_id as {{ dbt.type_string() }}) as external_office_id,
         cast(id as {{ dbt.type_string() }}) as office_id,
-        location_name,
+        location as location_name,
         name as office_name,
         cast(parent_id as {{ dbt.type_string() }}) as parent_office_id,
-        cast(primary_contact_user_id as {{ dbt.type_string() }}) as primary_contact_user_id
-        
+        cast(primary_in_house_contact_user_id as {{ dbt.type_string() }}) as primary_contact_user_id,
+        cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
+
     from fields
 
     where not coalesce(_fivetran_deleted, false)

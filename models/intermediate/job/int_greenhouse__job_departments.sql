@@ -1,9 +1,9 @@
 {{ config(enabled=var('greenhouse_using_job_department', True)) }}
 
-with job_department as (
+with job as (
 
     select *
-    from {{ ref('stg_greenhouse__job_department') }}
+    from {{ ref('stg_greenhouse__job') }}
 ),
 
 department as (
@@ -14,7 +14,7 @@ department as (
 
 join_parent_department as (
 
-    select 
+    select
         sub.*,
         parent.name as parent_department_name
 
@@ -27,18 +27,15 @@ join_parent_department as (
 agg_departments as (
 
     select
-        job_department.source_relation,
-        job_id,
-        {{ fivetran_utils.string_agg("join_parent_department.name", "'; '") }} as departments,
-        {{ fivetran_utils.string_agg("join_parent_department.parent_department_name", "'; '") }} as parent_departments
+        job.source_relation,
+        job.job_id,
+        join_parent_department.name as departments,
+        join_parent_department.parent_department_name as parent_departments
 
-    from job_department
-    join join_parent_department
-        on job_department.department_id = join_parent_department.department_id
-        and job_department.source_relation = join_parent_department.source_relation
-
-    group by 1, 2
+    from job
+    left join join_parent_department
+        on job.department_id = join_parent_department.department_id
+        and job.source_relation = join_parent_department.source_relation
 )
 
-select * from 
-agg_departments
+select * from agg_departments

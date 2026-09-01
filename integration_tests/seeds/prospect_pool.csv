@@ -1,3 +1,3 @@
-id,_fivetran_deleted,_fivetran_synced,active,name
-4010057003,false,2021-02-09 11:04:02.254,true,Past Applicants
-4010058003,false,2021-02-09 11:04:02.254,true,Past Employees
+id,_fivetran_deleted,_fivetran_synced,active,name,created_at,description,updated_at
+4010057003,false,2021-02-09 11:04:02.254,true,Past Applicants,2020-10-01 00:00:00,,2021-02-09 11:04:02.254
+4010058003,false,2021-02-09 11:04:02.254,true,Past Employees,2020-10-01 00:00:00,,2021-02-09 11:04:02.254

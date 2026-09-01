@@ -1,7 +1,7 @@
 
 with base as (
 
-    select * 
+    select *
     from {{ ref('stg_greenhouse__candidate_tmp') }}
 
 ),
@@ -30,17 +30,17 @@ final as (
     select
         source_relation,
         _fivetran_synced,
+        cast(id as {{ dbt.type_string() }}) as candidate_id,
         company as current_company,
-        cast(coordinator_id as {{ dbt.type_string() }}) as coordinator_user_id,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         first_name || ' ' || last_name as full_name,
-        cast(id as {{ dbt.type_string() }}) as candidate_id,
-        is_private,
-        cast(last_activity as {{ dbt.type_timestamp() }}) as last_activity_at,
-        cast(new_candidate_id as {{ dbt.type_string() }}) as new_candidate_id,
-        cast(recruiter_id as {{ dbt.type_string() }}) as recruiter_user_id,
         title as current_title,
-        cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at
+        cast(updated_at as {{ dbt.type_timestamp() }}) as last_updated_at,
+        cast(last_activity_at as {{ dbt.type_timestamp() }}) as last_activity_at,
+        private as is_private,
+        can_email,
+        preferred_name,
+        time_zone
 
         {% if var('greenhouse_candidate_custom_columns', []) != [] %}
         ,
