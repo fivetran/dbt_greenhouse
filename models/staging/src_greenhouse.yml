@@ -67,7 +67,7 @@ sources:
           - name: recruiter_id
             description: Foreign key referencing the USER assigned as recruiter.
           - name: referrer_id
-            description: Foreign key referencing the referrer who credited this application.
+            description: Foreign key referencing the REFERRER who credited this application.
           - name: agency_note_id
             description: Foreign key referencing the NOTE created when a candidate was submitted by an agency.
           - name: needs_decision
@@ -745,4 +745,23 @@ sources:
             description: Timestamp the stage was created.
           - name: updated_at
             description: Timestamp the stage was last updated.
+
+      - name: referrer
+        identifier: "{{ var('greenhouse_referrer_identifier', 'referrer')}}"
+        description: Table mapping an application referral to the USER who made it.
+        config:
+          enabled: "{{ var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the referrer record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique id of the referrer record. Referenced by `application.referrer_id`.
+          - name: name
+            description: Full name of the referrer.
+          - name: user_id
+            description: Foreign key referencing the USER who made the referral.
+          - name: created_at
+            description: Timestamp the referrer record was created.
+          - name: updated_at
+            description: Timestamp the referrer record was last updated.
 

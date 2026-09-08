@@ -1,3 +1,12 @@
+# dbt_greenhouse v1.6.0-a1
+
+## Bug Fix
+**1 total change • 1 possible breaking change**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ---------- | ----------- | -------- | -------- | ----- |
+| `stg_greenhouse__application_users` (via `int_greenhouse__application_users`)<br>`greenhouse__application_enhanced` | Join logic fix | `referrer_id` joined directly against the Greenhouse user table | `referrer_id` now joins through the new `stg_greenhouse__referrer` staging model (`referrer.id` → `referrer.user_id`) before resolving the user | **Possible breaking change:** The v3 API's `application.referrer_id` references the new `REFERRER` object, not a `USER` directly. The previous direct join to the user table produced an incorrect `referrer_name` (and downstream `credited_to_user_id`-equivalent value) whenever a `referrer_id` did not coincidentally match a valid `user_id`. Requires the new `referrer` table to be synced by the connector. |
+
 # dbt_greenhouse v1.5.0
 
 [PR #46](https://github.com/fivetran/dbt_greenhouse/pull/46) includes the following updates:

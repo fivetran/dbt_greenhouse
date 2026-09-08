@@ -33,6 +33,8 @@ table_variables:
     - candidate_phone_number
   _fivetran_quickstart_candidate_social_media_address:
     - candidate_social_media_address
+  _fivetran_quickstart_activity:
+    - activity  
 
 destination_configurations:
   databricks:
