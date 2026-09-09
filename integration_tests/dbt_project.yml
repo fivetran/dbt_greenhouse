@@ -1,5 +1,5 @@
 name: 'greenhouse_integration_tests'
-version: '1.5.0'
+version: '1.6.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -40,6 +40,7 @@ vars:
     greenhouse_source_identifier: "source"
     greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
+    greenhouse_referrer_identifier: "referrer"
 
   # Comment out when generating docs
   greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
@@ -228,6 +229,12 @@ seeds:
         created_at: timestamp
         updated_at: timestamp
         sort_order: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+    referrer:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
     interviewer:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"

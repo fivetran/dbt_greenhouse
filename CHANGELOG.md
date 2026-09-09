@@ -1,3 +1,20 @@
+# dbt_greenhouse v1.6.0-a1
+
+[PR #48](https://github.com/fivetran/dbt_greenhouse/pull/48) includes the following updates:
+
+## Schema/Data Change
+**1 total change • 0 possible breaking change**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ---------- | ----------- | -------- | -------- | ----- |
+| `stg_greenhouse__referrer` (new) | New staging model | — | — | Adds a new staging model over the `REFERRER` table introduced in the Harvest v3 API. Requires the new `referrer` table to be synced by the connector. |
+
+## Bug Fix
+- Fixes `referrer_name` (and the downstream credited-user value) on `greenhouse__application_enhanced`, which was incorrect whenever `application.referrer_id` did not coincidentally match a valid `user_id`. `referrer_id` now joins through the new `stg_greenhouse__referrer` staging model (`referrer.id` → `referrer.user_id`) before resolving the user, matching the v3 API's `REFERRER` object rather than joining straight to `USER`.
+
+## Under the Hood
+- Adds `activity` and `referrer` tables as non-essential variables in the `quickstart.yml` so Quickstart-managed connections aren't blocked if either table isn't yet synced.
+
 # dbt_greenhouse v1.5.0
 
 [PR #46](https://github.com/fivetran/dbt_greenhouse/pull/46) includes the following updates:

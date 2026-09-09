@@ -763,3 +763,23 @@ models:
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
+  - name: stg_greenhouse__referrer
+    description: Table mapping an application referral to the user who made it.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: referrer_id
+        description: Unique identifier for the referrer record.
+        tests:
+          - not_null
+      - name: user_id
+        description: Id of the user who made the referral.
+      - name: name
+        description: Full name of the referrer.
+      - name: created_at
+        description: Timestamp the referrer record was created.
+      - name: updated_at
+        description: Timestamp the referrer record was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+

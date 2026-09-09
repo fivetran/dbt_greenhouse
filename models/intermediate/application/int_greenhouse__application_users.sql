@@ -10,11 +10,17 @@ application as (
     from {{ ref('stg_greenhouse__application') }}
 ),
 
+referrer as (
+
+    select *
+    from {{ ref('stg_greenhouse__referrer') }}
+),
+
 join_user_names as (
 
     select
         application.*,
-        referrer.full_name as referrer_name,
+        referrer_user.full_name as referrer_name,
         coordinator.full_name as coordinator_name,
         recruiter.full_name as recruiter_name,
         coordinator.email as coordinator_email,
@@ -22,9 +28,13 @@ join_user_names as (
 
     from application
 
-    left join greenhouse_user as referrer
-        on application.referrer_id = referrer.user_id
+    left join referrer
+        on application.referrer_id = referrer.referrer_id
         and application.source_relation = referrer.source_relation
+
+    left join greenhouse_user as referrer_user
+        on referrer.user_id = referrer_user.user_id
+        and referrer.source_relation = referrer_user.source_relation
 
     left join greenhouse_user as coordinator
         on application.coordinator_id = coordinator.user_id
