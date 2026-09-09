@@ -769,7 +769,7 @@ models:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: referrer_id
-        description: Unique identifier for the referrer record. Referenced by `stg_greenhouse__application.referrer_id`.
+        description: Unique identifier for the referrer record.
         tests:
           - not_null
       - name: user_id

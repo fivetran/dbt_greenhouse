@@ -34,7 +34,9 @@ table_variables:
   _fivetran_quickstart_candidate_social_media_address:
     - candidate_social_media_address
   _fivetran_quickstart_activity:
-    - activity  
+    - activity
+  _fivetran_quickstart_referrer:
+    - referrer
 
 destination_configurations:
   databricks:
