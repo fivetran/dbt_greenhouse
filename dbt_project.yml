@@ -12,6 +12,7 @@ vars:
     candidate: "{{ source('greenhouse', 'candidate') }}"
     candidate_tag_link: "{{ source('greenhouse', 'candidate_tag_link') }}"
     application_history: "{{ source('greenhouse', 'application_history') }}"
+    application_stage: "{{ source('greenhouse', 'application_stage') }}"
     eeoc: "{{ source('greenhouse', 'eeoc') }}"
     candidate_email_address: "{{ source('greenhouse', 'candidate_email_address') }}"
     job: "{{ source('greenhouse', 'job') }}"

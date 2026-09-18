@@ -94,6 +94,33 @@ sources:
           - name: updated_at
             description: Timestamp of when the application was advanced.
 
+      - name: application_stage
+        identifier: "{{ var('greenhouse_application_stage_identifier', 'application_stage')}}"
+        description: Table capturing each stage an application has occupied, one row per stage per application.
+        config:
+          enabled: "{{ var('greenhouse_using_application_stage', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the application stage record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the application stage record.
+          - name: application_id
+            description: Foreign key referencing the APPLICATION this stage entry belongs to.
+          - name: job_interview_stage_id
+            description: Foreign key referencing the JOB_INTERVIEW_STAGE occupied during this entry.
+          - name: entered_at
+            description: Timestamp the application entered this stage. Null only for backfilled or partially recorded history.
+          - name: exited_at
+            description: Timestamp the application left this stage. Null while the application is still in this stage (the current stage entry).
+          - name: days_in_stage
+            description: Whole number of calendar days the application has spent in this stage, computed by Greenhouse as of the last sync.
+          - name: current
+            description: Boolean that is true when this row represents the application's current interview stage.
+          - name: created_at
+            description: Timestamp the application stage record was created.
+          - name: updated_at
+            description: Timestamp the application stage record was last updated.
+
       - name: attachment
         identifier: "{{ var('greenhouse_attachment_identifier', 'attachment')}}"
         description: Table capturing files attached to the candidate profile.
@@ -456,13 +483,13 @@ sources:
             description: An arbitrary ID provided by an external source; does not map to another entity in Greenhouse.
           - name: id
             description: Unique ID of the office.
-          - name: location
+          - name: location_name
             description: The office's physical location.
           - name: name
             description: The office's name.
           - name: parent_id
             description: Self-referencing id of the office's parent office.
-          - name: primary_in_house_contact_user_id
+          - name: primary_contact_user_id
             description: >
               Foreign key referencing the id of the USER who will be the primary in-house contact for
               this office.

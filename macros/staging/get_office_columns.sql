@@ -6,10 +6,10 @@
     {"name": "created_at", "datatype": dbt.type_timestamp()},
     {"name": "external_id", "datatype": dbt.type_string()},
     {"name": "id", "datatype": dbt.type_int()},
-    {"name": "location", "datatype": dbt.type_string()},
+    {"name": "location_name", "datatype": dbt.type_string()},
     {"name": "name", "datatype": dbt.type_string()},
     {"name": "parent_id", "datatype": dbt.type_int()},
-    {"name": "primary_in_house_contact_user_id", "datatype": dbt.type_int()},
+    {"name": "primary_contact_user_id", "datatype": dbt.type_int()},
     {"name": "updated_at", "datatype": dbt.type_timestamp()}
 ] %}
 

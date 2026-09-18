@@ -146,16 +146,16 @@ models:
         description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that was updated.
-      - name: new_stage_id
-        description: Foreign key referencing the JOB_STAGE that the application was advanced to.
-      - name: new_status
-        description: Status of the application as of this updated. 
+      - name: job_interview_stage_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE occupied during this entry.
+      - name: is_current
+        description: Boolean that is true when this row represents the application's current interview stage.
       - name: valid_from
-        description: Timestamp of when the application was advanced.
+        description: Timestamp the application entered this stage.
       - name: valid_until
-        description: Timestamp of when the application was moved to a further stage.
+        description: Timestamp the application left this stage. Null while the application is still in this stage (the current stage entry).
       - name: new_stage
-        description: Name of the newly advanced job stage.
+        description: Name of the job stage occupied during this entry.
       - name: full_name
         description: Full name of the applicant.
       - name: current_status

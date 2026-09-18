@@ -11,6 +11,8 @@ table_variables:
     - eeoc
   greenhouse_using_app_history:
     - application_history
+  greenhouse_using_application_stage:
+    - application_stage
   greenhouse_using_job_office:
     - job_office
     - office

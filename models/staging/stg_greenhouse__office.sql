@@ -28,10 +28,10 @@ final as (
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,
         cast(external_id as {{ dbt.type_string() }}) as external_office_id,
         cast(id as {{ dbt.type_string() }}) as office_id,
-        location as location_name,
+        location_name,
         name as office_name,
         cast(parent_id as {{ dbt.type_string() }}) as parent_office_id,
-        cast(primary_in_house_contact_user_id as {{ dbt.type_string() }}) as primary_contact_user_id,
+        cast(primary_contact_user_id as {{ dbt.type_string() }}) as primary_contact_user_id,
         cast(updated_at as {{ dbt.type_timestamp() }}) as updated_at
 
     from fields

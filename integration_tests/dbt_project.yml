@@ -15,6 +15,7 @@ vars:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"
     greenhouse_application_history_identifier: "application_history"
+    greenhouse_application_stage_identifier: "application_stage"
     greenhouse_attachment_identifier: "attachment"
     greenhouse_candidate_identifier: "candidate"
     greenhouse_candidate_tag_link_identifier: "candidate_tag_link"
@@ -209,11 +210,22 @@ seeds:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         parent_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        primary_in_house_contact_user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        primary_contact_user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         name: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
-        location: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
+        location_name: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
         created_at: timestamp
         updated_at: timestamp
+    application_stage:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_interview_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+        entered_at: timestamp
+        exited_at: timestamp
+        current: boolean
+        days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
     candidate_phone_number:
       +column_types:
         candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"

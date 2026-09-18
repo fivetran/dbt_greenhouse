@@ -21,6 +21,7 @@ test_scenarios:
   - name: "optional features disabled"
     vars:
       greenhouse_using_app_history: false
+      greenhouse_using_application_stage: false
       greenhouse_using_job_department: false
       greenhouse_using_job_office: false
       greenhouse_using_eeoc: false

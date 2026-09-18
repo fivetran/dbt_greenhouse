@@ -1,17 +1,17 @@
-{{ config(enabled=var('greenhouse_using_app_history', True)) }}
+{{ config(enabled=var('greenhouse_using_application_stage', True)) }}
 
 with application_history as (
 
-    select 
+    select
         source_relation,
         application_id,
-        new_stage_id,
-        new_status,
-        updated_at as valid_from,
-        coalesce(lead(updated_at) over (partition by application_id {{ fivetran_utils.partition_by_source_relation(package_name='greenhouse') }} order by updated_at asc),
-            {{ dbt.current_timestamp_backcompat() }}) as valid_until
+        job_interview_stage_id,
+        is_current,
+        entered_at as valid_from,
+        exited_at as valid_until,
+        days_in_stage
 
-    from {{ ref('stg_greenhouse__application_history') }}
+    from {{ ref('stg_greenhouse__application_stage') }}
 ),
 
 application as (
@@ -72,16 +72,13 @@ join_application_history as (
         on application_history.application_id = application.application_id
         and application_history.source_relation = application.source_relation
     left join job_stage
-        on application_history.new_stage_id = job_stage.job_stage_id
+        on application_history.job_interview_stage_id = job_stage.job_stage_id
         and application_history.source_relation = job_stage.source_relation
 ),
 
 time_in_stages as (
 
-    select 
-        *,
-        {{ dbt.datediff('valid_from', 'valid_until', 'day') }} as days_in_stage
-
+    select *
     from join_application_history
 ),
 
@@ -91,8 +88,8 @@ activities_in_stages as (
         -- Call out each column for Databricks compatibility
         time_in_stages.source_relation,
         time_in_stages.application_id,
-        time_in_stages.new_stage_id,
-        time_in_stages.new_status,
+        time_in_stages.job_interview_stage_id,
+        time_in_stages.is_current,
         time_in_stages.valid_from,
         time_in_stages.valid_until,
         time_in_stages.new_stage,
@@ -125,7 +122,8 @@ activities_in_stages as (
         time_in_stages.candidate_veteran_status,
         {% endif %}
 
-        sum(case when activity.occurred_at >= valid_from and activity.occurred_at < valid_until 
+        sum(case when activity.occurred_at >= valid_from and activity.occurred_at <
+            coalesce(valid_until, {{ dbt.current_timestamp_backcompat() }})
             then 1 else 0 end) as count_activities_in_stage
 
     from time_in_stages
