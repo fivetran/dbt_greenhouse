@@ -1,3 +1,14 @@
+# dbt_greenhouse v1.6.0-a2
+
+## Schema/Data Change
+**3 total changes • 1 possible breaking change**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ---------- | ----------- | -------- | -------- | ----- |
+| `stg_greenhouse__application_stage` (new) | New staging model | — | — | Adds a new staging model over the `APPLICATION_STAGE` table introduced in the Harvest v3 API, providing one row per stage occupied per application. Adds the `greenhouse_using_application_stage` variable (default `true`) gating this source and staging model. See the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for more details. |
+| `greenhouse__application_history` | Re-sourced + columns renamed | Sourced from `application_history`: one row per applicant, with `new_stage_id`, `new_status` | Sourced from the new `stg_greenhouse__application_stage`: one row per stage occupied per application, with `job_interview_stage_id`, `is_current` | **Possible breaking change:** `new_stage_id` renamed to `job_interview_stage_id`; `new_status` removed; adds `is_current`. Restores one row per stage per application. |
+| `stg_greenhouse__office`<br>`greenhouse__job_enhanced` | Bug fix: value now populated | `get_office_columns()` referenced the deprecated v2 raw column name `location`, so `office_locations` was always null | Now references the v3 raw column `location_name`; `office_locations` populated with real values | Not breaking — restores previously-missing data. `offices` was unaffected. |
+
 # dbt_greenhouse v1.6.0-a1
 
 [PR #48](https://github.com/fivetran/dbt_greenhouse/pull/48) includes the following updates:

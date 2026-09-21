@@ -63,7 +63,7 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: 1.6.0-a1
+    version: 1.6.0-a2
 ```
 
 ### Define database and schema variables

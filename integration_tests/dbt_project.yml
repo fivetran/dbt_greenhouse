@@ -43,6 +43,7 @@ vars:
     greenhouse_user_email_identifier: "user_email"
     greenhouse_referrer_identifier: "referrer"
 
+
   # Comment out when generating docs
   greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
   greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options'] # @docs-ignore
