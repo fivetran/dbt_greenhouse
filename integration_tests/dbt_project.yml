@@ -10,7 +10,7 @@ models:
   +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 vars:
-  greenhouse_schema: greenhouse_integration_tests
+  greenhouse_schema: zz_dbt_avinash_seed
   greenhouse:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"
@@ -227,6 +227,19 @@ seeds:
         exited_at: timestamp
         current: boolean
         days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+      +enabled: "{{ true if target.type != 'snowflake' else false }}"
+    application_stage_snowflake:
+      +alias: application_stage
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_interview_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+        entered_at: timestamp
+        exited_at: timestamp
+        days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+      +enabled: "{{ true if target.type == 'snowflake' else false }}"
     candidate_phone_number:
       +column_types:
         candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
