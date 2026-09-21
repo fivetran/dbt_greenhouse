@@ -1,11 +1,13 @@
 # dbt_greenhouse v1.6.0-a2
 
+[PR #50](https://github.com/fivetran/dbt_greenhouse/pull/50) includes the following updates:
+
 ## Schema/Data Change
-**3 total changes • 1 possible breaking change**
+**3 total changes • 2 possible breaking change**
 
 | Data Model(s) | Change type | Old | New | Notes |
 | ---------- | ----------- | -------- | -------- | ----- |
-| `greenhouse__application_history` | Schema change | Sourced from `APPLICATION_HISTORY`: `new_stage_id`, `new_status` | Sourced from `APPLICATION_STAGE`: `job_interview_stage_id`, `is_current` | **Possible breaking change:** Customer reported `stg_greenhouse__application_history` no longer reliably provides one row per stage per application. Re-sourcing to `stg_greenhouse__application_stage` a restores that grain. |
+| `greenhouse__application_history` | Schema change | Sourced from `APPLICATION_HISTORY`: `new_stage_id`, `new_status`, `valid_from`/`valid_until` derived from `updated_at` | Sourced from `APPLICATION_STAGE`: `job_interview_stage_id`, `is_current`, `valid_from`/`valid_until` derived from `entered_at`/`exited_at` | **Possible breaking change:** Customer reported `stg_greenhouse__application_history` no longer reliably provides one row per stage per application. Re-sourcing from `stg_greenhouse__application_stage` restores that grain. |
 | `greenhouse__job_enhanced`<br>`stg_greenhouse__office` | Bug fix | `location`, `primary_in_house_contact_user_id` | `location_name`, `primary_contact_user_id` | **Possible breaking change** Restores `office_locations` data after making sure the proper V3 source names were referenced. |
 | `stg_greenhouse__application_stage`<br>`stg_greenhouse__application_stage_tmp` | New staging models | — | — | Adds `APPLICATION_STAGE` table introduced in the Harvest V3 API to properly enrich `greenhouse__application_history`. Adds the `greenhouse_using_application_stage` variable to enable/disable this source. See the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for more details. |
 
