@@ -227,7 +227,7 @@ seeds:
         exited_at: timestamp
         current: boolean
         days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-      +enabled: "{{ true if target.type != 'snowflake' else false }}"
+      +enabled: "{{ target.type != 'snowflake' or var('fivetran_using_source_casing', false) }}"
     application_stage_snowflake:
       +alias: application_stage
       +column_types:
@@ -239,7 +239,7 @@ seeds:
         entered_at: timestamp
         exited_at: timestamp
         days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-      +enabled: "{{ true if target.type == 'snowflake' else false }}"
+      +enabled: "{{ target.type == 'snowflake' and not var('fivetran_using_source_casing', false) }}"
     candidate_phone_number:
       +column_types:
         candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
