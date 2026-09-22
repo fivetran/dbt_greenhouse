@@ -11,6 +11,8 @@ table_variables:
     - eeoc
   greenhouse_using_app_history:
     - application_history
+  greenhouse_using_application_stage:
+    - application_stage
   greenhouse_using_job_office:
     - job_office
     - office
@@ -33,6 +35,10 @@ table_variables:
     - candidate_phone_number
   _fivetran_quickstart_candidate_social_media_address:
     - candidate_social_media_address
+  _fivetran_quickstart_activity:
+    - activity
+  _fivetran_quickstart_referrer:
+    - referrer
 
 destination_configurations:
   databricks:

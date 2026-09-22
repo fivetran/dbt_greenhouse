@@ -1,5 +1,5 @@
 name: 'greenhouse'
-version: '1.5.0'
+version: '1.6.0'
 config-version: 2
 require-dbt-version: [">=1.3.0", "<3.0.0"]
 
@@ -12,6 +12,7 @@ vars:
     candidate: "{{ source('greenhouse', 'candidate') }}"
     candidate_tag_link: "{{ source('greenhouse', 'candidate_tag_link') }}"
     application_history: "{{ source('greenhouse', 'application_history') }}"
+    application_stage: "{{ source('greenhouse', 'application_stage') }}"
     eeoc: "{{ source('greenhouse', 'eeoc') }}"
     candidate_email_address: "{{ source('greenhouse', 'candidate_email_address') }}"
     job: "{{ source('greenhouse', 'job') }}"
@@ -34,6 +35,7 @@ vars:
     user_email: "{{ source('greenhouse', 'user_email') }}"
     users: "{{ source('greenhouse', 'users') }}"
     job_post_location: "{{ source('greenhouse', 'job_post_location') }}"
+    referrer: "{{ source('greenhouse', 'referrer') }}"
 
 models:
   greenhouse:

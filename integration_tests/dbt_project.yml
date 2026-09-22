@@ -1,5 +1,5 @@
 name: 'greenhouse_integration_tests'
-version: '1.5.0'
+version: '1.6.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -15,6 +15,7 @@ vars:
     greenhouse_activity_identifier: "activity"
     greenhouse_application_identifier: "application"
     greenhouse_application_history_identifier: "application_history"
+    greenhouse_application_stage_identifier: "application_stage"
     greenhouse_attachment_identifier: "attachment"
     greenhouse_candidate_identifier: "candidate"
     greenhouse_candidate_tag_link_identifier: "candidate_tag_link"
@@ -40,6 +41,8 @@ vars:
     greenhouse_source_identifier: "source"
     greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
+    greenhouse_referrer_identifier: "referrer"
+
 
   # Comment out when generating docs
   greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
@@ -208,11 +211,35 @@ seeds:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         parent_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        primary_in_house_contact_user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        primary_contact_user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         name: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
-        location: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
+        location_name: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
         created_at: timestamp
         updated_at: timestamp
+    application_stage:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_interview_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+        entered_at: timestamp
+        exited_at: timestamp
+        current: boolean
+        days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+      +enabled: "{{ target.type != 'snowflake' or var('fivetran_using_source_casing', false) }}"
+    application_stage_snowflake:
+      +alias: application_stage
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_interview_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+        entered_at: timestamp
+        exited_at: timestamp
+        days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+      +enabled: "{{ target.type == 'snowflake' and not var('fivetran_using_source_casing', false) }}"
     candidate_phone_number:
       +column_types:
         candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -228,6 +255,12 @@ seeds:
         created_at: timestamp
         updated_at: timestamp
         sort_order: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+    referrer:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
     interviewer:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"

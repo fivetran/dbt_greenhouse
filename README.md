@@ -63,7 +63,7 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=1.5.0", "<1.6.0"]
+    version: 1.6.0-a2
 ```
 
 ### Define database and schema variables
@@ -109,7 +109,8 @@ To disable the corresponding functionality in the package, you must set the rele
 vars:
     greenhouse_using_prospects: false # Disable if you do not use prospects and/or do not have the PROSPECT_POOL and PROSPECT_POOL_STAGE tables synced
     greenhouse_using_eeoc: false # Disable if you do not have EEOC data synced and/or do not want to integrate it into the package models
-    greenhouse_using_app_history: false # Disable if you do not have APPLICATION_HISTORY synced and/or do not want to run the application_history transform model
+    greenhouse_using_app_history: false # Disable if you do not have APPLICATION_HISTORY synced
+    greenhouse_using_application_stage: false # Disable if you do not have APPLICATION_STAGE synced and/or do not want to run the application_history transform model
     greenhouse_using_job_office: false # Disable if you do not have JOB_OFFICE and/or OFFICE synced, or do not want to include offices in the job_enhanced transform model
     greenhouse_using_job_department: false # Disable if you do not have DEPARTMENT synced, or do not want to include departments in the job_enhanced transform model
     greenhouse_using_job_hiring_manager: false # Disable if you do not have JOB_HIRING_MANAGER synced, or do not want to include hiring manager data in the job_enhanced transform model
