@@ -21,6 +21,7 @@ test_scenarios:
   - name: "optional features disabled"
     vars:
       greenhouse_using_app_history: false
+      greenhouse_using_application_stage: false
       greenhouse_using_job_department: false
       greenhouse_using_job_office: false
       greenhouse_using_eeoc: false
@@ -30,11 +31,34 @@ test_scenarios:
       greenhouse_using_job_owner: false
       greenhouse_using_interview: false
       greenhouse_using_interviewer: false
+      greenhouse_using_note: false
+      greenhouse_using_prospect_detail: false
+      greenhouse_using_job_candidate_attribute: false
+      greenhouse_using_scorecard_question: false
+      greenhouse_using_interview_kit: false
+      greenhouse_using_rejection_detail: false
+      greenhouse_using_rejection_reason: false
     include_incremental: false
 
   - name: "interview enabled, interviewer disabled"
     vars:
       greenhouse_using_interviewer: false
+    include_incremental: false
+
+  - name: "interviewer enabled, job_candidate_attribute and scorecard_question disabled"
+    vars:
+      greenhouse_using_job_candidate_attribute: false
+      greenhouse_using_scorecard_question: false
+    include_incremental: false
+
+  - name: "interview enabled, interview_kit disabled"
+    vars:
+      greenhouse_using_interview_kit: false
+    include_incremental: false
+
+  - name: "rejection_detail enabled, rejection_reason disabled"
+    vars:
+      greenhouse_using_rejection_reason: false
     include_incremental: false
 
   - name: "MDLS"
