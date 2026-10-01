@@ -1,0 +1,3 @@
+id,_fivetran_deleted,_fivetran_synced,interview_kit_id,active,answer_type,question,required,sort_order,created_at,updated_at
+7001003,false,2021-01-26 21:29:11.148,1001003,true,text,How would you rate this candidate's JavaScript skills?,true,1,2020-12-01 10:00:00,2020-12-01 10:00:00
+7002003,false,2020-12-03 00:03:31.438,1002003,true,yes_no,Would you recommend moving this candidate forward?,true,1,2020-11-01 10:00:00,2020-11-01 10:00:00

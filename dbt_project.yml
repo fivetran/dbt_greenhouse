@@ -5,7 +5,6 @@ require-dbt-version: [">=1.3.0", "<3.0.0"]
 
 vars:
   greenhouse:
-    activity: "{{ source('greenhouse', 'activity') }}"
     application: "{{ source('greenhouse', 'application') }}"
     department: "{{ source('greenhouse', 'department') }}"
     attachment: "{{ source('greenhouse', 'attachment') }}"
@@ -36,6 +35,15 @@ vars:
     users: "{{ source('greenhouse', 'users') }}"
     job_post_location: "{{ source('greenhouse', 'job_post_location') }}"
     referrer: "{{ source('greenhouse', 'referrer') }}"
+    note: "{{ source('greenhouse', 'note') }}"
+    prospect_detail: "{{ source('greenhouse', 'prospect_detail') }}"
+    job_candidate_attribute: "{{ source('greenhouse', 'job_candidate_attribute') }}"
+    scorecard_question: "{{ source('greenhouse', 'scorecard_question') }}"
+    scorecard_question_answer: "{{ source('greenhouse', 'scorecard_question_answer') }}"
+    job_interview: "{{ source('greenhouse', 'job_interview') }}"
+    interview_kit: "{{ source('greenhouse', 'interview_kit') }}"
+    rejection_reason: "{{ source('greenhouse', 'rejection_reason') }}"
+    rejection_detail: "{{ source('greenhouse', 'rejection_detail') }}"
 
 models:
   greenhouse:

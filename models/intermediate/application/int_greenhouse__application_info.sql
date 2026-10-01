@@ -35,7 +35,8 @@ activity as (
         candidate_id,
         count(*) as count_activities
 
-    from {{ ref('stg_greenhouse__activity') }}
+    from {{ ref('stg_greenhouse__note') }}
+    where lower(type) = 'activity'
     group by 1, 2
 ),
 

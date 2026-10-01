@@ -29,7 +29,8 @@ job_stage as (
 activity as (
 
     select *
-    from {{ ref('stg_greenhouse__activity') }}
+    from {{ ref('stg_greenhouse__note') }}
+    where lower(type) = 'activity'
 ),
 
 join_application_history as (

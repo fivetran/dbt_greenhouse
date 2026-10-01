@@ -15,24 +15,44 @@ sources:
       enabled: "{{ var('greenhouse_sources', []) == [] }}"
 
     tables:
-      - name: activity
-        identifier: "{{ var('greenhouse_activity_identifier', 'activity')}}"
-        description: Table capturing lists of activities on a candidate's profile, including interviews, notes, and emails.
+      - name: note
+        identifier: "{{ var('greenhouse_note_identifier', 'note')}}"
+        description: Table capturing notes, logged emails, interview feedback, and other activity entries on a candidate's profile.
+        config:
+          enabled: "{{ var('greenhouse_using_note', true) and var('greenhouse_sources', []) == [] }}"
         columns:
           - name: _fivetran_deleted
-            description: Boolean that is true if the activity record has been soft-deleted from Greenhouse.
-          - name: body
-            description: Content of the activity taken.
-          - name: candidate_id
-            description: Foreign key referencing the CANDIDATE whose profile was acted upon.
-          - name: created_at
-            description: Timestamp of when the activity occurred.
+            description: Boolean that is true if the note record has been soft-deleted from Greenhouse.
           - name: id
-            description: The internal Greenhouse ID of the activity feed note.
-          - name: subject
-            description: Subject of the activity.
+            description: Unique ID of the note.
           - name: user_id
-            description: Foreign key referencing the USER who performed the activity.
+            description: Foreign key referencing the USER who authored the note. Null for system-generated notes.
+          - name: candidate_id
+            description: Foreign key referencing the CANDIDATE this note is attached to.
+          - name: application_id
+            description: Foreign key referencing the APPLICATION this note is attached to, if any.
+          - name: body
+            description: Content of the note.
+          - name: body_with_tags
+            description: Content of the note with @-mentions preserved as tags.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: email_attachment_file_names
+            description: File names of attachments on a logged email.
+          - name: email_from
+            description: From address on a logged email.
+          - name: email_to
+            description: To address on a logged email.
+          - name: import_hash
+            description: De-duplication key set when the note was created by a bulk import.
+          - name: subject
+            description: Subject line of the note, populated for email-type notes.
+          - name: type
+            description: Type of note (e.g. note, email, activity, interview feedback).
+          - name: updated_at
+            description: Timestamp the record was last updated.
+          - name: visibility
+            description: Who can see the note (e.g. public, private, admin only).
 
       - name: application
         identifier: "{{ var('greenhouse_application_identifier', 'application')}}"
@@ -483,13 +503,13 @@ sources:
             description: An arbitrary ID provided by an external source; does not map to another entity in Greenhouse.
           - name: id
             description: Unique ID of the office.
-          - name: location_name
+          - name: location
             description: The office's physical location.
           - name: name
             description: The office's name.
           - name: parent_id
             description: Self-referencing id of the office's parent office.
-          - name: primary_contact_user_id
+          - name: primary_in_house_contact_user_id
             description: >
               Foreign key referencing the id of the USER who will be the primary in-house contact for
               this office.
@@ -791,4 +811,218 @@ sources:
             description: Timestamp the referrer record was created.
           - name: updated_at
             description: Timestamp the referrer record was last updated.
+
+      - name: prospect_detail
+        identifier: "{{ var('greenhouse_prospect_detail_identifier', 'prospect_detail')}}"
+        description: Table capturing the prospect pool/stage/owner details for prospect applications.
+        config:
+          enabled: "{{ var('greenhouse_using_prospect_detail', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the prospect detail record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the prospect detail record.
+          - name: application_id
+            description: Foreign key referencing the prospect APPLICATION this record belongs to.
+          - name: department_id
+            description: Foreign key referencing the DEPARTMENT the prospect is being considered for.
+          - name: office_id
+            description: Foreign key referencing the OFFICE the prospect is being considered for.
+          - name: pool_id
+            description: Foreign key referencing the prospect pool the prospect sits in.
+          - name: pool_stage_id
+            description: Foreign key referencing the prospect pool stage the prospect sits in.
+          - name: prospect_owner_id
+            description: Foreign key referencing the USER who owns this prospect.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: updated_at
+            description: Timestamp the record was last updated.
+
+      - name: job_candidate_attribute
+        identifier: "{{ var('greenhouse_job_candidate_attribute_identifier', 'job_candidate_attribute')}}"
+        description: Table capturing the candidate attributes (skills, traits) configured on a job's scorecard.
+        config:
+          enabled: "{{ var('greenhouse_using_job_candidate_attribute', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the job candidate attribute record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the job candidate attribute.
+          - name: job_id
+            description: Foreign key referencing the JOB this attribute belongs to.
+          - name: candidate_attribute_type_id
+            description: Foreign key referencing the attribute's type definition.
+          - name: active
+            description: Boolean that is true if the attribute is currently in use on the job.
+          - name: name
+            description: Display name of the attribute (e.g. "JavaScript", "Leadership").
+          - name: sort_order
+            description: Display priority of the attribute within the job's attribute list.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: updated_at
+            description: Timestamp the record was last updated.
+
+      - name: scorecard_question
+        identifier: "{{ var('greenhouse_scorecard_question_identifier', 'scorecard_question')}}"
+        description: Table capturing the questions configured on an interview kit's scorecard.
+        config:
+          enabled: "{{ var('greenhouse_using_scorecard_question', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the scorecard question record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the scorecard question.
+          - name: interview_kit_id
+            description: Foreign key referencing the INTERVIEW_KIT this question belongs to.
+          - name: active
+            description: Boolean that is true if the question is currently in use.
+          - name: answer_type
+            description: Shape of the expected answer (e.g. text, yes/no, single select, multi select, instruction).
+          - name: question
+            description: Text of the scorecard question.
+          - name: required
+            description: Boolean that is true if an interviewer must answer this question before submitting the scorecard.
+          - name: sort_order
+            description: Display order of the question within its interview kit.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: updated_at
+            description: Timestamp the record was last updated.
+
+      - name: scorecard_question_answer
+        identifier: "{{ var('greenhouse_scorecard_question_answer_identifier', 'scorecard_question_answer')}}"
+        description: Table capturing an interviewer's answer to a scorecard question.
+        config:
+          enabled: "{{ var('greenhouse_using_scorecard_question', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the scorecard question answer record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the scorecard question answer.
+          - name: scorecard_question_id
+            description: Foreign key referencing the SCORECARD_QUESTION being answered.
+          - name: scorecard_id
+            description: Foreign key referencing the SCORECARD this answer belongs to.
+          - name: answer
+            description: Free-text answer provided by the interviewer.
+          - name: answer_with_tag
+            description: Free-text answer with @-mentions preserved as tags.
+          - name: boolean_value
+            description: Yes/no answer provided by the interviewer, for yes/no questions.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: updated_at
+            description: Timestamp the record was last updated.
+          - name: value
+            description: Selected option value, for select-type questions.
+
+      - name: job_interview
+        identifier: "{{ var('greenhouse_job_interview_identifier', 'job_interview')}}"
+        description: Table capturing the interview slots configured on a job's interview plan.
+        config:
+          enabled: "{{ var('greenhouse_using_interview', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the job interview record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the job interview slot.
+          - name: job_interview_stage_id
+            description: Foreign key referencing the JOB_INTERVIEW_STAGE this slot belongs to.
+          - name: job_id
+            description: Foreign key referencing the JOB this slot is defined on.
+          - name: active
+            description: Boolean that is true if the slot is on the job's current interview plan.
+          - name: duration
+            description: Default length of the interview, in minutes.
+          - name: instruction
+            description: Interviewer-facing instructions for this slot.
+          - name: name
+            description: Name of the interview slot (e.g. "Recruiter Phone Screen").
+          - name: require_scorecard
+            description: Boolean that is true if interviewers must submit a scorecard for this slot.
+          - name: scheduling_type
+            description: How the slot is fulfilled (e.g. needs scheduling, take-home test, offer).
+          - name: sort_order
+            description: Position of this slot within its interview stage.
+          - name: summary
+            description: Candidate-facing summary for this slot.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: updated_at
+            description: Timestamp the record was last updated.
+
+      - name: interview_kit
+        identifier: "{{ var('greenhouse_interview_kit_identifier', 'interview_kit')}}"
+        description: Table capturing per-slot interview kit configuration (anonymization, exercises).
+        config:
+          enabled: "{{ var('greenhouse_using_interview_kit', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the interview kit record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the interview kit.
+          - name: job_id
+            description: Foreign key referencing the JOB this kit is configured on.
+          - name: job_interview_id
+            description: Foreign key referencing the JOB_INTERVIEW slot this kit belongs to.
+          - name: anonymize_candidate
+            description: Boolean that is true if candidate details are hidden from graders for this slot.
+          - name: anonymize_resumes
+            description: Boolean that is true if resumes are anonymized for reviewers for this slot.
+          - name: exercises
+            description: Interview prep content (instructions, exercises, rubric notes) for this slot.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: updated_at
+            description: Timestamp the record was last updated.
+
+      - name: rejection_reason
+        identifier: "{{ var('greenhouse_rejection_reason_identifier', 'rejection_reason')}}"
+        description: Lookup table of rejection reasons and their categories.
+        config:
+          enabled: "{{ var('greenhouse_using_rejection_reason', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the rejection reason record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the rejection reason.
+          - name: name
+            description: Display label for the rejection reason (e.g. "Not a cultural fit").
+          - name: type_id
+            description: Foreign key referencing the rejection reason's category.
+          - name: type_key
+            description: Stable machine-readable key for the rejection reason's category.
+          - name: type_name
+            description: Display name of the rejection reason's category.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: updated_at
+            description: Timestamp the record was last updated.
+
+      - name: rejection_detail
+        identifier: "{{ var('greenhouse_rejection_detail_identifier', 'rejection_detail')}}"
+        description: Table capturing who rejected an application, why, and when.
+        config:
+          enabled: "{{ var('greenhouse_using_rejection_detail', true) and var('greenhouse_sources', []) == [] }}"
+        columns:
+          - name: _fivetran_deleted
+            description: Boolean that is true if the rejection detail record has been soft-deleted from Greenhouse.
+          - name: id
+            description: Unique ID of the rejection detail record.
+          - name: application_id
+            description: Foreign key referencing the APPLICATION this rejection belongs to.
+          - name: rejected_by_id
+            description: Foreign key referencing the USER who rejected the application.
+          - name: rejection_reason_id
+            description: Foreign key referencing the REJECTION_REASON selected for the application.
+          - name: rejected_at
+            description: Timestamp the application was rejected.
+          - name: rejection_note_id
+            description: Foreign key referencing the note capturing the free-text rejection message.
+          - name: created_at
+            description: Timestamp the record was created.
+          - name: updated_at
+            description: Timestamp the record was last updated.
 

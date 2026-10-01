@@ -1,15 +1,14 @@
-{% macro get_office_columns() %}
+{% macro get_rejection_reason_columns() %}
 
 {% set columns = [
     {"name": "_fivetran_deleted", "datatype": "boolean"},
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
-    {"name": "created_at", "datatype": dbt.type_timestamp()},
-    {"name": "external_id", "datatype": dbt.type_string()},
     {"name": "id", "datatype": dbt.type_int()},
-    {"name": "location", "datatype": dbt.type_string()},
     {"name": "name", "datatype": dbt.type_string()},
-    {"name": "parent_id", "datatype": dbt.type_int()},
-    {"name": "primary_in_house_contact_user_id", "datatype": dbt.type_int()},
+    {"name": "type_id", "datatype": dbt.type_int()},
+    {"name": "type_key", "datatype": dbt.type_string()},
+    {"name": "type_name", "datatype": dbt.type_string()},
+    {"name": "created_at", "datatype": dbt.type_timestamp()},
     {"name": "updated_at", "datatype": dbt.type_timestamp()}
 ] %}
 

@@ -1,3 +1,25 @@
+# dbt_greenhouse v1.6.0-a3
+
+[PR #XX](https://github.com/fivetran/dbt_greenhouse/pull/XX) includes the following updates:
+
+## Schema/Data Change
+**8 total changes • 1 possible breaking change**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ------------- | ----------- | --- | --- | ----- |
+| `greenhouse__job_enhanced` | Columns restored | `location_name`, `primary_contact_user_id` returning `null` | Correctly sourced from the V3 `OFFICE.location`/`OFFICE.primary_in_house_contact_user_id` columns | Office location and primary contact data now populates correctly. |
+| `greenhouse__application_enhanced` | Columns added | — | `prospect_pool_id`, `prospect_pool_stage_id`, `prospect_owner_id`, `prospect_owner_name` | Restores prospect pipeline data removed as a breaking change in v1.5.0 — lets customers who use Greenhouse's CRM/sourcing pool features see which pool and stage a candidate sits in again. |
+| `greenhouse__interview_scorecard_detail` | Columns added | — | `attribute_name`, `sort_order` | Resolves the `job_candidate_attribute_id` FK, which previously had no attribute name or display order — labels scorecard ratings by the actual trait being evaluated (e.g. "JavaScript", "Leadership") instead of a bare id. |
+| `greenhouse__interview_scorecard_detail` | Columns added | — | `question_text`, `answer_type`, `answer`, `boolean_value` | Surfaces the actual scorecard question text and the interviewer's answer, not just a rating — useful for understanding what was asked and how an interviewer actually responded, which this package has never exposed in any version. |
+| `greenhouse__interview_enhanced` | Columns added | — | `interview_duration_minutes`, `requires_scorecard`, `scheduling_type`, `anonymize_candidate`, `anonymize_resumes`, `exercises` | `exercises` restores the `interview_kit_content` field the v1.5.0 CHANGELOG marked as permanently removed — it moved to the new `INTERVIEW_KIT.exercises` field, not removed. The remaining fields support interview-process compliance/consistency reporting. |
+| `greenhouse__application_enhanced` | Columns added | — | `rejection_reason_id`, `rejection_reason_name`, `rejection_reason_type_name`, `rejected_by_id` | Surfaces why and by whom an application was rejected — a common recruiting-funnel reporting need with no prior coverage in this package. |
+| `stg_greenhouse__activity` | Model renamed | Sourced from `ACTIVITY` | Renamed to `stg_greenhouse__note`, sourced from `NOTE` | **Possible breaking change:** `NOTE` merges the v2 `ACTIVITY`/`EMAIL`/`EMAIL_CC` tables with a `type` discriminator. Output columns and row counts are unchanged — the break is for any custom downstream model referencing `ref('stg_greenhouse__activity')` directly, or any `greenhouse_activity_identifier` override. |
+| `stg_greenhouse__prospect_detail`<br>`stg_greenhouse__job_candidate_attribute`<br>`stg_greenhouse__scorecard_question`<br>`stg_greenhouse__scorecard_question_answer`<br>`stg_greenhouse__job_interview`<br>`stg_greenhouse__interview_kit`<br>`stg_greenhouse__rejection_reason`<br>`stg_greenhouse__rejection_detail` (new) | New staging models | — | — | Adds new staging models over the corresponding new Harvest V3 tables. Each is backed by a `greenhouse_using_*` variable (default `true`) to disable it if the underlying table isn't synced — see the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for the full list and how to configure them. |
+
+## Bug Fix
+- Fixes `job_stage` and `interview_name` returning `null` for most interviews in `greenhouse__interview_enhanced` and `greenhouse__interview_scorecard_detail`, by correctly resolving a scheduled interview's stage through the new `JOB_INTERVIEW` table.
+- Fixes `scorecard_id`, `candidate_rating`, `scorecard_submitted_at`, and `interviewer_name` returning `null` for ad-hoc scorecards in `greenhouse__interview_scorecard_detail` — these scorecards exist on `SCORECARD` but have no matching row on the `INTERVIEWER` bridge table, so they previously dropped out of the join entirely. They now surface as additional rows keyed on `application_id`, with no interview association guessed at.
+
 # dbt_greenhouse v1.6.0-a2
 
 [PR #50](https://github.com/fivetran/dbt_greenhouse/pull/50) includes the following updates:

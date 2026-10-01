@@ -118,6 +118,13 @@ vars:
     greenhouse_using_job_post_location: false # Disable if you do not have JOB_POST_LOCATION synced, or do not want to include location data in the job_enhanced transform model
     greenhouse_using_interview: false # Disable if you do not have INTERVIEW synced. Disables the greenhouse__interview_enhanced and greenhouse__interview_scorecard_detail transform models, and removes interview data from the greenhouse__application_enhanced and greenhouse__job_enhanced transform models
     greenhouse_using_interviewer: false # Disable if you do not have INTERVIEWER synced. Disables the greenhouse__interview_scorecard_detail transform model and removes interviewer/scorecard data from the greenhouse__interview_enhanced and greenhouse__application_enhanced transform models
+    greenhouse_using_note: false # Disable if you do not have NOTE synced, or do not want to include note data in the package models
+    greenhouse_using_prospect_detail: false # Disable if you do not have PROSPECT_DETAIL synced, or do not want to include prospect pool/stage/owner data in the application_enhanced transform model
+    greenhouse_using_job_candidate_attribute: false # Disable if you do not have JOB_CANDIDATE_ATTRIBUTE synced, or do not want to include attribute name/sort order data in the interview_scorecard_detail transform model
+    greenhouse_using_scorecard_question: false # Disable if you do not have SCORECARD_QUESTION and SCORECARD_QUESTION_ANSWER synced, or do not want to include question text/answer data in the interview_scorecard_detail transform model
+    greenhouse_using_interview_kit: false # Disable if you do not have INTERVIEW_KIT synced, or do not want to include interview kit duration/scheduling/anonymization data in the interview_enhanced transform model
+    greenhouse_using_rejection_detail: false # Disable if you do not have REJECTION_DETAIL synced, or do not want to include rejection detail data in the application_enhanced transform model
+    greenhouse_using_rejection_reason: false # Disable if you do not have REJECTION_REASON synced, or do not want to include rejection reason name/type data in the application_enhanced transform model
 ```
 *Note: This package only integrates the above variables. If you'd like to disable other models, please create an [issue](https://github.com/fivetran/dbt_greenhouse/issues) specifying which ones.*
 

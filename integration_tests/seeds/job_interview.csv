@@ -1,0 +1,3 @@
+id,_fivetran_deleted,_fivetran_synced,job_interview_stage_id,job_id,active,duration,instruction,name,require_scorecard,scheduling_type,sort_order,summary,created_at,updated_at
+6104936003,false,2021-02-05 23:54:56.284,5418278003,4198678003,true,30,Ask about recent projects.,Recruiter Phone Screen,true,needs_scheduling,1,Initial phone screen with the recruiter.,2020-10-01 10:00:00,2020-10-01 10:00:00
+5292137003,false,2020-12-11 23:03:37.039,4992322003,4198806003,true,45,Focus on system design.,Onsite Technical Interview,true,needs_scheduling,1,Technical deep-dive with the hiring team.,2020-09-15 08:00:00,2020-09-15 08:00:00
