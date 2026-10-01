@@ -40,7 +40,7 @@ scorecard_question_answers_agg as (
     select
         scorecard_question_answer.source_relation,
         scorecard_question_answer.scorecard_id,
-        {{ fivetran_utils.string_agg("scorecard_question.question_text || ': ' || coalesce(scorecard_question_answer.answer, cast(scorecard_question_answer.boolean_value as " ~ dbt.type_string() ~ "))", "'; '") }} as scorecard_question_answers
+        {{ fivetran_utils.string_agg("scorecard_question.question_text || ': ' || coalesce(scorecard_question_answer.answer, case when scorecard_question_answer.boolean_value then 'true' when scorecard_question_answer.boolean_value is not null then 'false' end)", "'; '") }} as scorecard_question_answers
 
     from scorecard_question_answer
     left join scorecard_question
