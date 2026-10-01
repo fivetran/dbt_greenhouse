@@ -382,14 +382,8 @@ models:
         description: Display name of the attribute (e.g. "JavaScript", "Leadership").
       - name: sort_order
         description: Display priority of the attribute within the job's attribute list.
-      - name: question_text
-        description: Text of the scorecard question.
-      - name: answer_type
-        description: Shape of the expected answer (e.g. text, yes/no, single select, multi select, instruction).
-      - name: answer
-        description: Free-text answer provided by the interviewer.
-      - name: boolean_value
-        description: Yes/no answer provided by the interviewer, for yes/no questions.
+      - name: scorecard_question_answers
+        description: Concatenated list of each scorecard question and the interviewer's response (free-text answer or yes/no value), one per question asked on this scorecard.
 
   - name: greenhouse__job_enhanced
     description: Table capturing information and metrics related to jobs. May contain custom columns.

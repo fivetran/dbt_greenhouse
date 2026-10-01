@@ -32,6 +32,23 @@ scorecard_question as (
     select *
     from {{ ref('stg_greenhouse__scorecard_question') }}
 ),
+
+-- a scorecard can have multiple questions/answers; aggregate to one row per scorecard
+-- so this doesn't fan out the attribute-level grain of this table
+scorecard_question_answers_agg as (
+
+    select
+        scorecard_question_answer.source_relation,
+        scorecard_question_answer.scorecard_id,
+        {{ fivetran_utils.string_agg("scorecard_question.question_text || ': ' || coalesce(scorecard_question_answer.answer, cast(scorecard_question_answer.boolean_value as " ~ dbt.type_string() ~ "))", "'; '") }} as scorecard_question_answers
+
+    from scorecard_question_answer
+    left join scorecard_question
+        on scorecard_question_answer.scorecard_question_id = scorecard_question.scorecard_question_id
+        and scorecard_question_answer.source_relation = scorecard_question.source_relation
+
+    group by 1, 2
+),
 {% endif %}
 
 join_w_attributes as (
@@ -63,10 +80,7 @@ join_w_attributes as (
 
         {% if var('greenhouse_using_scorecard_question', True) %}
         ,
-        scorecard_question.question_text,
-        scorecard_question.answer_type,
-        scorecard_question_answer.answer,
-        scorecard_question_answer.boolean_value
+        scorecard_question_answers_agg.scorecard_question_answers
         {% endif %}
 
     from interview
@@ -81,12 +95,9 @@ join_w_attributes as (
     {% endif %}
 
     {% if var('greenhouse_using_scorecard_question', True) %}
-    left join scorecard_question_answer
-        on interview.scorecard_id = scorecard_question_answer.scorecard_id
-        and interview.source_relation = scorecard_question_answer.source_relation
-    left join scorecard_question
-        on scorecard_question_answer.scorecard_question_id = scorecard_question.scorecard_question_id
-        and scorecard_question_answer.source_relation = scorecard_question.source_relation
+    left join scorecard_question_answers_agg
+        on interview.scorecard_id = scorecard_question_answers_agg.scorecard_id
+        and interview.source_relation = scorecard_question_answers_agg.source_relation
     {% endif %}
 ),
 
