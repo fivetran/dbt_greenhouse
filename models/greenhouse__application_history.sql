@@ -26,12 +26,14 @@ job_stage as (
     from {{ ref('stg_greenhouse__job_interview_stage') }}
 ),
 
+{% if var('greenhouse_using_note', True) %}
 activity as (
 
     select *
     from {{ ref('stg_greenhouse__note') }}
     where lower(type) = 'activity'
 ),
+{% endif %}
 
 join_application_history as (
 
@@ -123,13 +125,19 @@ activities_in_stages as (
         time_in_stages.candidate_veteran_status,
         {% endif %}
 
+        {% if var('greenhouse_using_note', True) %}
         sum(case when activity.occurred_at >= valid_from and activity.occurred_at <
             coalesce(valid_until, {{ dbt.current_timestamp_backcompat() }})
             then 1 else 0 end) as count_activities_in_stage
+        {% else %}
+        cast(null as {{ dbt.type_int() }}) as count_activities_in_stage
+        {% endif %}
 
     from time_in_stages
+    {% if var('greenhouse_using_note', True) %}
     left join activity on activity.candidate_id = time_in_stages.candidate_id
         and activity.source_relation = time_in_stages.source_relation
+    {% endif %}
 
     -- 15 standard columns in join_application_history CTE (including source_relation) + 1 days_in_stage column + 1 if greenhouse_using_job_hiring_manager + 4 more if using the eeoc table + 1 if job_office + 2 if job_department
     {% set count_eeoc_columns = 4 if var('greenhouse_using_eeoc', True) else 0 %}

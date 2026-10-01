@@ -1,3 +1,5 @@
+{{ config(enabled=var('greenhouse_using_interview', True)) }}
+
 {{
     fivetran_utils.union_connections(
         connection_dictionary='greenhouse_sources',

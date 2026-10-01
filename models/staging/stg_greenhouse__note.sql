@@ -1,3 +1,4 @@
+{{ config(enabled=var('greenhouse_using_note', True)) }}
 
 with base as (
 
