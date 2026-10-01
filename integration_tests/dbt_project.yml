@@ -10,46 +10,43 @@ models:
   +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 vars:
-  greenhouse_database: singular-vector-135519
-  greenhouse_schema: greenhouse_test_v3_1
-
-  # greenhouse_schema: zz_dbt_avinash_seed
-  # greenhouse:
-  #   greenhouse_note_identifier: "note"
-  #   greenhouse_application_identifier: "application"
-  #   greenhouse_application_history_identifier: "application_history"
-  #   greenhouse_application_stage_identifier: "application_stage"
-  #   greenhouse_attachment_identifier: "attachment"
-  #   greenhouse_candidate_identifier: "candidate"
-  #   greenhouse_candidate_tag_link_identifier: "candidate_tag_link"
-  #   greenhouse_department_identifier: "department"
-  #   greenhouse_eeoc_identifier: "eeoc"
-  #   greenhouse_candidate_email_address_identifier: "candidate_email_address"
-  #   greenhouse_job_identifier: "job"
-  #   greenhouse_job_hiring_manager_identifier: "job_hiring_manager"
-  #   greenhouse_job_office_identifier: "job_office"
-  #   greenhouse_opening_identifier: "opening"
-  #   greenhouse_job_owner_identifier: "job_owner"
-  #   greenhouse_job_post_identifier: "job_post"
-  #   greenhouse_job_interview_stage_identifier: "job_interview_stage"
-  #   greenhouse_office_identifier: "office"
-  #   greenhouse_candidate_phone_number_identifier: "candidate_phone_number"
-  #   greenhouse_prospect_pool_identifier: "prospect_pool"
-  #   greenhouse_prospect_pool_stage_identifier: "prospect_pool_stage"
-  #   greenhouse_interview_identifier: "interview"
-  #   greenhouse_interviewer_identifier: "interviewer"
-  #   greenhouse_scorecard_identifier: "scorecard"
-  #   greenhouse_scorecard_candidate_attribute_identifier: "scorecard_candidate_attribute"
-  #   greenhouse_candidate_social_media_address_identifier: "candidate_social_media_address"
-  #   greenhouse_source_identifier: "source"
-  #   greenhouse_users_identifier: "users"
-  #   greenhouse_user_email_identifier: "user_email"
-  #   greenhouse_referrer_identifier: "referrer"
+  greenhouse_schema: greenhouse_integration_tests
+  greenhouse:
+    greenhouse_note_identifier: "note"
+    greenhouse_application_identifier: "application"
+    greenhouse_application_history_identifier: "application_history"
+    greenhouse_application_stage_identifier: "application_stage"
+    greenhouse_attachment_identifier: "attachment"
+    greenhouse_candidate_identifier: "candidate"
+    greenhouse_candidate_tag_link_identifier: "candidate_tag_link"
+    greenhouse_department_identifier: "department"
+    greenhouse_eeoc_identifier: "eeoc"
+    greenhouse_candidate_email_address_identifier: "candidate_email_address"
+    greenhouse_job_identifier: "job"
+    greenhouse_job_hiring_manager_identifier: "job_hiring_manager"
+    greenhouse_job_office_identifier: "job_office"
+    greenhouse_opening_identifier: "opening"
+    greenhouse_job_owner_identifier: "job_owner"
+    greenhouse_job_post_identifier: "job_post"
+    greenhouse_job_interview_stage_identifier: "job_interview_stage"
+    greenhouse_office_identifier: "office"
+    greenhouse_candidate_phone_number_identifier: "candidate_phone_number"
+    greenhouse_prospect_pool_identifier: "prospect_pool"
+    greenhouse_prospect_pool_stage_identifier: "prospect_pool_stage"
+    greenhouse_interview_identifier: "interview"
+    greenhouse_interviewer_identifier: "interviewer"
+    greenhouse_scorecard_identifier: "scorecard"
+    greenhouse_scorecard_candidate_attribute_identifier: "scorecard_candidate_attribute"
+    greenhouse_candidate_social_media_address_identifier: "candidate_social_media_address"
+    greenhouse_source_identifier: "source"
+    greenhouse_users_identifier: "users"
+    greenhouse_user_email_identifier: "user_email"
+    greenhouse_referrer_identifier: "referrer"
 
 
   # Comment out when generating docs
-  # greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
-  # greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options'] # @docs-ignore
+  greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
+  greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options'] # @docs-ignore
 
 seeds:
   +docs:
