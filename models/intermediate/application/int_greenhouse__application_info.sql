@@ -49,10 +49,26 @@ job as (
 ),
 
 {% if var('greenhouse_using_eeoc', true) %}
+-- an application can have more than one eeoc submission (e.g. a candidate
+-- updates their self-identification responses); keep only the latest
+-- so this join doesn't fan out the application-level grain of this model
+order_eeoc as (
+
+    select
+        *,
+        row_number() over (
+            partition by source_relation, application_id
+            order by submitted_at desc, updated_at desc
+        ) as eeoc_row_num
+
+    from {{ ref('stg_greenhouse__eeoc') }}
+),
+
 eeoc as (
 
     select *
-    from {{ ref('stg_greenhouse__eeoc') }}
+    from order_eeoc
+    where eeoc_row_num = 1
 ),
 {% endif %}
 

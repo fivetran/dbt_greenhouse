@@ -15,9 +15,10 @@
 | `stg_greenhouse__activity` | Model renamed | Sourced from `ACTIVITY` | Renamed to `stg_greenhouse__note`, sourced from `NOTE` | **Possible breaking change:** `NOTE` merges the v2 `ACTIVITY`/`EMAIL`/`EMAIL_CC` tables with a `type` discriminator. Output columns and row counts are unchanged — the break is for any custom downstream model referencing `ref('stg_greenhouse__activity')` directly, or any `greenhouse_activity_identifier` override. |
 | `stg_greenhouse__prospect_detail`<br>`stg_greenhouse__job_candidate_attribute`<br>`stg_greenhouse__scorecard_question`<br>`stg_greenhouse__scorecard_question_answer`<br>`stg_greenhouse__job_interview`<br>`stg_greenhouse__interview_kit`<br>`stg_greenhouse__rejection_reason`<br>`stg_greenhouse__rejection_detail` (new) | New staging models | — | — | Adds new staging models over the corresponding new Harvest V3 tables. Each is backed by a `greenhouse_using_*` variable (default `true`) to disable it if the underlying table isn't synced — see the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for the full list and how to configure them. |
 
-## Bug Fix
+## Bug Fixes
 - Fixes `job_stage` and `interview_name` returning `null` for most interviews in `greenhouse__interview_enhanced` and `greenhouse__interview_scorecard_detail`, by correctly resolving a scheduled interview's stage through the new `JOB_INTERVIEW` table.
 - Fixes `scorecard_id`, `candidate_rating`, `scorecard_submitted_at`, and `interviewer_name` returning `null` for ad-hoc scorecards in `greenhouse__interview_scorecard_detail` — these scorecards exist on `SCORECARD` but have no matching row on the `INTERVIEWER` bridge table, so they previously dropped out of the join entirely. They now surface as additional rows keyed on `application_id`, with no interview association guessed at.
+- Fixes duplicate rows in `greenhouse__application_enhanced`, `greenhouse__application_history`, and `greenhouse__job_enhanced` for applications with more than one `EEOC` submission (e.g. a candidate updates their self-identification responses). `int_greenhouse__application_info` now keeps only the most recent `EEOC` record per application instead of joining to all of them.
 
 # dbt_greenhouse v1.6.0-a2
 
