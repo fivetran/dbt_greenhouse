@@ -10,6 +10,7 @@ models:
   +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 vars:
+  # consistency_test_exclude_columns: []
   greenhouse_schema: greenhouse_integration_tests
   greenhouse:
     greenhouse_note_identifier: "note"
@@ -45,8 +46,8 @@ vars:
 
 
   # Comment out when generating docs
-  greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
-  greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options'] # @docs-ignore
+  # greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
+  # greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options'] # @docs-ignore
 
 seeds:
   +docs:
