@@ -23,6 +23,7 @@ prospect_detail as (
     from {{ ref('stg_greenhouse__prospect_detail') }}
 ),
 
+{% if var('greenhouse_using_prospects', True) %}
 prospect_pool as (
 
     select *
@@ -34,6 +35,7 @@ prospect_pool_stage as (
     select *
     from {{ ref('stg_greenhouse__prospect_pool_stage') }}
 ),
+{% endif %}
 {% endif %}
 
 {% if var('greenhouse_using_rejection_detail', True) %}
@@ -64,8 +66,10 @@ join_user_names as (
 
         {% if var('greenhouse_using_prospect_detail', True) %}
         ,
+        {% if var('greenhouse_using_prospects', True) %}
         prospect_pool.prospect_pool_id as prospect_pool_id,
         prospect_pool_stage.prospect_stage_id as prospect_pool_stage_id,
+        {% endif %}
         prospect_detail.prospect_owner_id as prospect_owner_id,
         prospect_owner.full_name as prospect_owner_name
         {% endif %}
@@ -104,6 +108,7 @@ join_user_names as (
         on application.application_id = prospect_detail.application_id
         and application.source_relation = prospect_detail.source_relation
 
+    {% if var('greenhouse_using_prospects', True) %}
     left join prospect_pool
         on prospect_detail.pool_id = prospect_pool.prospect_pool_id
         and prospect_detail.source_relation = prospect_pool.source_relation
@@ -111,6 +116,7 @@ join_user_names as (
     left join prospect_pool_stage
         on prospect_detail.pool_stage_id = prospect_pool_stage.prospect_stage_id
         and prospect_detail.source_relation = prospect_pool_stage.source_relation
+    {% endif %}
 
     left join greenhouse_user as prospect_owner
         on prospect_detail.prospect_owner_id = prospect_owner.user_id

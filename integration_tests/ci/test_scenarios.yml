@@ -49,6 +49,8 @@ test_scenarios:
     vars:
       greenhouse_using_job_candidate_attribute: false
       greenhouse_using_scorecard_question: false
+      greenhouse_using_prospects: false
+      greenhouse_using_prospect_detail: true
     include_incremental: false
 
   - name: "interview enabled, interview_kit disabled"

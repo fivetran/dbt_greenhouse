@@ -26,6 +26,8 @@ models:
         description: From address on a logged email.
       - name: email_to
         description: To address on a logged email.
+      - name: email_cc
+        description: CC addresses on a logged email.
       - name: import_hash
         description: De-duplication key set when the note was created by a bulk import.
       - name: subject

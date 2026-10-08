@@ -13,6 +13,7 @@
     {"name": "email_attachment_file_names", "datatype": dbt.type_string()},
     {"name": "email_from", "datatype": dbt.type_string()},
     {"name": "email_to", "datatype": dbt.type_string()},
+    {"name": "email_cc", "datatype": dbt.type_string()},
     {"name": "import_hash", "datatype": dbt.type_string()},
     {"name": "subject", "datatype": dbt.type_string()},
     {"name": "type", "datatype": dbt.type_string()},

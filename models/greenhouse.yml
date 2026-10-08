@@ -156,7 +156,7 @@ models:
         description: Foreign key referencing the USER who rejected the application.
 
   - name: greenhouse__application_history
-    description: If enabled, table capturing the history of applications as they advance through job stages.
+    description: If enabled, table capturing the history of applications as they advance through job stages. Controlled by the `greenhouse_using_application_stage` variable (requires the `APPLICATION_STAGE` table).
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"

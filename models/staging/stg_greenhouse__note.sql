@@ -36,6 +36,7 @@ final as (
         email_attachment_file_names,
         email_from,
         email_to,
+        email_cc,
         import_hash,
         subject,
         type,

@@ -215,8 +215,8 @@ seeds:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         parent_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         primary_in_house_contact_user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        name: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
-        location: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
+        name: "{{ 'string' if target.type in ('bigquery', 'databricks') else 'varchar' }}"
+        location: "{{ 'string' if target.type in ('bigquery', 'databricks') else 'varchar' }}"
         created_at: timestamp
         updated_at: timestamp
     application_stage:
