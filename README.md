@@ -63,7 +63,7 @@ Include the following greenhouse package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/greenhouse
-    version: [">=1.5.0", "<1.6.0"]
+    version: 1.6.0-a3
 ```
 
 ### Define database and schema variables
@@ -107,9 +107,10 @@ To disable the corresponding functionality in the package, you must set the rele
 
 ```yml
 vars:
-    greenhouse_using_prospects: false # Disable if you do not use prospects and/or do not have the PROSPECT_POOL and PROSPECT_POOL_STAGE tables synced
+    greenhouse_using_prospects: false # Disable if you do not use prospects and/or do not have the PROSPECT_POOL and PROSPECT_POOL_STAGE tables synced. Also removes prospect pool and stage data from the application_enhanced transform model
     greenhouse_using_eeoc: false # Disable if you do not have EEOC data synced and/or do not want to integrate it into the package models
-    greenhouse_using_app_history: false # Disable if you do not have APPLICATION_HISTORY synced and/or do not want to run the application_history transform model
+    greenhouse_using_app_history: false # Disable if you do not have APPLICATION_HISTORY synced. This no longer controls greenhouse__application_history
+    greenhouse_using_application_stage: false # Disable if you do not have APPLICATION_STAGE synced and/or do not want to run the application_history transform model
     greenhouse_using_job_office: false # Disable if you do not have JOB_OFFICE and/or OFFICE synced, or do not want to include offices in the job_enhanced transform model
     greenhouse_using_job_department: false # Disable if you do not have DEPARTMENT synced, or do not want to include departments in the job_enhanced transform model
     greenhouse_using_job_hiring_manager: false # Disable if you do not have JOB_HIRING_MANAGER synced, or do not want to include hiring manager data in the job_enhanced transform model
@@ -117,6 +118,13 @@ vars:
     greenhouse_using_job_post_location: false # Disable if you do not have JOB_POST_LOCATION synced, or do not want to include location data in the job_enhanced transform model
     greenhouse_using_interview: false # Disable if you do not have INTERVIEW synced. Disables the greenhouse__interview_enhanced and greenhouse__interview_scorecard_detail transform models, and removes interview data from the greenhouse__application_enhanced and greenhouse__job_enhanced transform models
     greenhouse_using_interviewer: false # Disable if you do not have INTERVIEWER synced. Disables the greenhouse__interview_scorecard_detail transform model and removes interviewer/scorecard data from the greenhouse__interview_enhanced and greenhouse__application_enhanced transform models
+    greenhouse_using_note: false # Disable if you do not have NOTE synced, or do not want to include note data in the package models
+    greenhouse_using_prospect_detail: false # Disable if you do not have PROSPECT_DETAIL synced, or do not want to include prospect owner data in the application_enhanced transform model
+    greenhouse_using_job_candidate_attribute: false # Disable if you do not have JOB_CANDIDATE_ATTRIBUTE synced, or do not want to include attribute name/sort order data in the interview_scorecard_detail transform model
+    greenhouse_using_scorecard_question: false # Disable if you do not have SCORECARD_QUESTION and SCORECARD_QUESTION_ANSWER synced, or do not want to include question text/answer data in the interview_scorecard_detail transform model
+    greenhouse_using_interview_kit: false # Disable if you do not have INTERVIEW_KIT synced, or do not want to include interview kit duration/scheduling/anonymization data in the interview_enhanced transform model
+    greenhouse_using_rejection_detail: false # Disable if you do not have REJECTION_DETAIL synced, or do not want to include rejection detail data in the application_enhanced transform model
+    greenhouse_using_rejection_reason: false # Disable if you do not have REJECTION_REASON synced, or do not want to include rejection reason name/type data in the application_enhanced transform model
 ```
 *Note: This package only integrates the above variables. If you'd like to disable other models, please create an [issue](https://github.com/fivetran/dbt_greenhouse/issues) specifying which ones.*
 

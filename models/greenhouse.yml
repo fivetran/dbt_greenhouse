@@ -138,24 +138,40 @@ models:
         description: Count of internal users that the candidate has interviewed with. 
       - name: latest_interview_scheduled_at
         description: The latest time that the candidate was scheduled to be interviewed at (can be in the future).
+      - name: prospect_pool_id
+        description: Foreign key referencing the prospect pool the prospect sits in.
+      - name: prospect_pool_stage_id
+        description: Foreign key referencing the prospect pool stage the prospect sits in.
+      - name: prospect_owner_id
+        description: Foreign key referencing the USER who owns this prospect.
+      - name: prospect_owner_name
+        description: Full name of the user who owns this prospect.
+      - name: rejection_reason_id
+        description: Foreign key referencing the REJECTION_REASON selected for the application.
+      - name: rejection_reason_name
+        description: Display label for the rejection reason (e.g. "Not a cultural fit").
+      - name: rejection_reason_type_name
+        description: Display name of the rejection reason's category.
+      - name: rejected_by_id
+        description: Foreign key referencing the USER who rejected the application.
 
   - name: greenhouse__application_history
-    description: If enabled, table capturing the history of applications as they advance through job stages.
+    description: If enabled, table capturing the history of applications as they advance through job stages. Controlled by the `greenhouse_using_application_stage` variable (requires the `APPLICATION_STAGE` table).
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that was updated.
-      - name: new_stage_id
-        description: Foreign key referencing the JOB_STAGE that the application was advanced to.
-      - name: new_status
-        description: Status of the application as of this updated. 
+      - name: job_interview_stage_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE occupied during this entry.
+      - name: is_current
+        description: Boolean that is true when this row represents the application's current interview stage.
       - name: valid_from
-        description: Timestamp of when the application was advanced.
+        description: Timestamp the application entered this stage.
       - name: valid_until
-        description: Timestamp of when the application was moved to a further stage.
+        description: Timestamp the application left this stage. Null while the application is still in this stage (the current stage entry).
       - name: new_stage
-        description: Name of the newly advanced job stage.
+        description: Name of the job stage occupied during this entry.
       - name: full_name
         description: Full name of the applicant.
       - name: current_status
@@ -299,6 +315,18 @@ models:
         description: Description of applicant's provided race.
       - name: candidate_veteran_status
         description: Description of the applicant's veteran status.
+      - name: interview_duration_minutes
+        description: Default length of the interview, in minutes.
+      - name: requires_scorecard
+        description: Boolean that is true if interviewers must submit a scorecard for this slot.
+      - name: scheduling_type
+        description: How the slot is fulfilled (e.g. needs scheduling, take-home test, offer).
+      - name: anonymize_candidate
+        description: Boolean that is true if candidate details are hidden from graders for this slot.
+      - name: anonymize_resumes
+        description: Boolean that is true if resumes are anonymized for reviewers for this slot.
+      - name: exercises
+        description: Interview prep content (instructions, exercises, rubric notes) for this slot.
 
   - name: greenhouse__interview_scorecard_detail
     description: >
@@ -350,6 +378,12 @@ models:
           - not_null
       - name: interview_scorecard_key
         description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
+      - name: attribute_name
+        description: Display name of the attribute (e.g. "JavaScript", "Leadership").
+      - name: sort_order
+        description: Display priority of the attribute within the job's attribute list.
+      - name: scorecard_question_answers
+        description: Concatenated list of each scorecard question and the interviewer's response (free-text answer or yes/no value), one per question asked on this scorecard.
 
   - name: greenhouse__job_enhanced
     description: Table capturing information and metrics related to jobs. May contain custom columns.

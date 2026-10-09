@@ -1,3 +1,56 @@
+# dbt_greenhouse v1.6.0-a3
+
+[PR #51](https://github.com/fivetran/dbt_greenhouse/pull/51) is a pre-release that includes the following updates:
+
+## Schema/Data Change
+**8 total changes • 2 possible breaking changes**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ------------- | ----------- | --- | --- | ----- |
+| `greenhouse__application_enhanced` | Columns added | — | `prospect_pool_id`, `prospect_pool_stage_id`, `prospect_owner_id`, `prospect_owner_name` | Restores prospect pipeline data removed as a breaking change in v1.5.0 — lets customers who use Greenhouse's CRM/sourcing pool features see which pool and stage a candidate sits in again. |
+| `greenhouse__interview_scorecard_detail` | Columns added | — | `attribute_name`, `sort_order` | Resolves the `job_candidate_attribute_id` FK, which previously had no attribute name or display order — labels scorecard ratings by the actual trait being evaluated (e.g. "JavaScript", "Leadership") instead of a bare ID. |
+| `greenhouse__interview_scorecard_detail` | Columns added | — | `scorecard_question_answers` | Surfaces the scorecard questions asked and the interviewer's responses, not just a rating — useful for understanding what was asked and how an interviewer actually responded. One concatenated value per scorecard (not a separate row per question) to avoid duplicating attribute-rating rows, since questions and rated attributes are independent lists with no shared key. |
+| `greenhouse__interview_enhanced` | Columns added | — | `interview_duration_minutes`, `requires_scorecard`, `scheduling_type`, `anonymize_candidate`, `anonymize_resumes`, `exercises` | `exercises` replaces `interview_kit_content`, which was removed in v1.5.0. The remaining fields support interview-process compliance/consistency reporting. |
+| `greenhouse__application_enhanced` | Columns added | — | `rejection_reason_id`, `rejection_reason_name`, `rejection_reason_type_name`, `rejected_by_id` | Surfaces why and by whom an application was rejected. |
+| `greenhouse__application_history` | Variable change | Controlled by `greenhouse_using_app_history` | Controlled by `greenhouse_using_application_stage` | **Possible breaking change:** The model is now sourced from `stg_greenhouse__application_stage`, so it follows that model's variable. If you set `greenhouse_using_app_history: false`, the model no longer disables. It builds whenever `greenhouse_using_application_stage` is `true` (the default), and fails if `APPLICATION_STAGE` is not synced. To disable the model, set `greenhouse_using_application_stage: false`. See the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for more details. |
+| `stg_greenhouse__note` | Changed staging model, columns added | `stg_greenhouse__activity`, sourced from `ACTIVITY` | `stg_greenhouse__note`, sourced from `NOTE`.<br> Adds `application_id`, `body_with_tags`, `email_attachment_file_names`, `email_from`, `email_to`, `email_cc`, `import_hash`, `type`, `updated_at`, `visibility` | **Possible breaking change:** `NOTE` merges the v2 `ACTIVITY`/`EMAIL`/`EMAIL_CC` tables, distinguished by a `type` column, so the model now returns more rows (emails and other note types) than `stg_greenhouse__activity` did. |
+| `stg_greenhouse__prospect_detail`<br>`stg_greenhouse__job_candidate_attribute`<br>`stg_greenhouse__scorecard_question`<br>`stg_greenhouse__scorecard_question_answer`<br>`stg_greenhouse__job_interview`<br>`stg_greenhouse__interview_kit`<br>`stg_greenhouse__rejection_reason`<br>`stg_greenhouse__rejection_detail` | New staging models | — | — | Adds new staging models over the corresponding new Harvest V3 tables. Each is backed by a `greenhouse_using_*` variable (default `true`) to disable it if the underlying table isn't synced. These variables are enabled dynamically in Quickstart based on which tables you sync. See the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for the full list and how to configure them. |
+
+## Bug Fixes
+- Fixes `job_stage` and `interview_name` returning `null` for most interviews in `greenhouse__interview_enhanced` and `greenhouse__interview_scorecard_detail`, by correctly resolving a scheduled interview's stage through the new `JOB_INTERVIEW` table.
+- Fixes `scorecard_id`, `candidate_rating`, `scorecard_submitted_at`, and `interviewer_name` returning `null` for ad-hoc scorecards in `greenhouse__interview_scorecard_detail` — these scorecards exist on `SCORECARD` but have no matching row on the `INTERVIEWER` bridge table, so they previously dropped out of the join entirely. They now surface as additional rows keyed on `application_id`, with no interview association guessed at.
+- Fixes duplicate rows in `greenhouse__application_enhanced`, `greenhouse__application_history`, and `greenhouse__job_enhanced` for applications with more than one `EEOC` submission (e.g. a candidate updates their self-identification responses). `int_greenhouse__application_info` now keeps only the most recent `EEOC` record per application instead of joining to all of them.
+
+# dbt_greenhouse v1.6.0-a2
+
+[PR #50](https://github.com/fivetran/dbt_greenhouse/pull/50) includes the following updates:
+
+## Schema/Data Change
+**3 total changes • 2 possible breaking change**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ---------- | ----------- | -------- | -------- | ----- |
+| `greenhouse__application_history` | Schema change | Sourced from `APPLICATION_HISTORY`: `new_stage_id`, `new_status`, `valid_from`/`valid_until` derived from `updated_at` | Sourced from `APPLICATION_STAGE`: `job_interview_stage_id`, `is_current`, `valid_from`/`valid_until` derived from `entered_at`/`exited_at` | **Possible breaking change:** Customer reported `stg_greenhouse__application_history` no longer reliably provides one row per stage per application. Re-sourcing from `stg_greenhouse__application_stage` restores that grain. |
+| `greenhouse__job_enhanced`<br>`stg_greenhouse__office` | Bug fix | `location`, `primary_in_house_contact_user_id` | `location_name`, `primary_contact_user_id` | **Possible breaking change** Restores `office_locations` data after making sure the proper V3 source names were referenced. |
+| `stg_greenhouse__application_stage`<br>`stg_greenhouse__application_stage_tmp` | New staging models | — | — | Adds `APPLICATION_STAGE` table introduced in the Harvest V3 API to properly enrich `greenhouse__application_history`. Adds the `greenhouse_using_application_stage` variable to enable/disable this source. See the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for more details. |
+
+# dbt_greenhouse v1.6.0-a1
+
+[PR #48](https://github.com/fivetran/dbt_greenhouse/pull/48) includes the following updates:
+
+## Schema/Data Change
+**1 total change • 0 possible breaking change**
+
+| Data Model(s) | Change type | Old | New | Notes |
+| ---------- | ----------- | -------- | -------- | ----- |
+| `stg_greenhouse__referrer` (new) | New staging model | — | — | Adds a new staging model over the `REFERRER` table introduced in the Harvest v3 API. Requires the new `referrer` table to be synced by the connector. |
+
+## Bug Fix
+- Fixes `referrer_name` (and the downstream credited-user value) on `greenhouse__application_enhanced`, which was incorrect whenever `application.referrer_id` did not coincidentally match a valid `user_id`. `referrer_id` now joins through the new `stg_greenhouse__referrer` staging model (`referrer.id` → `referrer.user_id`) before resolving the user, matching the v3 API's `REFERRER` object rather than joining straight to `USER`.
+
+## Under the Hood
+- Adds `activity` and `referrer` tables as non-essential variables in the `quickstart.yml` so Quickstart-managed connections aren't blocked if either table isn't yet synced.
+
 # dbt_greenhouse v1.5.0
 
 [PR #46](https://github.com/fivetran/dbt_greenhouse/pull/46) includes the following updates:
