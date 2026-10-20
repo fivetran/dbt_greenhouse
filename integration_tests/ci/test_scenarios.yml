@@ -45,7 +45,7 @@ test_scenarios:
       greenhouse_using_interviewer: false
     include_incremental: false
 
-  - name: "interviewer enabled, job_candidate_attribute and scorecard_question disabled"
+  - name: "prospect_detail enabled; prospect, job_candidate_attribute and scorecard_question disabled"
     vars:
       greenhouse_using_job_candidate_attribute: false
       greenhouse_using_scorecard_question: false
