@@ -1,4 +1,4 @@
-# dbt_greenhouse v1.6.0-a1 
+# dbt_greenhouse v1.6.0-a1
 
 [PR #48](https://github.com/fivetran/dbt_greenhouse/pull/48) includes the following updates:
 
