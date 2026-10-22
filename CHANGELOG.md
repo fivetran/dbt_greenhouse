@@ -1,27 +1,3 @@
-# dbt_greenhouse v1.6.0
-
-[PR #51](https://github.com/fivetran/dbt_greenhouse/pull/51) includes the following updates:
-
-## Schema/Data Change
-**9 total changes • 3 possible breaking changes**
-
-| Data Model(s) | Change type | Old | New | Notes |
-| ------------- | ----------- | --- | --- | ----- |
-| greenhouse__application_history<br>(Breaking) | Variable change | Controlled by `greenhouse_using_app_history` | Controlled by `greenhouse_using_application_stage` | This model is now sourced from the `APPLICATION_STAGE` table instead of `APPLICATION_HISTORY` and is therefore controlled by a new variable. See the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for more details for self-managed dbt projects. |
-| greenhouse__interview_enhanced<br>greenhouse__interview_scorecard_detail<br>(Breaking) | Key change | `interview_scorecard_key` hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation` | Hashed on `scheduled_interview_id`, `interviewer_user_id`, `scorecard_id`, and `source_relation` | `scorecard_id` was added to the key so the ad-hoc scorecards restored by the Bug Fix below get a unique key instead of colliding with an existing one. If you reference `interview_scorecard_key` directly, recompute any stored values after upgrading. |
-| stg_greenhouse__note<br>(Breaking) | Changed staging model, columns added | `stg_greenhouse__activity`, sourced from `ACTIVITY` | `stg_greenhouse__note`, sourced from `NOTE`.<br> Adds `application_id`, `body_with_tags`, `email_attachment_file_names`, `email_from`, `email_to`, `email_cc`, `import_hash`, `type`, `updated_at`, `visibility` | `NOTE` merges the v2 `ACTIVITY`/`EMAIL`/`EMAIL_CC` tables, distinguished by a `type` column, so the model now returns more rows (emails and other note types) than `stg_greenhouse__activity` did. `greenhouse__application_enhanced.count_activities` is now also disabled when `greenhouse_using_note` is `false`. |
-| greenhouse__application_enhanced | Columns added |  | `prospect_pool_id`, `prospect_pool_stage_id`, `prospect_owner_id`, `prospect_owner_name` | Restores prospect pipeline data removed as a breaking change in v1.5.0 — lets customers who use Greenhouse's CRM/sourcing pool features see which pool and stage a candidate sits in again. |
-| greenhouse__interview_scorecard_detail | Columns added |  | `attribute_name`, `sort_order` | Resolves the previously-opaque `job_candidate_attribute_id` FK with a readable attribute name and display order. |
-| greenhouse__interview_scorecard_detail | Columns added |  | `scorecard_question_answers` | Surfaces the scorecard questions asked and the interviewer's responses, not just a rating — useful for understanding what was asked and how an interviewer actually responded. One concatenated value per scorecard (not a separate row per question) to avoid duplicating attribute-rating rows, since questions and rated attributes are independent lists with no shared key. |
-| greenhouse__interview_enhanced | Columns added |  | `interview_duration_minutes`, `requires_scorecard`, `scheduling_type`, `anonymize_candidate`, `anonymize_resumes`, `exercises` | `exercises` replaces `interview_kit_content`, which was removed in v1.5.0. The remaining fields support interview-process compliance/consistency reporting. |
-| greenhouse__application_enhanced | Columns added |  | `rejection_reason_id`, `rejection_reason_name`, `rejection_reason_type_name`, `rejected_by_id` | Surfaces why and by whom an application was rejected. |
-| stg_greenhouse__prospect_detail<br>stg_greenhouse__job_candidate_attribute<br>stg_greenhouse__scorecard_question<br>stg_greenhouse__scorecard_question_answer<br>stg_greenhouse__job_interview<br>stg_greenhouse__interview_kit<br>stg_greenhouse__rejection_reason<br>stg_greenhouse__rejection_detail | New staging models |  |  | Adds new staging models over the corresponding new Harvest V3 tables. Each is backed by a `greenhouse_using_*` variable (default `true`) to disable it if the underlying table isn't synced. These variables are enabled dynamically in Quickstart based on which tables you sync. See the [README](https://github.com/fivetran/dbt_greenhouse/blob/main/README.md#disable-models-for-non-existent-sources) for the full list and how to configure them. |
-
-## Bug Fix
-- Fixes `job_stage` and `interview_name` returning `null` for most interviews in `greenhouse__interview_enhanced` and `greenhouse__interview_scorecard_detail`, by correctly resolving a scheduled interview's stage through the new `JOB_INTERVIEW` table.
-- Fixes `scorecard_id`, `candidate_rating`, `scorecard_submitted_at`, and `interviewer_name` returning `null` for ad-hoc scorecards in `greenhouse__interview_scorecard_detail` — these scorecards exist on `SCORECARD` but have no matching row on the `INTERVIEWER` bridge table, so they previously dropped out of the join entirely. They now surface as additional rows keyed on `application_id`, with no interview association guessed at.
-- Fixes duplicate rows in `greenhouse__application_enhanced`, `greenhouse__application_history`, and `greenhouse__job_enhanced` for applications with more than one `EEOC` submission (e.g. a candidate updates their self-identification responses). `int_greenhouse__application_info` now keeps only the most recent `EEOC` record per application instead of joining to all of them.
-
 # dbt_greenhouse v1.5.0
 
 [PR #46](https://github.com/fivetran/dbt_greenhouse/pull/46) includes the following updates:
