@@ -1,0 +1,23 @@
+version: 1.6.0-a1
+pr_number: 48
+is_breaking: false
+schema_data_changes:
+  entries:
+  - models:
+    - stg_greenhouse__referrer (new)
+    change_type: New staging model
+    is_breaking: false
+    notes: Adds a new staging model over the `REFERRER` table introduced in the Harvest
+      v3 API. Requires the new `referrer` table to be synced by the connector.
+bug_fixes:
+- description: "Fixes `referrer_name` (and the downstream credited-user value) on\
+    \ `greenhouse__application_enhanced`, which was incorrect whenever `application.referrer_id`\
+    \ did not coincidentally match a valid `user_id`. `referrer_id` now joins through\
+    \ the new `stg_greenhouse__referrer` staging model (`referrer.id` \u2192 `referrer.user_id`)\
+    \ before resolving the user, matching the v3 API's `REFERRER` object rather than\
+    \ joining straight to `USER`."
+under_the_hood:
+- description: Adds `activity` and `referrer` tables as non-essential variables in
+    the `quickstart.yml` so Quickstart-managed connections aren't blocked if either
+    table isn't yet synced.
+date: '2026-10-22'

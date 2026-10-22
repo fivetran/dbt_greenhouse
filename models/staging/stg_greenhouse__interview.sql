@@ -30,7 +30,7 @@ final as (
         cast(application_id as {{ dbt.type_string() }}) as application_id,
         cast(job_interview_id as {{ dbt.type_string() }}) as job_interview_id,
         cast(job_id as {{ dbt.type_string() }}) as job_id,
-        location,
+        cast(location as {{ dbt.type_string() }}) as location,
         cast(organizer_id as {{ dbt.type_string() }}) as organizer_user_id,
         status,
         cast(created_at as {{ dbt.type_timestamp() }}) as created_at,

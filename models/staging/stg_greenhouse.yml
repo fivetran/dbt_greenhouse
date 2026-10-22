@@ -1,23 +1,43 @@
 version: 2
 
 models:
-  - name: stg_greenhouse__activity
-    description: Table capturing lists of activities on a candidate's profile, including interviews, notes, and emails.
+  - name: stg_greenhouse__note
+    description: Table capturing notes, logged emails, interview feedback, and other activity entries on a candidate's profile.
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
-      - name: body
-        description: Content of the activity taken. 
-      - name: candidate_id
-        description: Foreign key referencing the CANDIDATE whose profile was acted upon. 
-      - name: occurred_at
-        description: Timestamp of when the activity occurred.
       - name: activity_id
-        description: The internal Greenhouse ID of the activity feed note.
-      - name: subject
-        description: Subject of the activity.
+        description: Unique ID of the note.
       - name: user_id
-        description: Foreign key referencing the USER who performed the activity.
+        description: Foreign key referencing the USER who authored the note. Null for system-generated notes.
+      - name: candidate_id
+        description: Foreign key referencing the CANDIDATE this note is attached to.
+      - name: application_id
+        description: Foreign key referencing the APPLICATION this note is attached to, if any.
+      - name: body
+        description: Content of the note.
+      - name: body_with_tags
+        description: Content of the note with @-mentions preserved as tags.
+      - name: occurred_at
+        description: Timestamp of when the note occurred (aliased from the source's `created_at`).
+      - name: email_attachment_file_names
+        description: File names of attachments on a logged email.
+      - name: email_from
+        description: From address on a logged email.
+      - name: email_to
+        description: To address on a logged email.
+      - name: email_cc
+        description: CC addresses on a logged email.
+      - name: import_hash
+        description: De-duplication key set when the note was created by a bulk import.
+      - name: subject
+        description: Subject line of the note, populated for email-type notes.
+      - name: type
+        description: Type of note (e.g. note, email, activity, interview feedback).
+      - name: updated_at
+        description: Timestamp the record was last updated.
+      - name: visibility
+        description: Who can see the note (e.g. public, private, admin only).
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
@@ -80,6 +100,34 @@ models:
         description: Status of the application as of this updated. 
       - name: updated_at
         description: Timestamp of when the application was advanced.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__application_stage
+    description: Table capturing each stage an application has occupied, one row per stage per application.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: application_stage_id
+        description: Unique ID of the application stage record.
+        tests:
+          - not_null
+      - name: application_id
+        description: Foreign key referencing the APPLICATION this stage entry belongs to.
+      - name: job_interview_stage_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE occupied during this entry.
+      - name: entered_at
+        description: Timestamp the application entered this stage. Null only for backfilled or partially recorded history — not a data quality issue.
+      - name: exited_at
+        description: Timestamp the application left this stage. Null while the application is still in this stage (the current stage entry).
+      - name: days_in_stage
+        description: Whole number of calendar days the application has spent in this stage. For the current stage, this is computed by Greenhouse as of the last sync and will not tick up in real time between syncs.
+      - name: is_current
+        description: Boolean that is true when this row represents the application's current interview stage.
+      - name: created_at
+        description: Timestamp the application stage record was created.
+      - name: updated_at
+        description: Timestamp the application stage record was last updated.
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 
@@ -760,6 +808,248 @@ models:
         description: Timestamp the stage was created.
       - name: updated_at
         description: Timestamp the stage was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__referrer
+    description: Table mapping an application referral to the user who made it.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: referrer_id
+        description: Unique identifier for the referrer record.
+        tests:
+          - not_null
+      - name: user_id
+        description: Id of the user who made the referral.
+      - name: name
+        description: Full name of the referrer.
+      - name: created_at
+        description: Timestamp the referrer record was created.
+      - name: updated_at
+        description: Timestamp the referrer record was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__prospect_detail
+    description: Table capturing the prospect pool/stage/owner details for prospect applications.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: prospect_detail_id
+        description: Unique ID of the prospect detail record.
+        tests:
+          - not_null
+      - name: application_id
+        description: Foreign key referencing the prospect APPLICATION this record belongs to.
+      - name: department_id
+        description: Foreign key referencing the DEPARTMENT the prospect is being considered for.
+      - name: office_id
+        description: Foreign key referencing the OFFICE the prospect is being considered for.
+      - name: pool_id
+        description: Foreign key referencing the prospect pool the prospect sits in.
+      - name: pool_stage_id
+        description: Foreign key referencing the prospect pool stage the prospect sits in.
+      - name: prospect_owner_id
+        description: Foreign key referencing the USER who owns this prospect.
+      - name: created_at
+        description: Timestamp the record was created.
+      - name: updated_at
+        description: Timestamp the record was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__job_candidate_attribute
+    description: Table capturing the candidate attributes (skills, traits) configured on a job's scorecard.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: job_candidate_attribute_id
+        description: Unique ID of the job candidate attribute.
+        tests:
+          - not_null
+      - name: job_id
+        description: Foreign key referencing the JOB this attribute belongs to.
+      - name: candidate_attribute_type_id
+        description: Foreign key referencing the attribute's type definition.
+      - name: is_active
+        description: Boolean that is true if the attribute is currently in use on the job.
+      - name: attribute_name
+        description: Display name of the attribute (e.g. "JavaScript", "Leadership").
+      - name: sort_order
+        description: Display priority of the attribute within the job's attribute list.
+      - name: created_at
+        description: Timestamp the record was created.
+      - name: updated_at
+        description: Timestamp the record was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__scorecard_question
+    description: Table capturing the questions configured on an interview kit's scorecard.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: scorecard_question_id
+        description: Unique ID of the scorecard question.
+        tests:
+          - not_null
+      - name: interview_kit_id
+        description: Foreign key referencing the INTERVIEW_KIT this question belongs to.
+      - name: is_active
+        description: Boolean that is true if the question is currently in use.
+      - name: answer_type
+        description: Shape of the expected answer (e.g. text, yes/no, single select, multi select, instruction).
+      - name: question_text
+        description: Text of the scorecard question.
+      - name: is_required
+        description: Boolean that is true if an interviewer must answer this question before submitting the scorecard.
+      - name: sort_order
+        description: Display order of the question within its interview kit.
+      - name: created_at
+        description: Timestamp the record was created.
+      - name: updated_at
+        description: Timestamp the record was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__scorecard_question_answer
+    description: Table capturing an interviewer's answer to a scorecard question.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: scorecard_question_answer_id
+        description: Unique ID of the scorecard question answer.
+        tests:
+          - not_null
+      - name: scorecard_question_id
+        description: Foreign key referencing the SCORECARD_QUESTION being answered.
+      - name: scorecard_id
+        description: Foreign key referencing the SCORECARD this answer belongs to.
+      - name: answer
+        description: Free-text answer provided by the interviewer.
+      - name: answer_with_tag
+        description: Free-text answer with @-mentions preserved as tags.
+      - name: boolean_value
+        description: Yes/no answer provided by the interviewer, for yes/no questions.
+      - name: created_at
+        description: Timestamp the record was created.
+      - name: updated_at
+        description: Timestamp the record was last updated.
+      - name: value
+        description: Selected option value, for select-type questions.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__job_interview
+    description: Table capturing the interview slots configured on a job's interview plan.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: job_interview_id
+        description: Unique ID of the job interview slot.
+        tests:
+          - not_null
+      - name: job_interview_stage_id
+        description: Foreign key referencing the JOB_INTERVIEW_STAGE this slot belongs to.
+      - name: job_id
+        description: Foreign key referencing the JOB this slot is defined on.
+      - name: is_active
+        description: Boolean that is true if the slot is on the job's current interview plan.
+      - name: interview_duration_minutes
+        description: Default length of the interview, in minutes.
+      - name: instruction
+        description: Interviewer-facing instructions for this slot.
+      - name: name
+        description: Name of the interview slot (e.g. "Recruiter Phone Screen").
+      - name: requires_scorecard
+        description: Boolean that is true if interviewers must submit a scorecard for this slot.
+      - name: scheduling_type
+        description: How the slot is fulfilled (e.g. needs scheduling, take-home test, offer).
+      - name: sort_order
+        description: Position of this slot within its interview stage.
+      - name: summary
+        description: Candidate-facing summary for this slot.
+      - name: created_at
+        description: Timestamp the record was created.
+      - name: updated_at
+        description: Timestamp the record was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__interview_kit
+    description: Table capturing per-slot interview kit configuration (anonymization, exercises).
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: interview_kit_id
+        description: Unique ID of the interview kit.
+        tests:
+          - not_null
+      - name: job_id
+        description: Foreign key referencing the JOB this kit is configured on.
+      - name: job_interview_id
+        description: Foreign key referencing the JOB_INTERVIEW slot this kit belongs to.
+      - name: anonymize_candidate
+        description: Boolean that is true if candidate details are hidden from graders for this slot.
+      - name: anonymize_resumes
+        description: Boolean that is true if resumes are anonymized for reviewers for this slot.
+      - name: exercises
+        description: Interview prep content (instructions, exercises, rubric notes) for this slot.
+      - name: created_at
+        description: Timestamp the record was created.
+      - name: updated_at
+        description: Timestamp the record was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__rejection_reason
+    description: Lookup table of rejection reasons and their categories.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: rejection_reason_id
+        description: Unique ID of the rejection reason.
+        tests:
+          - not_null
+      - name: rejection_reason_name
+        description: Display label for the rejection reason (e.g. "Not a cultural fit").
+      - name: type_id
+        description: Foreign key referencing the rejection reason's category.
+      - name: type_key
+        description: Stable machine-readable key for the rejection reason's category.
+      - name: rejection_reason_type_name
+        description: Display name of the rejection reason's category.
+      - name: created_at
+        description: Timestamp the record was created.
+      - name: updated_at
+        description: Timestamp the record was last updated.
+      - name: _fivetran_synced
+        description: "{{ doc('_fivetran_synced') }}"
+
+  - name: stg_greenhouse__rejection_detail
+    description: Table capturing who rejected an application, why, and when.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: rejection_detail_id
+        description: Unique ID of the rejection detail record.
+        tests:
+          - not_null
+      - name: application_id
+        description: Foreign key referencing the APPLICATION this rejection belongs to.
+      - name: rejected_by_id
+        description: Foreign key referencing the USER who rejected the application.
+      - name: rejection_reason_id
+        description: Foreign key referencing the REJECTION_REASON selected for the application.
+      - name: rejected_at
+        description: Timestamp the application was rejected.
+      - name: rejection_note_id
+        description: Foreign key referencing the note capturing the free-text rejection message.
+      - name: created_at
+        description: Timestamp the record was created.
+      - name: updated_at
+        description: Timestamp the record was last updated.
       - name: _fivetran_synced
         description: "{{ doc('_fivetran_synced') }}"
 

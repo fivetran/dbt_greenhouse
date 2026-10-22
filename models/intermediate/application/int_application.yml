@@ -50,6 +50,22 @@ models:
         description: Email of the coordinator assigned to this application.
       - name: recruiter_email
         description: Email of the recruiter assigned to this application.
+      - name: prospect_pool_id
+        description: Foreign key referencing the prospect pool the prospect sits in.
+      - name: prospect_pool_stage_id
+        description: Foreign key referencing the prospect pool stage the prospect sits in.
+      - name: prospect_owner_id
+        description: Foreign key referencing the USER who owns this prospect.
+      - name: prospect_owner_name
+        description: Full name of the user who owns this prospect.
+      - name: rejection_reason_id
+        description: Foreign key referencing the REJECTION_REASON selected for the application.
+      - name: rejection_reason_name
+        description: Display label for the rejection reason (e.g. "Not a cultural fit").
+      - name: rejection_reason_type_name
+        description: Display name of the rejection reason's category.
+      - name: rejected_by_id
+        description: Foreign key referencing the USER who rejected the application.
 
   - name: int_greenhouse__application_info
     description: Table capturing information about applications
@@ -157,3 +173,19 @@ models:
         tests:
           - unique
           - not_null
+      - name: prospect_pool_id
+        description: Foreign key referencing the prospect pool the prospect sits in.
+      - name: prospect_pool_stage_id
+        description: Foreign key referencing the prospect pool stage the prospect sits in.
+      - name: prospect_owner_id
+        description: Foreign key referencing the USER who owns this prospect.
+      - name: prospect_owner_name
+        description: Full name of the user who owns this prospect.
+      - name: rejection_reason_id
+        description: Foreign key referencing the REJECTION_REASON selected for the application.
+      - name: rejection_reason_name
+        description: Display label for the rejection reason (e.g. "Not a cultural fit").
+      - name: rejection_reason_type_name
+        description: Display name of the rejection reason's category.
+      - name: rejected_by_id
+        description: Foreign key referencing the USER who rejected the application.

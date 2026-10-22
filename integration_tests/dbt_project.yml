@@ -1,5 +1,5 @@
 name: 'greenhouse_integration_tests'
-version: '1.5.0'
+version: '1.6.0'
 config-version: 2
 profile: 'integration_tests'
 
@@ -10,11 +10,13 @@ models:
   +schema: "greenhouse_{{ var('directed_schema','dev') }}"
 
 vars:
+  # consistency_test_exclude_columns: []
   greenhouse_schema: greenhouse_integration_tests
   greenhouse:
-    greenhouse_activity_identifier: "activity"
+    greenhouse_note_identifier: "note"
     greenhouse_application_identifier: "application"
     greenhouse_application_history_identifier: "application_history"
+    greenhouse_application_stage_identifier: "application_stage"
     greenhouse_attachment_identifier: "attachment"
     greenhouse_candidate_identifier: "candidate"
     greenhouse_candidate_tag_link_identifier: "candidate_tag_link"
@@ -40,10 +42,12 @@ vars:
     greenhouse_source_identifier: "source"
     greenhouse_users_identifier: "users"
     greenhouse_user_email_identifier: "user_email"
+    greenhouse_referrer_identifier: "referrer"
+
 
   # Comment out when generating docs
-  greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
-  greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options'] # @docs-ignore
+  # greenhouse_application_custom_columns: ['custom_what_is_your_preferred_pronoun_', 'custom_how_did_you_hear_about_fivetran_'] # @docs-ignore
+  # greenhouse_job_custom_columns: ['custom_employment_type', 'custom_stock_options'] # @docs-ignore
 
 seeds:
   +docs:
@@ -52,12 +56,14 @@ seeds:
   greenhouse_integration_tests:
     +column_types:
       _fivetran_synced: timestamp
-    activity:
+    note:
       +column_types:
-        created_at: timestamp
-        candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
     application:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -209,10 +215,34 @@ seeds:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         parent_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
         primary_in_house_contact_user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
-        name: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
-        location: "{{ 'string' if target.name in ('bigquery', 'databricks') else 'varchar' }}"
+        name: "{{ 'string' if target.type in ('bigquery', 'databricks') else 'varchar' }}"
+        location: "{{ 'string' if target.type in ('bigquery', 'databricks') else 'varchar' }}"
         created_at: timestamp
         updated_at: timestamp
+    application_stage:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_interview_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+        entered_at: timestamp
+        exited_at: timestamp
+        current: boolean
+        days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+      +enabled: "{{ target.type != 'snowflake' or var('fivetran_using_source_casing', false) }}"
+    application_stage_snowflake:
+      +alias: application_stage
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_interview_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+        entered_at: timestamp
+        exited_at: timestamp
+        days_in_stage: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+      +enabled: "{{ target.type == 'snowflake' and not var('fivetran_using_source_casing', false) }}"
     candidate_phone_number:
       +column_types:
         candidate_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -228,6 +258,12 @@ seeds:
         created_at: timestamp
         updated_at: timestamp
         sort_order: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+    referrer:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        user_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
     interviewer:
       +column_types:
         id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
@@ -275,6 +311,79 @@ seeds:
         updated_at: timestamp
         verified: boolean
         verification_token_sent_at: timestamp
+    prospect_detail:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        department_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        office_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        pool_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        pool_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        prospect_owner_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+    job_candidate_attribute:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        candidate_attribute_type_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        active: boolean
+        sort_order: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+    scorecard_question:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        interview_kit_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        active: boolean
+        required: boolean
+        sort_order: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+    scorecard_question_answer:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        scorecard_question_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        scorecard_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        boolean_value: boolean
+        created_at: timestamp
+        updated_at: timestamp
+    job_interview:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_interview_stage_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        active: boolean
+        require_scorecard: boolean
+        duration: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        sort_order: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+    interview_kit:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        job_interview_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        anonymize_candidate: boolean
+        anonymize_resumes: boolean
+        created_at: timestamp
+        updated_at: timestamp
+    rejection_reason:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        type_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        created_at: timestamp
+        updated_at: timestamp
+    rejection_detail:
+      +column_types:
+        id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        application_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        rejected_by_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        rejection_reason_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        rejection_note_id: "{{ 'int64' if target.type == 'bigquery' else 'bigint' }}"
+        rejected_at: timestamp
+        created_at: timestamp
+        updated_at: timestamp
 
 dispatch:
   - macro_namespace: dbt_utils

@@ -1,0 +1,2 @@
+id,_fivetran_deleted,_fivetran_synced,application_id,rejected_by_id,rejection_reason_id,rejected_at,rejection_note_id,created_at,updated_at
+9401003,false,2021-02-10 09:00:00.000,25181085003,4177942003,9201003,2021-02-10 09:00:00.000,,2021-02-10 09:00:00.000,2021-02-10 09:00:00.000

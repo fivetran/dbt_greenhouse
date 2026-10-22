@@ -6,11 +6,25 @@ with interview as (
     from {{ ref('int_greenhouse__interview_users') }}
 ),
 
+job_interview as (
+
+    select *
+    from {{ ref('stg_greenhouse__job_interview') }}
+),
+
 job_stage as (
 
     select *
     from {{ ref('stg_greenhouse__job_interview_stage') }}
 ),
+
+{% if var('greenhouse_using_interview_kit', True) %}
+interview_kit as (
+
+    select *
+    from {{ ref('stg_greenhouse__interview_kit') }}
+),
+{% endif %}
 
 -- this has job info!
 application as (
@@ -28,6 +42,15 @@ final as (
         application.current_job_stage as application_current_job_stage,
         application.status as current_application_status,
         application.job_title,
+
+        {% if var('greenhouse_using_interview_kit', True) %}
+        job_interview.interview_duration_minutes,
+        job_interview.requires_scorecard,
+        job_interview.scheduling_type,
+        interview_kit.anonymize_candidate,
+        interview_kit.anonymize_resumes,
+        interview_kit.exercises,
+        {% endif %}
 
         {% if var('greenhouse_using_job_hiring_manager', True) and var('greenhouse_using_interviewer', True) %}
         application.hiring_managers like ('%' || interview.interviewer_name || '%')  as interviewer_is_hiring_manager,
@@ -57,10 +80,18 @@ final as (
         {% endif %}
 
     from interview
+    left join job_interview
+        on interview.job_interview_id = job_interview.job_interview_id
+        and interview.source_relation = job_interview.source_relation
     left join job_stage
-        on interview.job_interview_id = job_stage.job_stage_id
-        and interview.source_relation = job_stage.source_relation
-    left join application 
+        on job_interview.job_interview_stage_id = job_stage.job_stage_id
+        and job_interview.source_relation = job_stage.source_relation
+    {% if var('greenhouse_using_interview_kit', True) %}
+    left join interview_kit
+        on job_interview.job_interview_id = interview_kit.job_interview_id
+        and job_interview.source_relation = interview_kit.source_relation
+    {% endif %}
+    left join application
         on interview.application_id = application.application_id
         and interview.source_relation = application.source_relation
 )

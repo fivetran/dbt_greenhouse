@@ -28,16 +28,19 @@ source as (
     from {{ ref('stg_greenhouse__source') }}
 ),
 
+{% if var('greenhouse_using_note', True) %}
 activity as (
 
-    select 
+    select
         source_relation,
         candidate_id,
         count(*) as count_activities
 
-    from {{ ref('stg_greenhouse__activity') }}
+    from {{ ref('stg_greenhouse__note') }}
+    where lower(type) = 'activity'
     group by 1, 2
 ),
+{% endif %}
 
 job as (
 
@@ -46,10 +49,26 @@ job as (
 ),
 
 {% if var('greenhouse_using_eeoc', true) %}
+-- an application can have more than one eeoc submission (e.g. a candidate
+-- updates their self-identification responses); keep only the latest
+-- so this join doesn't fan out the application-level grain of this model
+order_eeoc as (
+
+    select
+        *,
+        row_number() over (
+            partition by source_relation, application_id
+            order by submitted_at desc, updated_at desc
+        ) as eeoc_row_num
+
+    from {{ ref('stg_greenhouse__eeoc') }}
+),
+
 eeoc as (
 
     select *
-    from {{ ref('stg_greenhouse__eeoc') }}
+    from order_eeoc
+    where eeoc_row_num = 1
 ),
 {% endif %}
 
@@ -75,7 +94,10 @@ join_info as (
         job_stage.stage_name as current_job_stage,
         source.source_name as sourced_from,
         source.source_type_name as sourced_from_type,
+
+        {% if var('greenhouse_using_note', True) %}
         activity.count_activities,
+        {% endif %}
 
         job.job_title,
         job.status as job_status,
@@ -124,9 +146,11 @@ join_info as (
     left join source
         on application.source_id = source.source_id
         and application.source_relation = source.source_relation
+    {% if var('greenhouse_using_note', True) %}
     left join activity
         on activity.candidate_id = candidate.candidate_id
         and activity.source_relation = candidate.source_relation
+    {% endif %}
     left join job
         on application.job_id = job.job_id
         and application.source_relation = job.source_relation

@@ -11,6 +11,8 @@ table_variables:
     - eeoc
   greenhouse_using_app_history:
     - application_history
+  greenhouse_using_application_stage:
+    - application_stage
   greenhouse_using_job_office:
     - job_office
     - office
@@ -24,8 +26,24 @@ table_variables:
     - job_post_location
   greenhouse_using_interview:
     - interview
+    - job_interview
   greenhouse_using_interviewer:
     - interviewer
+  greenhouse_using_note:
+    - note
+  greenhouse_using_prospect_detail:
+    - prospect_detail
+  greenhouse_using_job_candidate_attribute:
+    - job_candidate_attribute
+  greenhouse_using_scorecard_question:
+    - scorecard_question
+    - scorecard_question_answer
+  greenhouse_using_interview_kit:
+    - interview_kit
+  greenhouse_using_rejection_detail:
+    - rejection_detail
+  greenhouse_using_rejection_reason:
+    - rejection_reason
 
   _fivetran_quickstart_candidate_tag_link:
     - candidate_tag_link
@@ -33,6 +51,10 @@ table_variables:
     - candidate_phone_number
   _fivetran_quickstart_candidate_social_media_address:
     - candidate_social_media_address
+  _fivetran_quickstart_note:
+    - note
+  _fivetran_quickstart_referrer:
+    - referrer
 
 destination_configurations:
   databricks:

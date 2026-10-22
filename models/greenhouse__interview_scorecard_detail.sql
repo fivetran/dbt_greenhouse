@@ -12,16 +12,55 @@ scorecard_candidate_attribute as (
     from {{ ref('stg_greenhouse__scorecard_candidate_attribute') }}
 ),
 
+{% if var('greenhouse_using_job_candidate_attribute', True) %}
+job_candidate_attribute as (
+
+    select *
+    from {{ ref('stg_greenhouse__job_candidate_attribute') }}
+),
+{% endif %}
+
+{% if var('greenhouse_using_scorecard_question', True) %}
+scorecard_question_answer as (
+
+    select *
+    from {{ ref('stg_greenhouse__scorecard_question_answer') }}
+),
+
+scorecard_question as (
+
+    select *
+    from {{ ref('stg_greenhouse__scorecard_question') }}
+),
+
+-- a scorecard can have multiple questions/answers; aggregate to one row per scorecard
+-- so this doesn't fan out the attribute-level grain of this table
+scorecard_question_answers_agg as (
+
+    select
+        scorecard_question_answer.source_relation,
+        scorecard_question_answer.scorecard_id,
+        {{ fivetran_utils.string_agg("scorecard_question.question_text || ': ' || coalesce(scorecard_question_answer.answer, case when scorecard_question_answer.boolean_value then 'true' when scorecard_question_answer.boolean_value is not null then 'false' end)", "'; '") }} as scorecard_question_answers
+
+    from scorecard_question_answer
+    left join scorecard_question
+        on scorecard_question_answer.scorecard_question_id = scorecard_question.scorecard_question_id
+        and scorecard_question_answer.source_relation = scorecard_question.source_relation
+
+    group by 1, 2
+),
+{% endif %}
+
 join_w_attributes as (
 
     select
         scorecard_candidate_attribute.*,
         interview.candidate_rating,
-    
+
         interview.candidate_name,
         interview.interviewer_name,
         interview.interview_name,
-        
+
         interview.starts_at as interview_start_at,
         interview.scorecard_submitted_at,
 
@@ -32,11 +71,34 @@ join_w_attributes as (
         interview.hiring_managers,
         {% endif %}
         interview.interview_scorecard_key
-        
-    from interview 
+
+        {% if var('greenhouse_using_job_candidate_attribute', True) %}
+        ,
+        job_candidate_attribute.attribute_name,
+        job_candidate_attribute.sort_order
+        {% endif %}
+
+        {% if var('greenhouse_using_scorecard_question', True) %}
+        ,
+        scorecard_question_answers_agg.scorecard_question_answers
+        {% endif %}
+
+    from interview
     left join scorecard_candidate_attribute
         on interview.scorecard_id = scorecard_candidate_attribute.scorecard_id
         and interview.source_relation = scorecard_candidate_attribute.source_relation
+
+    {% if var('greenhouse_using_job_candidate_attribute', True) %}
+    left join job_candidate_attribute
+        on scorecard_candidate_attribute.job_candidate_attribute_id = job_candidate_attribute.job_candidate_attribute_id
+        and scorecard_candidate_attribute.source_relation = job_candidate_attribute.source_relation
+    {% endif %}
+
+    {% if var('greenhouse_using_scorecard_question', True) %}
+    left join scorecard_question_answers_agg
+        on interview.scorecard_id = scorecard_question_answers_agg.scorecard_id
+        and interview.source_relation = scorecard_question_answers_agg.source_relation
+    {% endif %}
 ),
 
 final as (

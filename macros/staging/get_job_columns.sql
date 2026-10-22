@@ -1,15 +1,15 @@
 {% macro get_job_columns() %}
 
 {% set columns = [
-    {"name": "_fivetran_deleted", "datatype": "boolean"},
+    {"name": "_fivetran_deleted", "datatype": dbt.type_boolean()},
     {"name": "_fivetran_synced", "datatype": dbt.type_timestamp()},
     {"name": "closed_at", "datatype": dbt.type_timestamp()},
-    {"name": "confidential", "datatype": "boolean"},
+    {"name": "confidential", "datatype": dbt.type_boolean()},
     {"name": "copied_from_id", "datatype": dbt.type_int()},
     {"name": "created_at", "datatype": dbt.type_timestamp()},
     {"name": "department_id", "datatype": dbt.type_int()},
     {"name": "id", "datatype": dbt.type_int()},
-    {"name": "is_template", "datatype": "boolean"},
+    {"name": "is_template", "datatype": dbt.type_boolean()},
     {"name": "name", "datatype": dbt.type_string()},
     {"name": "notes", "datatype": dbt.type_string()},
     {"name": "opened_at", "datatype": dbt.type_timestamp()},
