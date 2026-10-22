@@ -268,7 +268,7 @@ models:
       - name: interviewer_user_id
         description: Foreign key referencing the USER conducting the interview.
       - name: interview_scorecard_key
-        description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
+        description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, `scorecard_id`, and `source_relation`.
         tests:
           - unique
           - not_null
@@ -377,7 +377,7 @@ models:
           - unique
           - not_null
       - name: interview_scorecard_key
-        description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
+        description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, `scorecard_id`, and `source_relation`.
       - name: attribute_name
         description: Display name of the attribute (e.g. "JavaScript", "Leadership").
       - name: sort_order
