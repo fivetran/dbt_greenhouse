@@ -17,8 +17,8 @@ agg_offices as (
     select
         job_office.source_relation,
         job_id,
-        {{ fivetran_utils.string_agg("office.office_name", "'; '") }} as offices,
-        {{ fivetran_utils.string_agg("office.location_name", "'; '") }} as locations
+        {{ dbt.listagg("office.office_name", "'; '") }} as offices,
+        {{ dbt.listagg("office.location_name", "'; '") }} as locations
 
     from job_office
     join office

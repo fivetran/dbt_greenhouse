@@ -15,7 +15,7 @@ agg_emails as (
     select
         source_relation,
         user_id,
-        {{ fivetran_utils.string_agg('email', "', '") }} as email
+        {{ dbt.listagg('email', "', '") }} as email
 
     from user_email
 
