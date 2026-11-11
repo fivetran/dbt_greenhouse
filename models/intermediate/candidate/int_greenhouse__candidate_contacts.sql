@@ -15,7 +15,7 @@ phones as (
     select 
         source_relation,
         candidate_id,
-        {{ fivetran_utils.string_agg("phone_type || ': ' || phone_number" , "', '") }} as phone
+        {{ dbt.listagg("phone_type || ': ' || phone_number" , "', '") }} as phone
 
     from {{ ref('stg_greenhouse__candidate_phone_number') }}
 
@@ -27,7 +27,7 @@ emails as (
     select 
         source_relation,
         candidate_id,
-        {{ fivetran_utils.string_agg("'<' || email || '>'" , "', '") }} as email
+        {{ dbt.listagg("'<' || email || '>'" , "', '") }} as email
 
     from {{ ref('stg_greenhouse__candidate_email_address') }}
 
