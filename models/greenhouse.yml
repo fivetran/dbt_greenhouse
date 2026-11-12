@@ -217,8 +217,6 @@ models:
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
-      - name: _fivetran_synced
-        description: "{{ doc('_fivetran_synced') }}"
       - name: application_id
         description: Foreign key referencing the APPLICATION that is being interviewed.
       - name: created_at
