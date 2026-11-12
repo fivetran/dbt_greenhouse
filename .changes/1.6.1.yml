@@ -1,7 +1,10 @@
 version: 1.6.1
 pr_number: 56
 under_the_hood:
-  - title: Documentation updates
-    description: Updates the end model documentation so that it matches the columns the models actually output.
-    details:
-      - "Removes the `_fivetran_synced` column from the `greenhouse__interview_enhanced` documentation, since the model does not output this field."
+- title: Documentation updates
+  description: Updates the end model documentation so that it matches the columns
+    the models actually output.
+  details:
+  - Removes the `_fivetran_synced` column from the `greenhouse__interview_enhanced`
+    documentation, since the model does not output this field.
+date: '2026-11-12'

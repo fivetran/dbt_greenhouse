@@ -1,3 +1,11 @@
+# dbt_greenhouse v1.6.1
+
+[PR #56](https://github.com/fivetran/dbt_greenhouse/pull/56) includes the following updates:
+
+## Under the Hood
+- **Documentation updates**: Updates the end model documentation so that it matches the columns the models actually output.
+  - Removes the `_fivetran_synced` column from the `greenhouse__interview_enhanced` documentation, since the model does not output this field.
+
 # dbt_greenhouse v1.6.0
 
 [PR #51](https://github.com/fivetran/dbt_greenhouse/pull/51) includes the following updates:
