@@ -3,6 +3,12 @@ version: 2
 models:
   - name: stg_greenhouse__note
     description: Table capturing notes, logged emails, interview feedback, and other activity entries on a candidate's profile.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - activity_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -43,6 +49,12 @@ models:
 
   - name: stg_greenhouse__application
     description: Table capturing all applications (candidates + prospects).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - application_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -89,6 +101,13 @@ models:
 
   - name: stg_greenhouse__application_history
     description: Table capturing the history of applications as they advance through job stages.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - application_id
+              - updated_at
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -105,6 +124,12 @@ models:
 
   - name: stg_greenhouse__application_stage
     description: Table capturing each stage an application has occupied, one row per stage per application.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - application_stage_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -133,6 +158,12 @@ models:
 
   - name: stg_greenhouse__attachment
     description: Table capturing files attached to the candidate profile.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -157,6 +188,12 @@ models:
 
   - name: stg_greenhouse__candidate
     description: Table capturing an organization's candidates.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - candidate_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -189,6 +226,13 @@ models:
 
   - name: stg_greenhouse__candidate_tag_link
     description: Table associating candidates with their attached tags.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - candidate_id
+              - index
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -203,6 +247,12 @@ models:
 
   - name: stg_greenhouse__department
     description: Table storing an organization's job departments.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - department_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -225,6 +275,12 @@ models:
 
   - name: stg_greenhouse__eeoc
     description: Table capturing EEOC data provided by candidates.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - application_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -263,6 +319,13 @@ models:
 
   - name: stg_greenhouse__candidate_email_address
     description: Table storing email addresses associated with candidates.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - candidate_id
+              - index
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -279,6 +342,12 @@ models:
 
   - name: stg_greenhouse__job_hiring_manager
     description: Table capturing hiring managers assigned to each job.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -299,6 +368,12 @@ models:
 
   - name: stg_greenhouse__job_owner
     description: Table capturing owners (recruiters, sourcers, coordinators) assigned to each job.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -323,6 +398,12 @@ models:
 
   - name: stg_greenhouse__job_interview_stage
     description: Table capturing each stage of a job's interview plan.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_stage_id
     columns:
       - name: job_stage_id
         description: Unique identifier for the interview stage.
@@ -347,6 +428,12 @@ models:
 
   - name: stg_greenhouse__job
     description: Table capturing all jobs stored in Greenhouse.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -383,6 +470,13 @@ models:
 
   - name: stg_greenhouse__job_office
     description: Table relating jobs to the offices they exist in.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_id
+              - office_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -397,6 +491,13 @@ models:
 
   - name: stg_greenhouse__opening
     description: Table capturing openings made for jobs.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_id
+              - job_opening_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -433,6 +534,12 @@ models:
 
   - name: stg_greenhouse__job_post
     description: Table capturing the online job posts for an organization’s jobs (as seen on the Job Board).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_post_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -477,6 +584,12 @@ models:
 
   - name: stg_greenhouse__job_post_location
     description: Table capturing the locations associated with job posts.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_post_location_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -503,6 +616,12 @@ models:
 
   - name: stg_greenhouse__office
     description: Table capturing an organization's offices.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - office_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -529,6 +648,13 @@ models:
 
   - name: stg_greenhouse__candidate_phone_number
     description: Table capturing phone numbers associated with candidates.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - candidate_id
+              - index
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -545,6 +671,12 @@ models:
 
   - name: stg_greenhouse__interview
     description: Table storing interviews that have been scheduled for the specified application.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - scheduled_interview_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -589,6 +721,12 @@ models:
 
   - name: stg_greenhouse__interviewer
     description: Table relating users to the scheduled interviews they participated in (source table `interviewer`).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -615,6 +753,12 @@ models:
 
   - name: stg_greenhouse__scorecard
     description: All submitted scorecards for candidate interviews.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - scorecard_id
     columns:
       - name: scorecard_id
         description: Unique ID of the scorecard.
@@ -659,6 +803,12 @@ models:
 
   - name: stg_greenhouse__scorecard_candidate_attribute
     description: Table capturing per-attribute candidate ratings within each scorecard (source table `scorecard_candidate_attribute`).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - id
     columns:
       - name: id
         description: Unique ID of this scorecard attribute rating.
@@ -683,6 +833,13 @@ models:
 
   - name: stg_greenhouse__candidate_social_media_address
     description: Table capturing social media links (ie linkedin, github) provided by candidates.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - candidate_id
+              - index
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -697,6 +854,12 @@ models:
 
   - name: stg_greenhouse__source
     description: Table capturing an organization's applicant sources.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - source_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -719,6 +882,12 @@ models:
 
   - name: stg_greenhouse__users
     description: Table of an organization's Greenhouse users.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - user_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -749,6 +918,13 @@ models:
 
   - name: stg_greenhouse__user_email
     description: Table associating Greenhouse users with their emails.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - user_id
+              - email
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -771,6 +947,12 @@ models:
 
   - name: stg_greenhouse__prospect_pool
     description: Table capturing prospect pool groups.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - prospect_pool_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -793,6 +975,13 @@ models:
 
   - name: stg_greenhouse__prospect_pool_stage
     description: Table capturing stages prospects in different pools advance through.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - prospect_pool_id
+              - prospect_stage_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -813,6 +1002,12 @@ models:
 
   - name: stg_greenhouse__referrer
     description: Table mapping an application referral to the user who made it.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - referrer_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -833,6 +1028,12 @@ models:
 
   - name: stg_greenhouse__prospect_detail
     description: Table capturing the prospect pool/stage/owner details for prospect applications.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - prospect_detail_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -861,6 +1062,12 @@ models:
 
   - name: stg_greenhouse__job_candidate_attribute
     description: Table capturing the candidate attributes (skills, traits) configured on a job's scorecard.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_candidate_attribute_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -887,6 +1094,12 @@ models:
 
   - name: stg_greenhouse__scorecard_question
     description: Table capturing the questions configured on an interview kit's scorecard.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - scorecard_question_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -915,6 +1128,12 @@ models:
 
   - name: stg_greenhouse__scorecard_question_answer
     description: Table capturing an interviewer's answer to a scorecard question.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - scorecard_question_answer_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -943,6 +1162,12 @@ models:
 
   - name: stg_greenhouse__job_interview
     description: Table capturing the interview slots configured on a job's interview plan.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_interview_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -979,6 +1204,12 @@ models:
 
   - name: stg_greenhouse__interview_kit
     description: Table capturing per-slot interview kit configuration (anonymization, exercises).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - interview_kit_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -1005,6 +1236,12 @@ models:
 
   - name: stg_greenhouse__rejection_reason
     description: Lookup table of rejection reasons and their categories.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - rejection_reason_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -1029,6 +1266,12 @@ models:
 
   - name: stg_greenhouse__rejection_detail
     description: Table capturing who rejected an application, why, and when.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - rejection_detail_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"

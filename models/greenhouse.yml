@@ -157,6 +157,14 @@ models:
 
   - name: greenhouse__application_history
     description: If enabled, table capturing the history of applications as they advance through job stages. Controlled by the `greenhouse_using_application_stage` variable (requires the `APPLICATION_STAGE` table).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - application_id
+              - job_id
+              - valid_from
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -387,6 +395,12 @@ models:
 
   - name: greenhouse__job_enhanced
     description: Table capturing information and metrics related to jobs. May contain custom columns.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - job_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
