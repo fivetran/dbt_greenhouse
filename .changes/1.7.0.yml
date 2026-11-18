@@ -2,9 +2,13 @@ version: 1.7.0
 pr_number: 57
 new_features:
 - description: Raises the minimum dbt version to 1.10.0.
-- description: Adds `dbt_utils.unique_combination_of_columns` tests to staging and end models. If a test fails, please [open an issue](https://github.com/fivetran/dbt_greenhouse/issues/new/choose).
+- description: Adds `dbt_utils.unique_combination_of_columns` tests to staging and
+    end models. If a test fails, please [open an issue](https://github.com/fivetran/dbt_greenhouse/issues/new/choose).
 under_the_hood:
 - title: Documentation updates
-  description: Updates the end model documentation so that it matches the columns the models actually output.
+  description: Updates the end model documentation so that it matches the columns
+    the models actually output.
   details:
-  - Removes the `_fivetran_synced` column from the `greenhouse__interview_enhanced` documentation, since the model does not output this field.
+  - Removes the `_fivetran_synced` column from the `greenhouse__interview_enhanced`
+    documentation, since the model does not output this field.
+date: '2026-11-18'
