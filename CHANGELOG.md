@@ -7,7 +7,7 @@
 - Adds `dbt_utils.unique_combination_of_columns` tests to staging and end models. If a test fails, please [open an issue](https://github.com/fivetran/dbt_greenhouse/issues/new/choose).
 
 ## Under the Hood
-- Removes the `_fivetran_synced` column from the `greenhouse__interview_enhanced` documentation.
+- Updates yml column documentation to match model output.
 
 # dbt_greenhouse v1.6.0
 
