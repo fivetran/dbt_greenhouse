@@ -46,7 +46,7 @@ models:
         description: Foreign key referencing the USER conducting the interview.
       - name: interview_scorecard_key
         description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
-        tests:
+        data_tests:
           - unique
           - not_null
 
@@ -95,7 +95,7 @@ models:
         description: Foreign key referencing the USER conducting the interview.
       - name: interview_scorecard_key
         description: Key hashed on `scheduled_interview_id`, `interviewer_user_id`, and `source_relation`.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: interviewer_name

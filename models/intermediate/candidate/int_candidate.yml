@@ -16,7 +16,7 @@ models:
         description: First and last name of the candidate.
       - name: candidate_id
         description: Unique ID of the candidate in Greenhouse.
-        tests:
+        data_tests:
           - not_null
       - name: is_private
         description: Boolean that is true if the candidate is private.
@@ -50,7 +50,7 @@ models:
         description: "{{ doc('source_relation') }}"
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE who has these tags.
-        tests:
+        data_tests:
           - not_null
       - name: tags
         description: Comma-separated list of tags attached to this candidate. 

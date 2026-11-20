@@ -1,3 +1,14 @@
+# dbt_greenhouse v1.7.0
+
+[PR #57](https://github.com/fivetran/dbt_greenhouse/pull/57) includes the following updates:
+
+## Feature Update
+- **Breaking change**: Raises the minimum dbt version to 1.10.0.
+- Adds `dbt_utils.unique_combination_of_columns` tests to staging and end models. If a test fails, please [open an issue](https://github.com/fivetran/dbt_greenhouse/issues/new/choose).
+
+## Under the Hood
+- Updates yml column documentation to match model output.
+
 # dbt_greenhouse v1.6.0
 
 [PR #51](https://github.com/fivetran/dbt_greenhouse/pull/51) includes the following updates:

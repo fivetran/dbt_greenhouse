@@ -8,7 +8,7 @@ models:
         description: "{{ doc('source_relation') }}"
       - name: application_id
         description: Unique ID of the application.
-        tests:
+        data_tests:
           - not_null
       - name: candidate_id
         description: Foreign key referencing the CANDIDATE who submitted the application.
@@ -170,7 +170,7 @@ models:
         description: Description of the applicant's veteran status.
       - name: application_job_key
         description: Unique key hashed on `application_id`, `job_id`, and `source_relation`.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: prospect_pool_id
