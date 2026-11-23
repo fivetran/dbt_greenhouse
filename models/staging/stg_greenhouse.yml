@@ -280,7 +280,7 @@ models:
           arguments:
             combination_of_columns:
               - source_relation
-              - application_id
+              - id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -476,7 +476,7 @@ models:
             combination_of_columns:
               - source_relation
               - job_id
-              - office_id
+              - index
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -496,7 +496,6 @@ models:
           arguments:
             combination_of_columns:
               - source_relation
-              - job_id
               - job_opening_id
     columns:
       - name: source_relation
@@ -923,8 +922,7 @@ models:
           arguments:
             combination_of_columns:
               - source_relation
-              - user_id
-              - email
+              - id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -980,7 +978,6 @@ models:
           arguments:
             combination_of_columns:
               - source_relation
-              - prospect_pool_id
               - prospect_stage_id
     columns:
       - name: source_relation
