@@ -17,7 +17,7 @@ models:
         description: User's full name. 
       - name: user_id
         description: Unique ID of the user. 
-        tests:
+        data_tests:
           - not_null
       - name: is_site_admin
         description: If true, this user is a site admin, which means the user has full permissions on all non-private jobs.
